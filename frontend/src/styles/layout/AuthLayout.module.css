@@ -1,0 +1,159 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-bg-primary);
+  font-family: var(--font-family);
+  overflow: hidden;
+}
+
+/* Left Panel */
+.leftPanel {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-3xl);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.backgroundEffect {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 50%,
+      rgba(15, 118, 110, 0.15) 0%,
+      transparent 70%);
+  pointer-events: none;
+}
+
+.leftContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.logo {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, var(--color-purple-500), var(--color-purple-600));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoIcon {
+  color: white;
+  font-size: 1rem;
+}
+
+.brandName {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.025em;
+}
+
+.tagline {
+  max-width: 280px;
+}
+
+.taglineMain {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.taglineSub {
+  font-size: var(--font-size-xs);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.testimonialWrapper {
+  margin-top: auto;
+  padding-top: var(--space-2xl);
+}
+
+.waveSvg {
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 120%;
+  height: 80%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Right Panel */
+.rightPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  position: relative;
+  background: radial-gradient(ellipse at 70% 30%,
+      rgba(139, 92, 246, 0.08) 0%,
+      transparent 60%);
+}
+
+.formWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftPanel {
+    padding: var(--space-xl);
+    min-height: 40vh;
+  }
+
+  .waveSvg {
+    bottom: -20%;
+    height: 100%;
+  }
+
+  .testimonialWrapper {
+    display: none;
+  }
+
+  .rightPanel {
+    padding: var(--space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .leftPanel {
+    padding: var(--space-lg);
+    min-height: auto;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .rightPanel {
+    padding: var(--space-md);
+  }
+}

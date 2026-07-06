@@ -1,0 +1,230 @@
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: var(--space-2xl);
+    background-color: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.logoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brandName {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.025em;
+}
+
+.title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-sm) 0;
+    letter-spacing: -0.025em;
+}
+
+.subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* Google Button */
+.googleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    outline: none;
+}
+
+.googleButton:hover {
+    background-color: #374151;
+    border-color: var(--color-border-focus);
+}
+
+.googleIcon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.googleText {
+    line-height: 1.5;
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+}
+
+.dividerLine {
+    flex: 1;
+    height: 1px;
+    background-color: var(--color-border);
+}
+
+.dividerText {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: lowercase;
+}
+
+/* Form */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.nameRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.nameField,
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.label {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.025em;
+}
+
+.input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: all var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.input:focus {
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+}
+
+.input:hover:not(:focus) {
+    border-color: #4B5563;
+}
+
+/* Password wrapper with eye icon */
+.passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.passwordWrapper .input {
+    padding-right: 2.5rem;
+}
+
+.eyeButton {
+    position: absolute;
+    right: var(--space-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast);
+    padding: 0;
+}
+
+.eyeButton:hover {
+    color: var(--color-text-secondary);
+}
+
+.submitWrapper {
+    margin-top: var(--space-sm);
+}
+
+.footer {
+    text-align: center;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: var(--space-lg) 0 0 0;
+}
+
+.signInLink {
+    color: var(--color-text-link);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.signInLink:hover {
+    color: var(--color-purple-400);
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .container {
+        padding: var(--space-xl) var(--space-md);
+        max-width: 100%;
+    }
+
+    .nameRow {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+}

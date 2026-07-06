@@ -1,0 +1,19 @@
+.container {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.heading {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-md) 0;
+}
+
+.topicsGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}

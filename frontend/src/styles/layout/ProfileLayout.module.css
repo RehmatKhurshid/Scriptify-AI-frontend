@@ -1,0 +1,18 @@
+.container {
+    min-height: 100vh;
+    background-color: var(--color-bg-primary);
+    font-family: var(--font-family);
+}
+
+.main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl) var(--space-3xl);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main {
+        padding: 0 var(--space-md) var(--space-2xl);
+    }
+}

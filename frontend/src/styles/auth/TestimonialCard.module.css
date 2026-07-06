@@ -1,0 +1,59 @@
+.card {
+  background: rgba(17, 24, 39, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  max-width: 320px;
+}
+
+.quote {
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-md) 0;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-purple-500), var(--color-purple-600));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarInitials {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: white;
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.authorName {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.authorTitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
