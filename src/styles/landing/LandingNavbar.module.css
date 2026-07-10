@@ -1,0 +1,173 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(11, 15, 26, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    width: 100%;
+}
+
+.inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--space-md) var(--space-3xl);
+    width: 100%;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xl);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.brandName {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.025em;
+}
+
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+.navLink {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    position: relative;
+    padding: var(--space-xs) 0;
+}
+
+.navLink:hover {
+    color: var(--color-text-primary);
+}
+
+.navLink.active {
+    color: var(--color-text-primary);
+}
+
+.navLink.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-purple-500), var(--color-purple-400));
+    border-radius: 2px;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.signInLink {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.signInLink:hover {
+    color: var(--color-text-primary);
+}
+
+.mobileToggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.mobileToggle:hover {
+    background-color: var(--color-bg-input);
+    color: var(--color-text-primary);
+}
+
+/* Mobile menu overlay */
+.mobileOpen {
+    display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .inner {
+        padding: var(--space-sm) var(--space-lg);
+    }
+
+    .navLinks {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(11, 15, 26, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-xl);
+        padding: var(--space-2xl);
+        z-index: 99;
+    }
+
+    .mobileOpen {
+        display: flex;
+    }
+
+    .navLink {
+        font-size: var(--font-size-xl);
+        font-weight: 600;
+    }
+
+    .navLink.active::after {
+        bottom: -8px;
+    }
+
+    .mobileToggle {
+        display: flex;
+    }
+
+    .signInLink {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .inner {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .brandName {
+        display: none;
+    }
+}

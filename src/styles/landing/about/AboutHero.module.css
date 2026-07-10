@@ -1,0 +1,105 @@
+.hero {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 100px var(--space-xl) 60px;
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #C4B5FD, #A78BFA, #8B5CF6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.35;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.01em;
+}
+
+.subtitle {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: #64748B;
+    margin: 0 auto 32px;
+    max-width: 480px;
+}
+
+.ctaGroup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.ctaPrimary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    font-family: var(--font-family);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #1E1B4B;
+    background: linear-gradient(135deg, #C4B5FD, #A78BFA);
+    border: none;
+    border-radius: 9999px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 200ms ease;
+    cursor: pointer;
+}
+
+.ctaPrimary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(167, 139, 250, 0.35);
+}
+
+.ctaSecondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    font-family: var(--font-family);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #94A3B8;
+    background: transparent;
+    border: 1px solid #1E293B;
+    border-radius: 9999px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 200ms ease;
+    cursor: pointer;
+}
+
+.ctaSecondary:hover {
+    border-color: #334155;
+    color: #CBD5E1;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+@media (max-width: 640px) {
+    .hero {
+        padding: 60px var(--space-md) 40px;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+    }
+
+    .ctaGroup {
+        flex-direction: column;
+    }
+
+    .ctaPrimary,
+    .ctaSecondary {
+        width: 100%;
+    }
+}

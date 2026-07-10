@@ -1,7 +1,7 @@
 import React from 'react';
 import { FiClock } from 'react-icons/fi';
 import Avatar from '../../components/common/Avatar';
-import styles from '../../styles/dashboard/ArticleCard.module.css';
+import styles from '../../styles/home-feed/ArticleCard.module.css';
 
 const ArticleCard = ({
     author,

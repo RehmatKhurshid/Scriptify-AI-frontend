@@ -1,6 +1,6 @@
 import React from 'react';
 import Tag from '../../components/common/Tag';
-import styles from '../../styles/dashboard/RecommendedTopics.module.css';
+import styles from '../../styles/home-feed/RecommendedTopics.module.css';
 
 const topics = [
     { id: 1, label: 'Artificial Intelligence', active: true },

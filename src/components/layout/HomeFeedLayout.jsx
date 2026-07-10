@@ -1,8 +1,8 @@
 import React from 'react';
 import TopNavbar from '../navigation/TopNavbar';
-import styles from '../../styles/layout/DashboardLayout.module.css';
+import styles from '../../styles/layout/HomeFeedLayout.module.css';
 
-const DashboardLayout = ({ children }) => {
+const HomeFeedLayout = ({ children }) => {
     return (
         <div className={styles.container}>
             <TopNavbar />
@@ -15,4 +15,4 @@ const DashboardLayout = ({ children }) => {
     );
 };
 
-export default DashboardLayout;
+export default HomeFeedLayout;

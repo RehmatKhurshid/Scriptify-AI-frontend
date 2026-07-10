@@ -1,0 +1,198 @@
+.preview {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+}
+
+.window {
+    position: relative;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.95), rgba(11, 15, 26, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
+    z-index: 2;
+}
+
+.windowHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.windowControls {
+    display: flex;
+    gap: 6px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.red {
+    background-color: #EF4444;
+}
+
+.yellow {
+    background-color: #F59E0B;
+}
+
+.green {
+    background-color: #10B981;
+}
+
+.windowTitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-left: var(--space-sm);
+}
+
+.windowContent {
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.heroMock {
+    position: relative;
+    height: 140px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(135deg, #1E3A5F, #0F766E);
+}
+
+.mockImage {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(30, 58, 95, 0.8), rgba(15, 118, 110, 0.6));
+}
+
+.mockOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(11, 15, 26, 0.9) 100%);
+}
+
+.mockBadge {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border-radius: var(--radius-sm);
+    font-size: 9px;
+    color: var(--color-text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mockTitle {
+    position: absolute;
+    bottom: 32px;
+    left: var(--space-sm);
+    width: 70%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.mockTitleShort {
+    position: absolute;
+    bottom: 14px;
+    left: var(--space-sm);
+    width: 45%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.cardsMock {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.cardMock {
+    flex: 1;
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-md);
+}
+
+.cardContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+}
+
+.cardLine {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+}
+
+.cardLineShort {
+    width: 60%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+.cardImage {
+    width: 50px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.1));
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.aiCard {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: var(--radius-md);
+    color: var(--color-purple-400);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.aiIcon {
+    font-size: 1.25rem;
+}
+
+.glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .preview {
+        max-width: 100%;
+    }
+}
