@@ -1,0 +1,19 @@
+.container {
+    min-height: 100vh;
+    background-color: var(--color-bg-primary);
+    font-family: var(--font-family);
+}
+
+.main {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .main {
+        flex-direction: column;
+    }
+}

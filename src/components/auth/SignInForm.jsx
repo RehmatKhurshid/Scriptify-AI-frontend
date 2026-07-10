@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FiArrowRight } from 'react-icons/fi';
 import InputField from '../common/InputField';
 import Button from '../common/Button';
@@ -52,7 +53,11 @@ const SignInForm = () => {
           placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          rightElement={<span className={styles.forgotLink}>Forgot?</span>}
+          rightElement={
+            <Link to="/forgot-password" className={styles.forgotLink}>
+              Forgot?
+            </Link>
+          }
         />
 
         <div className={styles.submitWrapper}>

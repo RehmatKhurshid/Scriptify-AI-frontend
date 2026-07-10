@@ -2,7 +2,7 @@ import React from 'react';
 import { FiBookmark, FiClock } from 'react-icons/fi';
 import Avatar from '../../components/common/Avatar';
 import Tag from '../../components/common/Tag';
-import styles from '../../styles/dashboard/HeroArticle.module.css';
+import styles from '../../styles/home-feed/HeroArticle.module.css';
 
 const HeroArticle = () => {
     return (

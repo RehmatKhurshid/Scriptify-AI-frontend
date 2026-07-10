@@ -1,7 +1,7 @@
 import React from 'react';
 import { FiSliders } from 'react-icons/fi';
 import ArticleCard from './ArticleCard';
-import styles from '../../styles/dashboard/FeedSection.module.css';
+import styles from '../../styles/home-feed/FeedSection.module.css';
 
 const articles = [
     {

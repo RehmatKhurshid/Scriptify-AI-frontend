@@ -1,12 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiMail, FiRefreshCw, FiArrowLeft } from 'react-icons/fi';
 import Button from '../common/Button';
 import styles from '../../styles/auth/VerifyEmailForm.module.css';
 
 const VerifyEmailForm = () => {
+    const navigate = useNavigate();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
     const [canResend, setCanResend] = useState(false);
+    const [status, setStatus] = useState('idle'); // idle | verifying | success | error
+    const [errorMessage, setErrorMessage] = useState('');
     const inputRefs = useRef([]);
 
     const email = 'alex.chen@example.com';
@@ -47,9 +51,12 @@ const VerifyEmailForm = () => {
         if (e.key === 'Backspace') {
             e.preventDefault();
             const newOtp = [...otp];
-            newOtp[index] = '';
-            setOtp(newOtp);
-            if (index > 0) {
+            if (otp[index] !== '') {
+                newOtp[index] = '';
+                setOtp(newOtp);
+            } else if (index > 0) {
+                newOtp[index - 1] = '';
+                setOtp(newOtp);
                 inputRefs.current[index - 1]?.focus();
             }
         }
@@ -84,7 +91,21 @@ const VerifyEmailForm = () => {
         e.preventDefault();
         const code = otp.join('');
         if (code.length === 6) {
+            setStatus('verifying');
+            setErrorMessage('');
             console.log('Verifying OTP:', code);
+            
+            setTimeout(() => {
+                if (code === '123456') {
+                    setStatus('success');
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1500);
+                } else {
+                    setStatus('error');
+                    setErrorMessage('Invalid verification code. Please try again.');
+                }
+            }, 1500);
         }
     };
 
@@ -108,6 +129,18 @@ const VerifyEmailForm = () => {
                 </p>
             </div>
 
+            {status === 'error' && (
+                <div className={styles.errorAlert} role="alert">
+                    {errorMessage}
+                </div>
+            )}
+
+            {status === 'success' && (
+                <div className={styles.successAlert} role="alert">
+                    Email verified successfully! Redirecting...
+                </div>
+            )}
+
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.otpWrapper}>
                     {otp.map((digit, index) => (
@@ -122,6 +155,7 @@ const VerifyEmailForm = () => {
                             onPaste={handlePaste}
                             className={`${styles.otpInput} ${digit ? styles.filled : ''}`}
                             aria-label={`Digit ${index + 1}`}
+                            disabled={status === 'verifying' || status === 'success'}
                         />
                     ))}
                 </div>
@@ -132,9 +166,14 @@ const VerifyEmailForm = () => {
                         variant="primary"
                         size="md"
                         fullWidth
-                        disabled={!isComplete}
+                        disabled={!isComplete || status === 'verifying' || status === 'success'}
                     >
-                        Verify Email
+                        {status === 'verifying' ? (
+                            <span className={styles.loaderWrapper}>
+                                <FiRefreshCw className={styles.spinnerIcon} />
+                                Verifying...
+                            </span>
+                        ) : 'Verify Email'}
                     </Button>
                 </div>
             </form>
@@ -145,11 +184,11 @@ const VerifyEmailForm = () => {
                 </p>
                 <button
                     type="button"
-                    className={`${styles.resendButton} ${canResend ? styles.active : ''}`}
+                    className={`${styles.resendButton} ${canResend && status !== 'verifying' && status !== 'success' ? styles.active : ''}`}
                     onClick={handleResend}
-                    disabled={!canResend}
+                    disabled={!canResend || status === 'verifying' || status === 'success'}
                 >
-                    <FiRefreshCw className={`${styles.resendIcon} ${!canResend ? styles.spinning : ''}`} />
+                    <FiRefreshCw className={`${styles.resendIcon} ${!canResend && status !== 'verifying' && status !== 'success' ? styles.spinning : ''}`} />
                     {canResend ? 'Resend verification email' : `Resend in ${timer}s`}
                 </button>
             </div>
