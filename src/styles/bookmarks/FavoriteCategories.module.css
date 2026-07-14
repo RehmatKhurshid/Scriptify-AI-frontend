@@ -1,0 +1,37 @@
+.card {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(11, 15, 26, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.title {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-md) 0;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.tag {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tag:hover {
+    border-color: var(--color-purple-500);
+    color: var(--color-purple-400);
+}

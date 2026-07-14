@@ -1,0 +1,64 @@
+.card {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(11, 15, 26, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+}
+
+.title {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--space-md) 0;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+    cursor: pointer;
+}
+
+.item:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.thumbnail {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.itemTitle {
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.itemTime {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    margin: 0;
+}
