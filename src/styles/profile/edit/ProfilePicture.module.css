@@ -1,0 +1,111 @@
+.section {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.6), rgba(11, 15, 26, 0.8));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.sectionIcon {
+    color: var(--color-purple-400);
+    font-size: 1rem;
+}
+
+.sectionTitle {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.avatarWrapper {
+    position: relative;
+}
+
+.cameraButton {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+    background: linear-gradient(135deg, var(--color-purple-500), var(--color-purple-600));
+    border: 2px solid var(--color-bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.cameraButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+}
+
+.actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.uploadButton {
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: #1E1B4B;
+    background: linear-gradient(135deg, #C4B5FD, #A78BFA);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.uploadButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.35);
+}
+
+.removeButton {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.removeButton:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #EF4444;
+}
+
+.hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin: 0;
+}

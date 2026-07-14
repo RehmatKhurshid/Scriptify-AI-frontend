@@ -1,0 +1,34 @@
+.container {
+    min-height: 100vh;
+    background-color: var(--color-bg-primary);
+    font-family: var(--font-family);
+}
+
+.main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-xl);
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .main {
+        padding: var(--space-md);
+    }
+}

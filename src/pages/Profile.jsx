@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProfileLayout from '../components/layout/ProfileLayout';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileTabs from '../components/profile/ProfileTabs';
@@ -30,11 +31,20 @@ const blogs = [
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('blogs');
+    const navigate = useNavigate();
+
+    const handleTabChange = (tabId) => {
+        if (tabId === 'bookmarks') {
+            navigate('/bookmarks');
+        } else {
+            setActiveTab(tabId);
+        }
+    };
 
     return (
         <ProfileLayout>
             <ProfileHeader />
-            <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
+            <ProfileTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
             {activeTab === 'blogs' && (
                 <div className={styles.grid}>

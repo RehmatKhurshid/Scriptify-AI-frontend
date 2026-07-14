@@ -1,0 +1,102 @@
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.selectAllButton,
+.removeButton,
+.clearAllButton,
+.filterButton,
+.sortButton {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-md);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+    background: none;
+}
+
+.selectAllButton {
+    color: var(--color-text-secondary);
+    background: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+}
+
+.selectAllButton:hover {
+    background: #374151;
+    color: var(--color-text-primary);
+}
+
+.removeButton {
+    color: #EF4444;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.removeButton:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.clearAllButton {
+    color: var(--color-text-muted);
+}
+
+.clearAllButton:hover {
+    color: var(--color-text-secondary);
+}
+
+.filterButton,
+.sortButton {
+    color: var(--color-text-secondary);
+    background: var(--color-bg-input);
+    border: 1px solid var(--color-border);
+}
+
+.filterButton:hover,
+.sortButton:hover {
+    background: #374151;
+    color: var(--color-text-primary);
+}
+
+.buttonIcon {
+    font-size: 0.875rem;
+}
+
+.chevron {
+    font-size: 0.75rem;
+    margin-left: 2px;
+}
+
+@media (max-width: 640px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .left,
+    .right {
+        justify-content: space-between;
+    }
+}
