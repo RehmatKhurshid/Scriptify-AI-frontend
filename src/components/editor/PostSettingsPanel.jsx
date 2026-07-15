@@ -1,73 +1,55 @@
-import React, { useState } from 'react';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import React from 'react';
+import { Sparkles, Image, Settings } from 'lucide-react';
 import styles from '../../styles/editor/PostSettingsPanel.module.css';
 
 const PostSettingsPanel = () => {
-    const [categoryOpen, setCategoryOpen] = useState(true);
-    const [seoOpen, setSeoOpen] = useState(true);
-    const [audienceOpen, setAudienceOpen] = useState(true);
-
     return (
-        <div className={styles.panel}>
-            {/* Category */}
-            <div className={styles.section}>
-                <button
-                    className={styles.sectionHeader}
-                    onClick={() => setCategoryOpen(!categoryOpen)}
-                >
-                    <span className={styles.sectionTitle}>Category</span>
-                    {categoryOpen ? <FiChevronUp /> : <FiChevronDown />}
-                </button>
-                {categoryOpen && (
-                    <div className={styles.sectionContent}>
-                        <button className={styles.dropdown}>
-                            <span>Technology</span>
-                            <FiChevronDown />
-                        </button>
-                    </div>
-                )}
+        <aside className={styles.panel}>
+            {/* Header */}
+            <div className={styles.panelHeader}>
+                <div className={styles.aiBadge}>
+                    <Sparkles size={16} className={styles.aiIcon} />
+                    <span>AI Blog Assistant</span>
+                </div>
+                <span className={styles.betaTag}>BETA</span>
             </div>
 
-            {/* SEO Description */}
+            {/* Generate Draft Section */}
             <div className={styles.section}>
-                <button
-                    className={styles.sectionHeader}
-                    onClick={() => setSeoOpen(!seoOpen)}
-                >
-                    <span className={styles.sectionTitle}>SEO Description</span>
-                    {seoOpen ? <FiChevronUp /> : <FiChevronDown />}
-                </button>
-                {seoOpen && (
-                    <div className={styles.sectionContent}>
-                        <textarea
-                            className={styles.textarea}
-                            placeholder="Enter a brief description for search engines..."
-                            rows={3}
-                        />
-                    </div>
-                )}
+                <label className={styles.sectionLabel}>Generate Draft</label>
+                <textarea
+                    className={styles.ideaTextarea}
+                    placeholder="Describe your blog idea... (e.g. A post about the future of AI in frontend design)"
+                    rows={4}
+                />
             </div>
 
-            {/* Audience */}
-            <div className={styles.section}>
-                <button
-                    className={styles.sectionHeader}
-                    onClick={() => setAudienceOpen(!audienceOpen)}
-                >
-                    <span className={styles.sectionTitle}>Audience</span>
-                    {audienceOpen ? <FiChevronUp /> : <FiChevronDown />}
-                </button>
-                {audienceOpen && (
-                    <div className={styles.sectionContent}>
-                        <div className={styles.tagGroup}>
-                            <span className={`${styles.tag} ${styles.active}`}>Developers</span>
-                            <span className={styles.tag}>Designers</span>
-                            <span className={styles.tag}>Founders</span>
-                        </div>
-                    </div>
-                )}
+            <button className={styles.generateButton}>
+                <Sparkles size={16} />
+                <span>Generate Blog Draft</span>
+            </button>
+
+            {/* Featured Thumbnail Section */}
+            <div className={styles.sectionThumbnail}>
+                <label className={styles.sectionLabel}>Featured Thumbnail</label>
+                
+                <div className={styles.dropzone}>
+                    <Image size={24} className={styles.dropzoneIcon} />
+                    <span className={styles.dropzoneTitle}>Drag & Drop or Click</span>
+                    <span className={styles.dropzoneSubtitle}>1200×630px recommended</span>
+                </div>
+
+                <div className={styles.thumbnailActions}>
+                    <button className={styles.aiGenerateBtn}>
+                        <Sparkles size={14} />
+                        <span>AI Generate</span>
+                    </button>
+                    <button className={styles.settingsBtn} title="Thumbnail Settings">
+                        <Settings size={16} />
+                    </button>
+                </div>
             </div>
-        </div>
+        </aside>
     );
 };
 

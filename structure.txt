@@ -1,0 +1,179 @@
+src
+├── App.css
+├── App.jsx
+├── assets
+│   ├── hero.png
+│   ├── react.svg
+│   └── vite.svg
+├── components
+│   ├── auth
+│   │   ├── ChangePasswordForm.jsx
+│   │   ├── ForgotPasswordForm.jsx
+│   │   ├── GoogleButton.jsx
+│   │   ├── ResetPasswordForm.jsx
+│   │   ├── SignInForm.jsx
+│   │   ├── SignUpForm.jsx
+│   │   ├── TestimonialCard.jsx
+│   │   └── VerifyEmailForm.jsx
+│   ├── bookmarks
+│   │   ├── BookmarkCard.jsx
+│   │   ├── BookmarkHeader.jsx
+│   │   ├── BookmarksGrid.jsx
+│   │   ├── BookmarksSidebar.jsx
+│   │   ├── BookmarksToolbar.jsx
+│   │   ├── FavoriteCategories.jsx
+│   │   ├── RecentlySaved.jsx
+│   │   └── SummaryCard.jsx
+│   ├── common
+│   │   ├── Avatar.jsx
+│   │   ├── Button.jsx
+│   │   ├── InputField.jsx
+│   │   └── Tag.jsx
+│   ├── editor
+│   │   ├── AIToolsPanel.jsx
+│   │   ├── EditorCanvas.jsx
+│   │   ├── EditorNavbar.jsx
+│   │   ├── EditorSidebar.jsx
+│   │   └── PostSettingsPanel.jsx
+│   ├── home-feed
+│   │   ├── ArticleCard.jsx
+│   │   ├── FeedSection.jsx
+│   │   ├── HeroArticle.jsx
+│   │   └── RecommendedTopics.jsx
+│   ├── icons
+│   │   └── Logo.jsx
+│   ├── landing
+│   │   ├── DashboardPreview.jsx
+│   │   ├── FeaturesGrid.jsx
+│   │   ├── HeroSection.jsx
+│   │   ├── LandingNavbar.jsx
+│   │   ├── PartnerLogos.jsx
+│   │   └── about
+│   │       ├── AboutCTA.jsx
+│   │       ├── AboutHero.jsx
+│   │       ├── CoreValues.jsx
+│   │       ├── Differentiators.jsx
+│   │       ├── LookingAhead.jsx
+│   │       ├── OurMission.jsx
+│   │       ├── OurStory.jsx
+│   │       ├── OurVision.jsx
+│   │       ├── TargetAudience.jsx
+│   │       ├── TechStack.jsx
+│   │       └── Workflow.jsx
+│   ├── layout
+│   │   ├── AuthLayout.jsx
+│   │   ├── HomeFeedLayout.jsx
+│   │   └── ProfileLayout.jsx
+│   ├── navigation
+│   │   └── TopNavbar.jsx
+│   └── profile
+│       ├── ProfileBlogCard.jsx
+│       ├── ProfileHeader.jsx
+│       ├── ProfileTabs.jsx
+│       └── edit
+│           ├── AboutMe.jsx
+│           ├── DangerZone.jsx
+│           ├── EditProfileHeader.jsx
+│           ├── LivePreview.jsx
+│           ├── PersonalInfo.jsx
+│           ├── ProfilePicture.jsx
+│           ├── ReadingPreferences.jsx
+│           └── SecuritySettings.jsx
+├── index.css
+├── main.jsx
+├── pages
+│   ├── AboutPage.jsx
+│   ├── Bookmarks.jsx
+│   ├── ChangePassword.jsx
+│   ├── CreateBlog.jsx
+│   ├── EditProfile.jsx
+│   ├── FeaturesPage.jsx
+│   ├── ForgotPassword.jsx
+│   ├── HomeFeed.jsx
+│   ├── LandingPage.jsx
+│   ├── Profile.jsx
+│   ├── ResetPassword.jsx
+│   ├── SignIn.jsx
+│   ├── SignUp.jsx
+│   └── VerifyEmail.jsx
+└── styles
+    ├── auth
+    │   ├── ChangePasswordForm.module.css
+    │   ├── ForgotPasswordForm.module.css
+    │   ├── GoogleButton.module.css
+    │   ├── ResetPasswordForm.module.css
+    │   ├── SignInForm.module.css
+    │   ├── SignUpForm.module.css
+    │   ├── TestimonialCard.module.css
+    │   └── VerifyEmailForm.module.css
+    ├── bookmarks
+    │   ├── BookmarkCard.module.css
+    │   ├── BookmarksGrid.module.css
+    │   ├── BookmarksHeader.module.css
+    │   ├── BookmarksPage.module.css
+    │   ├── BookmarksSidebar.module.css
+    │   ├── BookmarksToolbar.module.css
+    │   ├── FavoriteCategories.module.css
+    │   ├── RecentlySaved.module.css
+    │   └── SummaryCard.module.css
+    ├── common
+    │   ├── Avatar.module.css
+    │   ├── Button.module.css
+    │   ├── InputField.module.css
+    │   └── Tag.module.css
+    ├── editor
+    │   ├── AIToolsPanel.module.css
+    │   ├── CreateBlog.module.css
+    │   ├── EditorCanvas.module.css
+    │   ├── EditorNavbar.module.css
+    │   ├── EditorSidebar.module.css
+    │   └── PostSettingsPanel.module.css
+    ├── home-feed
+    │   ├── ArticleCard.module.css
+    │   ├── FeedSection.module.css
+    │   ├── HeroArticle.module.css
+    │   ├── HomeFeed.module.css
+    │   └── RecommendedTopics.module.css
+    ├── landing
+    │   ├── AboutPage.module.css
+    │   ├── DashboardPreview.module.css
+    │   ├── FeaturesGrid.module.css
+    │   ├── FeaturesPage.module.css
+    │   ├── HeroSection.module.css
+    │   ├── LandingNavbar.module.css
+    │   ├── LandingPage.module.css
+    │   ├── PartnerLogos.module.css
+    │   └── about
+    │       ├── AboutCTA.module.css
+    │       ├── AboutHero.module.css
+    │       ├── CoreValues.module.css
+    │       ├── Differentiators.module.css
+    │       ├── LookingAhead.module.css
+    │       ├── OurMission.module.css
+    │       ├── OurStory.module.css
+    │       ├── OurVision.module.css
+    │       ├── TargetAudience.module.css
+    │       ├── TechStack.module.css
+    │       └── Workflow.module.css
+    ├── layout
+    │   ├── AuthLayout.module.css
+    │   ├── HomeFeedLayout.module.css
+    │   └── ProfileLayout.module.css
+    ├── navigation
+    │   └── TopNavbar.module.css
+    ├── profile
+    │   ├── Profile.module.css
+    │   ├── ProfileBlogCard.module.css
+    │   ├── ProfileHeader.module.css
+    │   ├── ProfileTabs.module.css
+    │   └── edit
+    │       ├── AboutMe.module.css
+    │       ├── DangerZone.module.css
+    │       ├── EditProfile.module.css
+    │       ├── EditProfileHeader.module.css
+    │       ├── LivePreview.module.css
+    │       ├── PersonalInfo.module.css
+    │       ├── ProfilePicture.module.css
+    │       ├── ReadingPreferences.module.css
+    │       └── SecuritySettings.module.css
+    └── variables.css
