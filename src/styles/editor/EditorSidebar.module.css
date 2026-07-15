@@ -1,42 +1,193 @@
+@import '../variables.css';
+
 .sidebar {
-    width: 320px;
-    flex-shrink: 0;
+    width: 240px;
+    background-color: #1a1a2e;
+    border-right: 1px solid #2d2d44;
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
-    padding: var(--space-xl);
-    position: sticky;
-    top: 60px;
-    height: calc(100vh - 60px);
-    overflow-y: auto;
+    position: relative;
+    transition: width 0.3s ease;
+    flex-shrink: 0;
 }
 
-/* Scrollbar styling */
-.sidebar::-webkit-scrollbar {
-    width: 4px;
+.sidebar.collapsed {
+    width: 72px;
 }
 
-.sidebar::-webkit-scrollbar-track {
+.sidebarHeader {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid #2d2d44;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.logoIcon {
+    color: #a78bfa;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+}
+
+.logoTag {
+    font-size: 11px;
+    color: #64748b;
+    margin-left: 34px;
+    display: block;
+}
+
+.nav {
+    flex: 1;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
     background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
 }
 
-.sidebar::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 2px;
+.navItem:hover {
+    background-color: #252542;
+    color: #e2e8f0;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .sidebar {
-        width: 280px;
-    }
+.navItem.active {
+    background-color: #4c1d95;
+    color: #f8fafc;
 }
 
-@media (max-width: 900px) {
-    .sidebar {
-        width: 100%;
-        position: static;
-        height: auto;
-        padding: var(--space-md);
-    }
+.navIcon {
+    flex-shrink: 0;
+}
+
+.activeIndicator {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 20px;
+    background-color: #a78bfa;
+    border-radius: 0 4px 4px 0;
+}
+
+.sidebarFooter {
+    padding: 16px 12px;
+    border-top: 1px solid #2d2d44;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.upgradeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.upgradeButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.footerLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.footerLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+}
+
+.footerLink:hover {
+    background-color: #252542;
+    color: #e2e8f0;
+}
+
+.footerIcon {
+    flex-shrink: 0;
+}
+
+.collapseButton {
+    position: absolute;
+    right: -12px;
+    top: 80px;
+    width: 24px;
+    height: 24px;
+    background: #2d2d44;
+    border: 2px solid #1a1a2e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.collapseButton:hover {
+    background: #4c1d95;
+    color: white;
+}
+
+/* Collapsed state adjustments */
+.collapsed .upgradeButton {
+    padding: 10px;
+}
+
+.collapsed .footerLink {
+    justify-content: center;
+    padding: 10px 0;
 }
