@@ -1,71 +1,134 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import ProfileLayout from '../components/layout/ProfileLayout';
+import TopNavbar from '../components/navigation/TopNavbar';
+import ProfileSidebar from '../components/profile/ProfileSidebar';
 import ProfileHeader from '../components/profile/ProfileHeader';
+import ProfileStats from '../components/profile/ProfileStats';
 import ProfileTabs from '../components/profile/ProfileTabs';
+import ProfileSearchBar from '../components/profile/ProfileSearchBar';
 import ProfileBlogCard from '../components/profile/ProfileBlogCard';
 import styles from '../styles/profile/Profile.module.css';
 
-const blogs = [
-    {
-        id: 1,
-        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop',
-        category: 'Tech',
-        date: 'Oct 12',
-        title: 'The Future of Generative UI in Web Design',
-        excerpt: 'Exploring how AI models are fundamentally changing the way we structure and render...',
-        readTime: '5 min read',
-        bookmarked: false,
-    },
-    {
-        id: 2,
-        image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop',
-        category: 'Productivity',
-        date: 'Sep 20',
-        title: 'Mastering Deep Work in an AI Era',
-        excerpt: 'Strategies to maintain focus and leverage intelligent tools without losing your creative...',
-        readTime: '8 min read',
-        bookmarked: true,
-    },
-];
-
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('blogs');
-    const navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('newest');
 
-    const handleTabChange = (tabId) => {
-        if (tabId === 'bookmarks') {
-            navigate('/bookmarks');
-        } else {
-            setActiveTab(tabId);
-        }
+    const user = {
+        name: 'Alex Chen',
+        handle: '@alexchen',
+        role: 'AI Researcher',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+        banner: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&h=400&fit=crop',
+        bio: 'Exploring the intersection of artificial intelligence and creative writing. Helping brands tell smarter stories through data-driven narratives and editorial precision.',
+        location: 'San Francisco, CA',
+        website: 'alexchen.dev',
+        joined: 'March 2023',
+        authProvider: 'Google',
+        stats: {
+            followers: '12.4K',
+            following: '842',
+            published: 12,
+            drafts: 4,
+            bookmarks: 15,
+        },
     };
 
+    const sidebarNavItems = [
+        { id: 'feed', label: 'My Feed', icon: 'Rss' },
+        { id: 'trending', label: 'Trending', icon: 'TrendingUp' },
+        { id: 'library', label: 'Library', icon: 'BookOpen' },
+        { id: 'workspace', label: 'AI Workspace', icon: 'Sparkles' },
+        { id: 'profile', label: 'Profile', icon: 'User', active: true },
+        { id: 'settings', label: 'Settings', icon: 'Settings' },
+    ];
+
+    const blogs = [
+        {
+            id: 1,
+            title: 'The Future of Generative AI in Professional...',
+            description: 'How neural networks are reshaping the way we work...',
+            coverImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=340&fit=crop',
+            status: 'PUBLISHED',
+            readTime: '5 min read',
+            views: '1.2K views',
+            date: '2 days ago',
+        },
+        {
+            id: 2,
+            title: 'Mastering the Human-AI Hybrid Content Workflow',
+            description: 'A deep dive into the systems and tools I use to augment my...',
+            coverImage: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&h=340&fit=crop',
+            status: 'PUBLISHED',
+            readTime: '8 min read',
+            views: '854 views',
+            date: '1 week ago',
+        },
+        {
+            id: 3,
+            title: 'Ethical Implications of Large Language Models',
+            description: 'Navigating the complex landscape of training data...',
+            coverImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=340&fit=crop',
+            status: 'PUBLISHED',
+            readTime: '12 min read',
+            views: '3.8K views',
+            date: '2 weeks ago',
+        },
+    ];
+
+    const filteredBlogs = blogs.filter(blog =>
+        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        blog.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <ProfileLayout>
-            <ProfileHeader />
-            <ProfileTabs activeTab={activeTab} onTabChange={handleTabChange} />
+        <div className={styles.profilePage}>
+            <ProfileSidebar
+                user={user}
+                navItems={sidebarNavItems}
+            />
 
-            {activeTab === 'blogs' && (
-                <div className={styles.grid}>
-                    {blogs.map((blog) => (
-                        <ProfileBlogCard key={blog.id} {...blog} />
-                    ))}
-                </div>
-            )}
+            <div className={styles.mainContent}>
+                <TopNavbar />
 
-            {activeTab === 'drafts' && (
-                <div className={styles.emptyState}>
-                    <p>No drafts yet.</p>
-                </div>
-            )}
+                <div className={styles.scrollArea}>
+                    <ProfileHeader user={user} />
+                    <ProfileStats stats={user.stats} />
 
-            {activeTab === 'bookmarks' && (
-                <div className={styles.emptyState}>
-                    <p>No bookmarks yet.</p>
+                    <div className={styles.contentSection}>
+                        <div className={styles.tabsRow}>
+                            <ProfileTabs
+                                activeTab={activeTab}
+                                onTabChange={setActiveTab}
+                                counts={{
+                                    blogs: user.stats.published,
+                                    drafts: user.stats.drafts,
+                                    bookmarks: user.stats.bookmarks,
+                                }}
+                            />
+                            <ProfileSearchBar
+                                searchQuery={searchQuery}
+                                onSearchChange={setSearchQuery}
+                                sortBy={sortBy}
+                                onSortChange={setSortBy}
+                            />
+                        </div>
+
+                        <div className={styles.blogGrid}>
+                            {filteredBlogs.map(blog => (
+                                <ProfileBlogCard key={blog.id} blog={blog} />
+                            ))}
+                        </div>
+
+                        <button className={styles.loadMore}>
+                            Load More Articles
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-            )}
-        </ProfileLayout>
+            </div>
+        </div>
     );
 };
 

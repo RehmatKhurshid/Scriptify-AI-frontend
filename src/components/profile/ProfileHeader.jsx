@@ -1,40 +1,74 @@
 import React from 'react';
-import { FiEdit3 } from 'react-icons/fi';
-import Avatar from '../../components/common/Avatar';
-import Button from '../../components/common/Button';
+import { PenLine, MapPin, Link as LinkIcon, Calendar, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import styles from '../../styles/profile/ProfileHeader.module.css';
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ user }) => {
     return (
         <div className={styles.header}>
-            <div className={styles.avatarWrapper}>
-                <Avatar
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
-                    alt="Alex Chen"
-                    size="xl"
-                    className={styles.avatar}
-                />
+            <div className={styles.banner}>
+                <img src={user.banner} alt="Profile banner" />
+                <div className={styles.bannerOverlay} />
             </div>
 
-            <h1 className={styles.name}>Alex Chen</h1>
-            <p className={styles.bio}>
-                AI Enthusiast & Tech Blogger exploring the intersection of design, code, and generative intelligence.
-            </p>
-
-            <div className={styles.stats}>
-                <div className={styles.stat}>
-                    <span className={styles.statValue}>2.4k</span>
-                    <span className={styles.statLabel}>FOLLOWERS</span>
+            <div className={styles.headerContent}>
+                <div className={styles.avatarSection}>
+                    <div className={styles.avatar}>
+                        <img src={user.avatar} alt={user.name} />
+                    </div>
                 </div>
-                <div className={styles.stat}>
-                    <span className={styles.statValue}>800</span>
-                    <span className={styles.statLabel}>FOLLOWING</span>
+
+                <div className={styles.infoSection}>
+                    <div className={styles.nameRow}>
+                        <h1 className={styles.name}>{user.name}</h1>
+                        <span className={styles.verifiedBadge}>
+                            <CheckCircle size={14} />
+                            Verified Author
+                        </span>
+                    </div>
+
+                    <p className={styles.bio}>{user.bio}</p>
+
+                    <div className={styles.metaRow}>
+                        <span className={styles.metaItem}>
+                            <MapPin size={14} />
+                            {user.location}
+                        </span>
+                        <span className={styles.metaItem}>
+                            <LinkIcon size={14} />
+                            {user.website}
+                        </span>
+                        <span className={styles.metaItem}>
+                            <Calendar size={14} />
+                            Joined {user.joined}
+                        </span>
+                        <span className={styles.metaItem}>
+                            <CheckCircle size={14} />
+                            Authenticated via {user.authProvider}
+                        </span>
+                    </div>
+                </div>
+
+                <div className={styles.actions}>
+                    <Link to="/create" className={styles.writeButton}>
+                        <PenLine size={16} />
+                        <span>Write New Blog</span>
+                    </Link>
+                    <Link to="/edit-profile" className={styles.editButton} title="Edit Profile">
+                        <PenLine size={16} />
+                    </Link>
+                    <button className={styles.moreButton}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="6" r="2" />
+                            <circle cx="12" cy="12" r="2" />
+                            <circle cx="12" cy="18" r="2" />
+                        </svg>
+                    </button>
+                    <Link to="/change-password" className={styles.changePassword}>
+                        Change Password
+                    </Link>
                 </div>
             </div>
-
-            <Button variant="outline" size="sm" icon={<FiEdit3 />}>
-                Edit Profile
-            </Button>
         </div>
     );
 };

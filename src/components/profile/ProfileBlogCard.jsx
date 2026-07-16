@@ -1,40 +1,44 @@
 import React from 'react';
-import { FiBookmark } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { Eye, Edit, Trash2, Clock } from 'lucide-react';
 import styles from '../../styles/profile/ProfileBlogCard.module.css';
 
-const ProfileBlogCard = ({
-    image,
-    category,
-    date,
-    title,
-    excerpt,
-    readTime,
-    bookmarked = false,
-}) => {
+const ProfileBlogCard = ({ blog }) => {
     return (
         <article className={styles.card}>
-            <div className={styles.imageWrapper}>
-                <img src={image} alt={title} className={styles.image} />
-                <div className={styles.imageOverlay}></div>
+            <div className={styles.coverWrapper}>
+                <img src={blog.coverImage} alt={blog.title} className={styles.cover} />
+                <div className={styles.statusBadge}>
+                    <span className={styles.statusDot} />
+                    {blog.status}
+                </div>
+                <div className={styles.readTime}>
+                    <Clock size={12} />
+                    {blog.readTime}
+                </div>
             </div>
 
             <div className={styles.content}>
-                <div className={styles.meta}>
-                    <span className={styles.category}>{category}</span>
-                    <span className={styles.date}>{date}</span>
-                </div>
-
-                <h3 className={styles.title}>{title}</h3>
-                <p className={styles.excerpt}>{excerpt}</p>
+                <h3 className={styles.title}>{blog.title}</h3>
+                <p className={styles.description}>{blog.description}</p>
 
                 <div className={styles.footer}>
-                    <span className={styles.readTime}>{readTime}</span>
-                    <button
-                        className={`${styles.bookmarkButton} ${bookmarked ? styles.bookmarked : ''}`}
-                        aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
-                    >
-                        <FiBookmark />
-                    </button>
+                    <div className={styles.stats}>
+                        <Eye size={14} />
+                        <span>{blog.views}</span>
+                    </div>
+
+                    <div className={styles.actions}>
+                        <Link to={`/edit/${blog.id}`} className={styles.actionBtn} title="Edit">
+                            <Edit size={14} />
+                        </Link>
+                        <button className={styles.actionBtn} title="View">
+                            <Eye size={14} />
+                        </button>
+                        <button className={styles.actionBtn} title="Delete">
+                            <Trash2 size={14} />
+                        </button>
+                    </div>
                 </div>
             </div>
         </article>

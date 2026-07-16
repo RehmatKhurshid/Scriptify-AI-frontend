@@ -1,0 +1,51 @@
+@import '../variables.css';
+
+.statsContainer {
+    padding: 0 32px 24px;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.statCard {
+    background: #13131f;
+    border: 1px solid #1e1e2e;
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.statCard:hover {
+    border-color: #2d2d44;
+    transform: translateY(-2px);
+}
+
+.statValue {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.statLabel {
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
