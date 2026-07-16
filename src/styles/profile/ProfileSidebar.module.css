@@ -1,0 +1,161 @@
+@import '../variables.css';
+
+.sidebar {
+    width: 260px;
+    background-color: #0f0f1a;
+    border-right: 1px solid #1e1e2e;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    padding: 20px 16px;
+}
+
+.sidebarHeader {
+    margin-bottom: 24px;
+    padding: 0 8px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logoIcon {
+    color: #a78bfa;
+}
+
+.logoText {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.5px;
+}
+
+.userCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px;
+    background: #13131f;
+    border: 1px solid #1e1e2e;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.userAvatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #2d2d44;
+    margin-bottom: 12px;
+    border: 3px solid #4c1d95;
+}
+
+.userAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.userName {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0 0 4px 0;
+}
+
+.userRole {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.editProfile {
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid #2d2d44;
+    border-radius: 8px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.editProfile:hover {
+    background: #1a1a2e;
+    color: #e2e8f0;
+    border-color: #4c1d95;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-size: 14px;
+    width: 100%;
+}
+
+.navItem:hover {
+    background: #1a1a2e;
+    color: #e2e8f0;
+}
+
+.navItem.active {
+    background: #4c1d95;
+    color: #f8fafc;
+}
+
+.navIcon {
+    flex-shrink: 0;
+}
+
+.navLabel {
+    font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 72px;
+        padding: 20px 12px;
+    }
+
+    .logoText,
+    .userName,
+    .userRole,
+    .editProfile,
+    .navLabel {
+        display: none;
+    }
+
+    .userCard {
+        padding: 12px;
+    }
+
+    .userAvatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .navItem {
+        justify-content: center;
+        padding: 12px;
+    }
+}

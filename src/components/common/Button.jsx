@@ -9,6 +9,7 @@ const Button = ({
     icon = null,
     onClick,
     type = 'button',
+    className = '',
     ...props
 }) => {
     const classNames = [
@@ -16,6 +17,7 @@ const Button = ({
         styles[variant],
         styles[size],
         fullWidth && styles.fullWidth,
+        className,
     ]
         .filter(Boolean)
         .join(' ');
