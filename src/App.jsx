@@ -1,21 +1,26 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import VerifyEmail from './pages/VerifyEmail';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import ChangePassword from './pages/ChangePassword';
-import HomeFeed from './pages/HomeFeed';
-import Profile from './pages/Profile';
-import EditProfile from './pages/EditProfile';
-import CreateBlog from './pages/CreateBlog';
-import EditBlog from './pages/EditBlog';
-import Bookmarks from './pages/Bookmarks';
-import LandingPage from './pages/LandingPage';
-import FeaturesPage from './pages/FeaturesPage';
-import AboutPage from './pages/AboutPage';
+import SignIn from './pages/auth/SignIn';
+import SignUp from './pages/auth/SignUp';
+import VerifyEmail from './pages/auth/VerifyEmail';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import ChangePassword from './pages/user/ChangePassword';
+import HomeFeed from './pages/auth/HomeFeed';
+import Profile from './pages/user/Profile';
+import EditProfile from './pages/user/EditProfile';
+import CreateBlog from './pages/blog/CreateBlog';
+import EditBlog from './pages/blog/EditBlog';
+import Bookmarks from './pages/user/Bookmarks';
+import LandingPage from './pages/home/LandingPage';
+import FeaturesPage from './pages/home/FeaturesPage';
+import AboutPage from './pages/home/AboutPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import UserManagement from './pages/admin/UserManagement';
+import BlogManagement from './pages/admin/BlogManagement';
+import FlaggedComments from './pages/admin/FlaggedComments';
 import './styles/variables.css';
+
 
 function App() {
   return (
@@ -37,6 +42,10 @@ function App() {
         <Route path="/create" element={<CreateBlog />} />
         <Route path="/edit/:id" element={<EditBlog />} />
         <Route path="/edit-blog" element={<EditBlog />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<UserManagement />} />
+        <Route path="/admin/blogs" element={<BlogManagement />} />
+        <Route path="/admin/flagged-comments" element={<FlaggedComments />} />
       </Routes>
     </BrowserRouter>
   );

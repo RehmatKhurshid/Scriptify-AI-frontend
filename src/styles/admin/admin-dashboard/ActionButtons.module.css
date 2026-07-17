@@ -1,0 +1,49 @@
+.actionsRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.actionButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionButton:hover {
+    background: #1a2236;
+    border-color: #334155;
+    color: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.actionButton svg {
+    color: #64748b;
+}
+
+.actionButton:hover svg {
+    color: #a78bfa;
+}
+
+@media (max-width: 1024px) {
+    .actionsRow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .actionsRow {
+        grid-template-columns: 1fr;
+    }
+}

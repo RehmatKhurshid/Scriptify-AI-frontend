@@ -1,0 +1,72 @@
+.panel {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.panelTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0;
+}
+
+.viewAll {
+    font-size: 13px;
+    color: #64748b;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.viewAll:hover {
+    color: #a78bfa;
+}
+
+.activityList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activityItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.activityIcon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.activityContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.activityText {
+    font-size: 13px;
+    color: #e2e8f0;
+    margin: 0 0 4px 0;
+    line-height: 1.5;
+}
+
+.activityTime {
+    font-size: 11px;
+    color: #475569;
+}
