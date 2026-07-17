@@ -1,0 +1,261 @@
+.tableCard {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.thCheckbox,
+.tdCheckbox {
+    width: 48px;
+    padding: 14px 16px;
+    text-align: center;
+}
+
+.th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1e293b;
+    background: #0d1117;
+}
+
+.thActions {
+    text-align: right;
+    padding: 14px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1e293b;
+    background: #0d1117;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+}
+
+.checkbox input {
+    width: 100%;
+    height: 100%;
+    accent-color: #7c3aed;
+    cursor: pointer;
+}
+
+.row {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.row:hover {
+    background: rgba(124, 58, 237, 0.05);
+}
+
+.row.selected {
+    background: rgba(124, 58, 237, 0.08);
+}
+
+.tdUser {
+    padding: 14px 16px;
+}
+
+.userCell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #1e293b;
+    flex-shrink: 0;
+}
+
+.userAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.userNameRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.userName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.verifiedBadge {
+    color: #06b6d4;
+    flex-shrink: 0;
+}
+
+.userEmail {
+    font-size: 12px;
+    color: #475569;
+}
+
+.td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #94a3b8;
+    border-bottom: 1px solid #1e293b;
+}
+
+.authCell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+}
+
+.authCell svg {
+    color: #64748b;
+}
+
+.roleBadge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.roleAdmin {
+    color: #c4b5fd;
+    background: rgba(196, 181, 253, 0.1);
+    border: 1px solid rgba(196, 181, 253, 0.2);
+}
+
+.roleBlogger {
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.1);
+    border: 1px solid rgba(244, 114, 182, 0.2);
+}
+
+.roleReader {
+    color: #94a3b8;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.statusActive .statusDot {
+    background: #34d399;
+    box-shadow: 0 0 6px rgba(52, 211, 153, 0.4);
+}
+
+.statusSuspended .statusDot {
+    background: #f472b6;
+}
+
+.statusActive {
+    color: #34d399;
+}
+
+.statusSuspended {
+    color: #f472b6;
+}
+
+.joined {
+    color: #64748b;
+}
+
+.tdActions {
+    padding: 14px 16px;
+    text-align: right;
+    border-bottom: 1px solid #1e293b;
+}
+
+.actionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.actionBtn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    background: #1e293b;
+    color: #e2e8f0;
+}
+
+.deleteBtn:hover {
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.1);
+}
+
+.banBtn:hover {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+}
+
+.row:last-child .td,
+.row:last-child .tdActions,
+.row:last-child .tdCheckbox,
+.row:last-child .tdUser {
+    border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+
+    .th:nth-child(4),
+    .th:nth-child(5),
+    .td:nth-child(4),
+    .td:nth-child(5) {
+        display: none;
+    }
+}

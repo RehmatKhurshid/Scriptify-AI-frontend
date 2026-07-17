@@ -1,0 +1,55 @@
+.bulkActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.label {
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.actionBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    background: #334155;
+    border-color: #475569;
+}
+
+.deleteBtn {
+    background: rgba(244, 114, 182, 0.1);
+    border-color: rgba(244, 114, 182, 0.3);
+    color: #f472b6;
+}
+
+.deleteBtn:hover {
+    background: rgba(244, 114, 182, 0.2);
+    border-color: #f472b6;
+}
+
+@media (max-width: 768px) {
+    .bulkActions {
+        gap: 8px;
+    }
+
+    .actionBtn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
