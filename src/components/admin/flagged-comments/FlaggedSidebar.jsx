@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import styles from '../../../styles/admin/flagged-comments/FlaggedSidebar.module.css';
 
@@ -43,6 +44,14 @@ const iconMap = {
     ),
 };
 
+const routeMap = {
+    dashboard: '/admin',
+    users: '/admin/users',
+    blogs: '/admin/blogs',
+    flagged: '/admin/flagged-comments',
+    settings: '/admin/settings',
+};
+
 const FlaggedSidebar = ({ navItems }) => {
     return (
         <aside className={styles.sidebar}>
@@ -72,16 +81,18 @@ const FlaggedSidebar = ({ navItems }) => {
                     const isActive = item.active;
 
                     return (
-                        <button
+                        <Link
                             key={item.id}
+                            to={routeMap[item.id] || '/admin'}
                             className={`${styles.navItem} ${isActive ? styles.active : ''}`}
+                            style={{ textDecoration: 'none' }}
                         >
                             <span className={styles.navIcon}>{iconMap[item.icon]}</span>
                             <span className={styles.navLabel}>{item.label}</span>
                             {item.badge && (
                                 <span className={styles.badge}>{item.badge}</span>
                             )}
-                        </button>
+                        </Link>
                     );
                 })}
             </nav>

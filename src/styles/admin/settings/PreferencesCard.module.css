@@ -1,0 +1,133 @@
+.card {
+    background: #151e32;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.cardTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f8fafc;
+    margin: 0 0 20px 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.preferenceSection {
+    margin-bottom: 24px;
+}
+
+.preferenceSection:last-child {
+    margin-bottom: 0;
+}
+
+.sectionLabel {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin-bottom: 12px;
+}
+
+.themeGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.themeCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    background: #0b1120;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.themeCard:hover {
+    border-color: #475569;
+    color: #e2e8f0;
+}
+
+.themeCard.active {
+    border-color: #a78bfa;
+    color: #f8fafc;
+    background: rgba(167, 139, 250, 0.05);
+}
+
+.checkDot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: #a78bfa;
+    border-radius: 50%;
+}
+
+.toggleRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.toggleInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.toggleSub {
+    font-size: 12px;
+    color: #475569;
+}
+
+.toggle {
+    width: 44px;
+    height: 24px;
+    background: #334155;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.toggle.on {
+    background: #a78bfa;
+}
+
+.toggleThumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #f8fafc;
+    border-radius: 50%;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle.on .toggleThumb {
+    left: 22px;
+}
+
+@media (max-width: 768px) {
+    .themeGrid {
+        grid-template-columns: 1fr;
+    }
+}

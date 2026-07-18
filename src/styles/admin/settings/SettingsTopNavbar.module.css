@@ -1,0 +1,120 @@
+.navbar {
+    height: 60px;
+    background: #0b1120;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+}
+
+.searchWrapper {
+    position: relative;
+    width: 280px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #475569;
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 24px;
+    color: #e2e8f0;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.searchInput::placeholder {
+    color: #475569;
+}
+
+.searchInput:focus {
+    border-color: #4c1d95;
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.iconButton {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.iconButton:hover {
+    color: #e2e8f0;
+}
+
+.notificationDot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    background: #f472b6;
+    border-radius: 50%;
+    border: 2px solid #0b1120;
+}
+
+.brandBadge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.brandBadge svg {
+    color: #fbbf24;
+}
+
+.userAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #334155;
+    cursor: pointer;
+}
+
+.userAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .searchWrapper {
+        width: 200px;
+    }
+
+    .brandBadge {
+        display: none;
+    }
+}
