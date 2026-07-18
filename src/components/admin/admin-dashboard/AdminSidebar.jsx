@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     LayoutDashboard,
     Users,
@@ -20,6 +21,14 @@ const iconMap = {
     Settings,
 };
 
+const routeMap = {
+    dashboard: '/admin',
+    users: '/admin/users',
+    blogs: '/admin/blogs',
+    flagged: '/admin/flagged-comments',
+    settings: '/admin/settings',
+};
+
 const AdminSidebar = ({ navItems, isEditorial = false }) => {
     return (
         <aside className={styles.sidebar}>
@@ -34,10 +43,10 @@ const AdminSidebar = ({ navItems, isEditorial = false }) => {
             </div>
 
             {isEditorial && (
-                <button className={styles.newPostBtn}>
+                <Link to="/create" className={styles.newPostBtn} style={{ textDecoration: 'none' }}>
                     <Plus size={16} />
                     <span>New Post</span>
-                </button>
+                </Link>
             )}
 
             <nav className={styles.nav}>
@@ -46,14 +55,16 @@ const AdminSidebar = ({ navItems, isEditorial = false }) => {
                     const isActive = item.active;
 
                     return (
-                        <button
+                        <Link
                             key={item.id}
+                            to={routeMap[item.id] || '/admin'}
                             className={`${styles.navItem} ${isActive ? styles.active : ''}`}
+                            style={{ textDecoration: 'none' }}
                         >
                             <IconComponent className={styles.navIcon} size={18} />
                             <span className={styles.navLabel}>{item.label}</span>
                             {isActive && <div className={styles.activeIndicator} />}
-                        </button>
+                        </Link>
                     );
                 })}
             </nav>

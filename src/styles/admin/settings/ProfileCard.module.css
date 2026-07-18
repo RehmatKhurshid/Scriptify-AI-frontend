@@ -1,0 +1,177 @@
+.card {
+    background: #151e32;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.cardTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f8fafc;
+    margin: 0 0 20px 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.profileContent {
+    display: flex;
+    gap: 24px;
+}
+
+.avatarSection {
+    flex-shrink: 0;
+}
+
+.avatarWrapper {
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #334155;
+}
+
+.editAvatar {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #475569;
+    border: 2px solid #151e32;
+    border-radius: 50%;
+    color: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.editAvatar:hover {
+    background: #64748b;
+}
+
+.formSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
+    letter-spacing: 0.5px;
+}
+
+.input {
+    padding: 10px 14px;
+    background: #0b1120;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input:focus {
+    border-color: #4c1d95;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.metaRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 4px;
+}
+
+.metaItem {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.metaLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
+    letter-spacing: 0.5px;
+}
+
+.metaBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(167, 139, 250, 0.15);
+    border-radius: 6px;
+    font-size: 12px;
+    color: #c4b5fd;
+    width: fit-content;
+    font-weight: 500;
+}
+
+.metaBadge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #c4b5fd;
+    border-radius: 50%;
+}
+
+.metaValue {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #1e293b;
+}
+
+.saveBtn {
+    padding: 10px 24px;
+    background: #c4b5fd;
+    border: none;
+    border-radius: 24px;
+    color: #1e1b4b;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveBtn:hover {
+    background: #a78bfa;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .profileContent {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .metaRow {
+        grid-template-columns: 1fr;
+    }
+}

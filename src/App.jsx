@@ -19,6 +19,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import UserManagement from './pages/admin/UserManagement';
 import BlogManagement from './pages/admin/BlogManagement';
 import FlaggedComments from './pages/admin/FlaggedComments';
+import AdminSettings from './pages/admin/AdminSettings';
 import './styles/variables.css';
 
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="/admin/users" element={<UserManagement />} />
         <Route path="/admin/blogs" element={<BlogManagement />} />
         <Route path="/admin/flagged-comments" element={<FlaggedComments />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
       </Routes>
     </BrowserRouter>
   );
