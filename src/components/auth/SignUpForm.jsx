@@ -1,35 +1,63 @@
 import React, { useState } from 'react';
-import { FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
-import { FcGoogle } from 'react-icons/fc';
-import InputField from '../common/InputField';
+import { useNavigate } from 'react-router-dom';
+import { FiArrowRight, FiEye, FiEyeOff, FiRefreshCw } from 'react-icons/fi';
 import Button from '../common/Button';
+import { authService } from '../../services/authService';
 import styles from '../../styles/auth/SignUpForm.module.css';
 
-const GoogleButton = ({ onClick }) => {
-    return (
-        <button type="button" className={styles.googleButton} onClick={onClick}>
-            <FcGoogle className={styles.googleIcon} />
-            <span className={styles.googleText}>Continue with Google</span>
-        </button>
-    );
-};
-
 const SignUpForm = () => {
-    const [firstName, setFirstName] = useState('Jamie');
-    const [lastName, setLastName] = useState('Doe');
-    const [email, setEmail] = useState('jamie@example.com');
-    const [password, setPassword] = useState('••••••••');
-    const [confirmPassword, setConfirmPassword] = useState('••••••••');
+    const navigate = useNavigate();
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Sign up:', { firstName, lastName, email, password, confirmPassword });
-    };
+        setError('');
+        setSuccessMessage('');
 
-    const handleGoogleSignUp = () => {
-        console.log('Google sign up');
+        if (!firstName.trim() || !lastName.trim() || !email.trim() || !password) {
+            setError('Please fill in all required fields.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return;
+        }
+
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters long.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const data = await authService.signUp({
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                email: email.trim(),
+                password,
+            });
+
+            setSuccessMessage(data.message || 'Registration successful! Redirecting to email verification...');
+            
+            setTimeout(() => {
+                navigate('/verify-email', { state: { email: email.trim() } });
+            }, 1500);
+        } catch (err) {
+            setError(err.message || 'Signup failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -55,13 +83,17 @@ const SignUpForm = () => {
                 <p className={styles.subtitle}>Join the focused editorial workflow.</p>
             </div>
 
-            <GoogleButton onClick={handleGoogleSignUp} />
+            {error && (
+                <div className={styles.errorAlert} role="alert">
+                    {error}
+                </div>
+            )}
 
-            <div className={styles.divider}>
-                <span className={styles.dividerLine}></span>
-                <span className={styles.dividerText}>or</span>
-                <span className={styles.dividerLine}></span>
-            </div>
+            {successMessage && (
+                <div className={styles.successAlert} role="status">
+                    {successMessage}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.nameRow}>
@@ -74,6 +106,8 @@ const SignUpForm = () => {
                             placeholder="First Name"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
+                            disabled={loading}
+                            required
                         />
                     </div>
                     <div className={styles.nameField}>
@@ -85,6 +119,8 @@ const SignUpForm = () => {
                             placeholder="Last Name"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
+                            disabled={loading}
+                            required
                         />
                     </div>
                 </div>
@@ -98,6 +134,8 @@ const SignUpForm = () => {
                         placeholder="name@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        disabled={loading}
+                        required
                     />
                 </div>
 
@@ -111,28 +149,44 @@ const SignUpForm = () => {
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            disabled={loading}
+                            required
                         />
                         <button
                             type="button"
                             className={styles.eyeButton}
                             onClick={() => setShowPassword(!showPassword)}
                             aria-label={showPassword ? 'Hide password' : 'Show password'}
+                            disabled={loading}
                         >
-                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                            {showPassword ? <FiEye /> : <FiEyeOff />}
                         </button>
                     </div>
                 </div>
 
                 <div className={styles.field}>
                     <label htmlFor="confirmPassword" className={styles.label}>Confirm Password</label>
-                    <input
-                        id="confirmPassword"
-                        type={showConfirmPassword ? 'text' : 'password'}
-                        className={styles.input}
-                        placeholder="••••••••"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
+                    <div className={styles.passwordWrapper}>
+                        <input
+                            id="confirmPassword"
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            className={styles.input}
+                            placeholder="••••••••"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            disabled={loading}
+                            required
+                        />
+                        <button
+                            type="button"
+                            className={styles.eyeButton}
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                            disabled={loading}
+                        >
+                            {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
+                        </button>
+                    </div>
                 </div>
 
                 <div className={styles.submitWrapper}>
@@ -141,9 +195,10 @@ const SignUpForm = () => {
                         variant="primary"
                         size="md"
                         fullWidth
-                        icon={<FiArrowRight />}
+                        icon={loading ? <FiRefreshCw style={{ animation: 'spin 1s linear infinite' }} /> : <FiArrowRight />}
+                        disabled={loading}
                     >
-                        Sign up
+                        {loading ? 'Creating Account...' : 'Sign up'}
                     </Button>
                 </div>
             </form>

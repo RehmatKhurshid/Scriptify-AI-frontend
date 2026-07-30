@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { FiCamera, FiTrash2 } from 'react-icons/fi';
 import Avatar from '../../common/Avatar';
 import styles from '../../../styles/profile/edit/ProfilePicture.module.css';
 
-const ProfilePicture = () => {
-    const [avatar, setAvatar] = useState('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face');
+const ProfilePicture = ({ avatarPreview, onAvatarChange, onAvatarRemove }) => {
+    const fileInputRef = useRef(null);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file && onAvatarChange) {
+            onAvatarChange(file);
+        }
+    };
 
     return (
         <div className={styles.section}>
@@ -13,27 +20,44 @@ const ProfilePicture = () => {
                 <h3 className={styles.sectionTitle}>Profile Picture</h3>
             </div>
 
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                style={{ display: 'none' }}
+            />
+
             <div className={styles.content}>
                 <div className={styles.avatarWrapper}>
-                    <Avatar src={avatar} alt="Profile" size="xl" />
-                    <button className={styles.cameraButton}>
+                    <Avatar src={avatarPreview} alt="Profile Avatar" size="xl" />
+                    <button
+                        type="button"
+                        className={styles.cameraButton}
+                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                        title="Upload Avatar"
+                    >
                         <FiCamera />
                     </button>
                 </div>
 
                 <div className={styles.actions}>
-                    <button className={styles.uploadButton}>
+                    <button
+                        type="button"
+                        className={styles.uploadButton}
+                        onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                    >
                         Upload new avatar
                     </button>
-                    <button className={styles.removeButton}>
+                    <button
+                        type="button"
+                        className={styles.removeButton}
+                        onClick={onAvatarRemove}
+                    >
                         <FiTrash2 />
                         Remove avatar
                     </button>
                 </div>
-
-                <p className={styles.hint}>
-                    Recommended: Square JPG, PNG or WebP. Max 2MB.
-                </p>
             </div>
         </div>
     );

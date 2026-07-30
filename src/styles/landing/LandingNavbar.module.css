@@ -1,9 +1,9 @@
 .navbar {
-    position: sticky;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    z-index: 1000;
     background-color: rgba(11, 15, 26, 0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -75,6 +75,12 @@
     height: 2px;
     background: linear-gradient(90deg, var(--color-purple-500), var(--color-purple-400));
     border-radius: 2px;
+}
+
+.centerNav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
 }
 
 .right {
@@ -243,14 +249,6 @@
 
 /* Responsive */
 @media (max-width: 1024px) and (min-width: 769px) {
-    .left {
-        gap: var(--space-lg);
-    }
-
-    .navLinks {
-        gap: var(--space-md);
-    }
-
     .inner {
         padding: var(--space-md) var(--space-xl);
     }
@@ -261,20 +259,8 @@
         padding: var(--space-md) var(--space-lg);
     }
 
-    .navLinks {
-        display: none;
-    }
-
-    .signInLink {
-        display: none;
-    }
-
-    .ctaButton {
-        display: none;
-    }
-
-    .mobileToggle {
-        display: flex;
+    .right {
+        gap: var(--space-md);
     }
 }
 

@@ -1,20 +1,22 @@
 import React from 'react';
 import {
-    Bold,
-    Italic,
-    Underline,
-    Quote,
-    Image,
-    Code,
     Sparkles,
     Wand2,
     RefreshCw,
     Maximize2,
-    Minimize2
+    Minimize2,
+    Loader2
 } from 'lucide-react';
 import styles from '../../styles/editor/EditorCanvas.module.css';
 
-const EditorCanvas = ({ blogData, onChange }) => {
+const EditorCanvas = ({
+    blogData,
+    onChange,
+    onGenerateTags,
+    onGenerateSummary,
+    onImproveContent,
+    aiLoading = {},
+}) => {
     const categories = [
         'Artificial Intelligence',
         'Machine Learning',
@@ -31,10 +33,6 @@ const EditorCanvas = ({ blogData, onChange }) => {
                 <div className={styles.inputGroup}>
                     <div className={styles.labelRow}>
                         <label className={styles.label}>Title</label>
-                        <button className={styles.aiLabelButton}>
-                            <Sparkles size={12} className={styles.sparkleColor} />
-                            <span>Generate Title</span>
-                        </button>
                     </div>
                     <div className={styles.inputWithIcon}>
                         <input
@@ -66,9 +64,18 @@ const EditorCanvas = ({ blogData, onChange }) => {
                     <div className={`${styles.inputGroup} ${styles.colTags}`}>
                         <div className={styles.labelRow}>
                             <label className={styles.label}>SEO Tags</label>
-                            <button className={styles.aiLabelButton}>
-                                <Sparkles size={12} className={styles.sparkleColor} />
-                                <span>Generate Tags</span>
+                            <button
+                                type="button"
+                                className={styles.aiLabelButton}
+                                onClick={onGenerateTags}
+                                disabled={aiLoading.tags}
+                            >
+                                {aiLoading.tags ? (
+                                    <Loader2 size={12} className={styles.spinIcon} />
+                                ) : (
+                                    <Sparkles size={12} className={styles.sparkleColor} />
+                                )}
+                                <span>{aiLoading.tags ? 'Generating...' : 'Generate Tags'}</span>
                             </button>
                         </div>
                         <div className={styles.inputWithIcon}>
@@ -84,13 +91,92 @@ const EditorCanvas = ({ blogData, onChange }) => {
                     </div>
                 </div>
 
+                {/* Content Writing Section */}
+                <div className={styles.inputGroup}>
+                    <div className={styles.contentHeaderRow}>
+                        <label className={styles.label}>Content</label>
+
+                        {/* Top AI Action Buttons for Content */}
+                        <div className={styles.contentAiBar}>
+                            <button
+                                type="button"
+                                className={`${styles.contentAiBtn} ${aiLoading.improve === 'improve' ? styles.activeAI : ''}`}
+                                onClick={() => onImproveContent('improve', 'Improve grammar, clarity, readability, and professional tone.')}
+                                disabled={!!aiLoading.improve}
+                            >
+                                {aiLoading.improve === 'improve' ? <Loader2 size={13} className={styles.spinIcon} /> : <Sparkles size={13} />}
+                                <span>{aiLoading.improve === 'improve' ? 'Improving...' : 'Improve Content'}</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                className={`${styles.contentAiBtn} ${aiLoading.improve === 'continue' ? styles.activeAI : ''}`}
+                                onClick={() => onImproveContent('continue', 'Continue writing the next logical paragraph or section seamlessly.')}
+                                disabled={!!aiLoading.improve}
+                            >
+                                {aiLoading.improve === 'continue' ? <Loader2 size={13} className={styles.spinIcon} /> : <Wand2 size={13} />}
+                                <span>{aiLoading.improve === 'continue' ? 'Writing...' : 'Continue Writing'}</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                className={`${styles.contentAiBtn} ${aiLoading.improve === 'rewrite' ? styles.activeAI : ''}`}
+                                onClick={() => onImproveContent('rewrite', 'Rewrite this content with enhanced phrasing, flow, and vocabulary.')}
+                                disabled={!!aiLoading.improve}
+                            >
+                                {aiLoading.improve === 'rewrite' ? <Loader2 size={13} className={styles.spinIcon} /> : <RefreshCw size={13} />}
+                                <span>{aiLoading.improve === 'rewrite' ? 'Rewriting...' : 'Rewrite'}</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                className={`${styles.contentAiBtn} ${aiLoading.improve === 'expand' ? styles.activeAI : ''}`}
+                                onClick={() => onImproveContent('expand', 'Expand on key points in this content with more details, insights, and examples.')}
+                                disabled={!!aiLoading.improve}
+                            >
+                                {aiLoading.improve === 'expand' ? <Loader2 size={13} className={styles.spinIcon} /> : <Maximize2 size={13} />}
+                                <span>{aiLoading.improve === 'expand' ? 'Expanding...' : 'Expand'}</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                className={`${styles.contentAiBtn} ${aiLoading.improve === 'shorten' ? styles.activeAI : ''}`}
+                                onClick={() => onImproveContent('shorten', 'Shorten and condense this content while retaining main points.')}
+                                disabled={!!aiLoading.improve}
+                            >
+                                {aiLoading.improve === 'shorten' ? <Loader2 size={13} className={styles.spinIcon} /> : <Minimize2 size={13} />}
+                                <span>{aiLoading.improve === 'shorten' ? 'Shortening...' : 'Shorten'}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={styles.textareaWithIcon}>
+                        <textarea
+                            className={styles.contentInput}
+                            placeholder="Start writing manually, or use the AI tools above to generate content..."
+                            rows={12}
+                            value={blogData.content}
+                            onChange={(e) => onChange({ ...blogData, content: e.target.value })}
+                        />
+                    </div>
+                </div>
+
                 {/* Excerpt Section */}
                 <div className={styles.inputGroup}>
                     <div className={styles.labelRow}>
                         <label className={styles.label}>Excerpt</label>
-                        <button className={styles.aiLabelButton}>
-                            <Sparkles size={12} className={styles.sparkleColor} />
-                            <span>Generate Summary</span>
+                        <button
+                            type="button"
+                            className={styles.aiLabelButton}
+                            onClick={onGenerateSummary}
+                            disabled={aiLoading.summary}
+                        >
+                            {aiLoading.summary ? (
+                                <Loader2 size={12} className={styles.spinIcon} />
+                            ) : (
+                                <Sparkles size={12} className={styles.sparkleColor} />
+                            )}
+                            <span>{aiLoading.summary ? 'Summarizing...' : 'Generate Summary'}</span>
                         </button>
                     </div>
                     <div className={styles.textareaWithIcon}>
@@ -98,79 +184,12 @@ const EditorCanvas = ({ blogData, onChange }) => {
                             className={styles.excerptInput}
                             placeholder="A brief summary for previews..."
                             rows={2}
+                            maxLength={300}
                             value={blogData.excerpt}
                             onChange={(e) => onChange({ ...blogData, excerpt: e.target.value })}
                         />
                         <Sparkles size={16} className={styles.textareaSparkle} />
                     </div>
-                </div>
-            </div>
-
-            {/* AI Helpers Tools Bar */}
-            <div className={styles.aiToolsBar}>
-                <button className={`${styles.aiBarButton} ${styles.activeAI}`}>
-                    <Sparkles size={14} />
-                    <span>Improve Content</span>
-                </button>
-                <button className={styles.aiBarButton}>
-                    <Wand2 size={14} />
-                    <span>Continue Writing</span>
-                </button>
-                <button className={styles.aiBarButton}>
-                    <RefreshCw size={14} />
-                    <span>Rewrite</span>
-                </button>
-                <button className={styles.aiBarButton}>
-                    <Maximize2 size={14} />
-                    <span>Expand</span>
-                </button>
-                <button className={styles.aiBarButton}>
-                    <Minimize2 size={14} />
-                    <span>Shorten</span>
-                </button>
-            </div>
-
-            {/* Formatting Toolbar */}
-            <div className={styles.formattingToolbar}>
-                <button className={styles.formatButton} title="Bold"><Bold size={16} /></button>
-                <button className={styles.formatButton} title="Italic"><Italic size={16} /></button>
-                <button className={styles.formatButton} title="Underline"><Underline size={16} /></button>
-                <div className={styles.formatDivider} />
-                <button className={styles.formatButton} style={{ fontWeight: '700', fontSize: '13px' }} title="Heading 1">H1</button>
-                <button className={styles.formatButton} style={{ fontWeight: '700', fontSize: '13px' }} title="Heading 2">H2</button>
-                <button className={styles.formatButton} title="Quote"><Quote size={16} /></button>
-                <div className={styles.formatDivider} />
-                <button className={styles.formatButton} title="Insert Image"><Image size={16} /></button>
-                <button className={styles.formatButton} title="Code Block"><Code size={16} /></button>
-            </div>
-
-            {/* Content Editor */}
-            <div className={styles.contentArea}>
-                <textarea
-                    className={styles.contentInput}
-                    placeholder="Start writing manually, or use the AI tools above to generate content..."
-                    value={blogData.content}
-                    onChange={(e) => onChange({ ...blogData, content: e.target.value })}
-                />
-            </div>
-
-            {/* Bottom Status Bar */}
-            <div className={styles.statusBar}>
-                <div className={styles.statusLeft}>
-                    <label className={styles.statusOption}>
-                        <input type="radio" name="post-status" defaultChecked className={styles.radioInput} />
-                        <span className={styles.radioCustom} />
-                        <span>Draft</span>
-                    </label>
-                    <label className={styles.statusOption}>
-                        <input type="radio" name="post-status" className={styles.radioInput} />
-                        <span className={styles.radioCustom} />
-                        <span>Public</span>
-                    </label>
-                </div>
-                <div className={styles.statusRight}>
-                    <span>0 Words</span>
-                    <span>0 min read</span>
                 </div>
             </div>
         </div>

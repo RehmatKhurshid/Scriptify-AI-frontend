@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
-import { FiMail, FiArrowRight, FiArrowLeft } from 'react-icons/fi';
+import { FiMail, FiArrowRight, FiArrowLeft, FiRefreshCw, FiExternalLink } from 'react-icons/fi';
 import Button from '../common/Button';
+import { authService } from '../../services/authService';
 import styles from '../../styles/auth/ForgotPasswordForm.module.css';
 
 const ForgotPasswordForm = () => {
     const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (email) {
+        setError('');
+
+        if (!email.trim()) {
+            setError('Please enter your email address.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            await authService.forgotPassword({ email: email.trim() });
             setIsSubmitted(true);
-            console.log('Sending reset link to:', email);
+        } catch (err) {
+            setError(err.message || 'Failed to request reset link. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -24,12 +40,27 @@ const ForgotPasswordForm = () => {
                     </div>
                     <div className={styles.successRing}></div>
                 </div>
-                <h1 className={styles.title}>Check your inbox</h1>
+                <h1 className={styles.title}>Reset Link Generated</h1>
                 <p className={styles.subtitle}>
-                    We've sent a password reset link to{' '}
-                    <span className={styles.emailHighlight}>{email}</span>
+                    Check your <strong style={{ color: '#c4b5fd' }}>backend terminal window</strong>. We've logged the password reset URL for <span className={styles.emailHighlight}>{email}</span>.
                 </p>
-                <a href="/signin" className={styles.backLink}>
+
+                <div style={{
+                    margin: '16px 0',
+                    padding: '12px 14px',
+                    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+                    border: '1px border-solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                    color: '#94a3b8',
+                    textAlign: 'left',
+                    lineHeight: '1.5'
+                }}>
+                    <strong style={{ color: '#f8fafc', display: 'block', marginBottom: '4px' }}>📋 Development Step:</strong>
+                    Copy the full URL starting with <code style={{ color: '#a78bfa' }}>http://localhost:5173/reset-password?token=...</code> from your backend terminal and open it in your browser.
+                </div>
+
+                <a href="/signin" className={styles.backLink} style={{ marginTop: '12px', display: 'inline-flex' }}>
                     <FiArrowLeft className={styles.backIcon} />
                     Back to Sign In
                 </a>
@@ -42,9 +73,24 @@ const ForgotPasswordForm = () => {
             <div className={styles.header}>
                 <h1 className={styles.title}>Forgot Password?</h1>
                 <p className={styles.subtitle}>
-                    Enter your email address and we'll send you a link to reset your workspace access.
+                    Enter your email address and we'll generate a reset link in your terminal.
                 </p>
             </div>
+
+            {error && (
+                <div className={styles.errorAlert} role="alert" style={{
+                    padding: '8px 16px',
+                    marginBottom: '16px',
+                    fontSize: '13px',
+                    color: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.2)',
+                    borderRadius: '8px',
+                    textAlign: 'center',
+                }}>
+                    {error}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.field}>
@@ -58,6 +104,7 @@ const ForgotPasswordForm = () => {
                             placeholder="name@example.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            disabled={loading}
                             required
                         />
                     </div>
@@ -69,9 +116,10 @@ const ForgotPasswordForm = () => {
                         variant="primary"
                         size="md"
                         fullWidth
-                        icon={<FiArrowRight />}
+                        icon={loading ? <FiRefreshCw style={{ animation: 'spin 1s linear infinite' }} /> : <FiArrowRight />}
+                        disabled={loading}
                     >
-                        Send Reset Link
+                        {loading ? 'Generating Link...' : 'Generate Reset Link'}
                     </Button>
                 </div>
             </form>
@@ -80,11 +128,6 @@ const ForgotPasswordForm = () => {
                 <FiArrowLeft className={styles.backIcon} />
                 Back to Sign In
             </a>
-
-            <p className={styles.footer}>
-                Need to talk to a human? Contact us on{' '}
-                <a href="#" className={styles.supportLink}>Success Team</a>
-            </p>
         </div>
     );
 };

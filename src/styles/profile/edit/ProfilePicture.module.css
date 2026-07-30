@@ -103,9 +103,3 @@
     border-color: rgba(239, 68, 68, 0.3);
     color: #EF4444;
 }
-
-.hint {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    margin: 0;
-}

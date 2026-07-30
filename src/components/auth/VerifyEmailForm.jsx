@@ -1,19 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FiMail, FiRefreshCw, FiArrowLeft } from 'react-icons/fi';
 import Button from '../common/Button';
+import { authService } from '../../services/authService';
 import styles from '../../styles/auth/VerifyEmailForm.module.css';
 
 const VerifyEmailForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [email, setEmail] = useState('');
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [timer, setTimer] = useState(60);
     const [canResend, setCanResend] = useState(false);
     const [status, setStatus] = useState('idle'); // idle | verifying | success | error
     const [errorMessage, setErrorMessage] = useState('');
+    const [resendMessage, setResendMessage] = useState('');
     const inputRefs = useRef([]);
 
-    const email = 'alex.chen@example.com';
+    useEffect(() => {
+        const passedEmail = location.state?.email || new URLSearchParams(window.location.search).get('email') || '';
+        setEmail(passedEmail);
+    }, [location]);
 
     useEffect(() => {
         if (timer > 0) {
@@ -27,7 +34,6 @@ const VerifyEmailForm = () => {
     }, [timer]);
 
     useEffect(() => {
-        // Auto-focus first input on mount
         if (inputRefs.current[0]) {
             inputRefs.current[0].focus();
         }
@@ -41,7 +47,6 @@ const VerifyEmailForm = () => {
         newOtp[index] = cleanValue.slice(-1);
         setOtp(newOtp);
 
-        // Move to next input if value entered
         if (cleanValue && index < 5) {
             inputRefs.current[index + 1]?.focus();
         }
@@ -73,39 +78,55 @@ const VerifyEmailForm = () => {
 
         setOtp(newOtp);
 
-        // Focus the next empty input or last filled one
         const focusIndex = Math.min(pastedData.length, 5);
         inputRefs.current[focusIndex]?.focus();
     };
 
-    const handleResend = () => {
-        if (!canResend) return;
-        setTimer(60);
-        setCanResend(false);
-        setOtp(['', '', '', '', '', '']);
-        inputRefs.current[0]?.focus();
-        console.log('Resending OTP...');
+    const handleResend = async () => {
+        if (!canResend || !email) return;
+
+        setStatus('idle');
+        setErrorMessage('');
+        setResendMessage('');
+
+        try {
+            const data = await authService.resendOTP({ email });
+            setResendMessage(data.message || 'A new OTP has been sent to your email.');
+            setTimer(60);
+            setCanResend(false);
+            setOtp(['', '', '', '', '', '']);
+            inputRefs.current[0]?.focus();
+        } catch (err) {
+            setErrorMessage(err.message || 'Failed to resend OTP. Please try again.');
+        }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const code = otp.join('');
+
+        if (!email) {
+            setErrorMessage('No email address provided. Please return to sign up.');
+            setStatus('error');
+            return;
+        }
+
         if (code.length === 6) {
             setStatus('verifying');
             setErrorMessage('');
-            console.log('Verifying OTP:', code);
-            
-            setTimeout(() => {
-                if (code === '123456') {
-                    setStatus('success');
-                    setTimeout(() => {
-                        navigate('/');
-                    }, 1500);
-                } else {
-                    setStatus('error');
-                    setErrorMessage('Invalid verification code. Please try again.');
-                }
-            }, 1500);
+            setResendMessage('');
+
+            try {
+                await authService.verifyEmail({ email, otp: code });
+                setStatus('success');
+
+                setTimeout(() => {
+                    navigate('/signin');
+                }, 1500);
+            } catch (err) {
+                setStatus('error');
+                setErrorMessage(err.message || 'Invalid or expired verification code.');
+            }
         }
     };
 
@@ -125,19 +146,25 @@ const VerifyEmailForm = () => {
                 <h1 className={styles.title}>Verify your email</h1>
                 <p className={styles.subtitle}>
                     We've sent a verification code to{' '}
-                    <span className={styles.email}>{email}</span>
+                    <span className={styles.email}>{email || 'your email'}</span>
                 </p>
             </div>
 
-            {status === 'error' && (
+            {errorMessage && (
                 <div className={styles.errorAlert} role="alert">
                     {errorMessage}
                 </div>
             )}
 
             {status === 'success' && (
-                <div className={styles.successAlert} role="alert">
-                    Email verified successfully! Redirecting...
+                <div className={styles.successAlert} role="status">
+                    Email verified successfully! Redirecting to Sign In...
+                </div>
+            )}
+
+            {resendMessage && (
+                <div className={styles.successAlert} role="status">
+                    {resendMessage}
                 </div>
             )}
 

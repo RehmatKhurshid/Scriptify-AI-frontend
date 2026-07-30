@@ -1,11 +1,5 @@
 import React, { useState, useRef } from 'react';
 import {
-    Bold,
-    Italic,
-    Underline,
-    Quote,
-    Image,
-    Code,
     Sparkles,
     Wand2,
     RefreshCw,
@@ -193,6 +187,86 @@ const EditBlogCanvas = ({
                     </div>
                 </div>
 
+                {/* Content Section */}
+                <div className={canvasStyles.inputGroup}>
+                    <div className={canvasStyles.contentHeaderRow}>
+                        <label className={canvasStyles.label}>Content</label>
+
+                        {/* Top AI Action Buttons for Content */}
+                        <div className={canvasStyles.contentAiBar}>
+                            <button 
+                                className={canvasStyles.contentAiBtn}
+                                onClick={onAIImproveContent}
+                                title="Improve tone, grammar and flow of text"
+                            >
+                                <Sparkles size={13} style={{ color: '#a78bfa' }} />
+                                <span>Improve Content</span>
+                            </button>
+                            <button 
+                                className={canvasStyles.contentAiBtn}
+                                onClick={onAIContinueWriting}
+                                title="Let AI continue writing from current cursor position"
+                            >
+                                <Wand2 size={13} style={{ color: '#8b5cf6' }} />
+                                <span>Continue Writing</span>
+                            </button>
+                            <button 
+                                className={`${canvasStyles.contentAiBtn} ${selectedTextData ? canvasStyles.activeAI : ''}`}
+                                onClick={() => {
+                                    if (selectedTextData) {
+                                        onAIRewriteSelected(selectedTextData);
+                                    } else {
+                                        onAIRewriteSelected(null);
+                                    }
+                                }}
+                                title={selectedTextData ? `Rewrite: "${selectedTextData.text.substring(0, 20)}..."` : "Highlight text inside content block to rewrite it"}
+                            >
+                                <RefreshCw size={13} style={{ animation: selectedTextData ? 'spin 6s linear infinite' : 'none' }} />
+                                <span>
+                                    {selectedTextData ? 'Rewrite Selection ✨' : 'Rewrite Content'}
+                                </span>
+                            </button>
+                            <button 
+                                className={canvasStyles.contentAiBtn}
+                                onClick={() => onAIExpandContent(selectedTextData)}
+                                title="Elaborate and add depth to selection or text"
+                            >
+                                <Maximize2 size={13} />
+                                <span>Expand</span>
+                            </button>
+                            <button 
+                                className={canvasStyles.contentAiBtn}
+                                onClick={() => onAIShortenContent(selectedTextData)}
+                                title="Condense and summarize selection or text"
+                            >
+                                <Minimize2 size={13} />
+                                <span>Shorten</span>
+                            </button>
+
+                            {selectedTextData && (
+                                <span style={{ marginLeft: '4px', fontSize: '11px', color: '#a78bfa', background: 'rgba(139, 92, 246, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
+                                    Selected {selectedTextData.text.split(/\s+/).filter(Boolean).length} words
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    <div className={canvasStyles.textareaWithIcon}>
+                        <textarea
+                            ref={textareaRef}
+                            className={canvasStyles.contentInput}
+                            placeholder="Start writing manually, or use the AI tools above to generate content..."
+                            rows={12}
+                            value={blogData.content || ''}
+                            onChange={(e) => {
+                                onChange({ ...blogData, content: e.target.value });
+                                handleSelection(e);
+                            }}
+                            onSelect={handleSelection}
+                            onKeyUp={handleSelection}
+                        />
+                    </div>
+                </div>
+
                 {/* Excerpt Section */}
                 <div className={canvasStyles.inputGroup}>
                     <div className={canvasStyles.labelRow}>
@@ -215,6 +289,7 @@ const EditBlogCanvas = ({
                             className={canvasStyles.excerptInput}
                             placeholder="A brief summary for previews..."
                             rows={2}
+                            maxLength={300}
                             value={blogData.excerpt || ''}
                             onChange={(e) => onChange({ ...blogData, excerpt: e.target.value })}
                             style={{
@@ -229,128 +304,6 @@ const EditBlogCanvas = ({
                             <Sparkles size={16} className={canvasStyles.textareaSparkle} />
                         )}
                     </div>
-                </div>
-            </div>
-
-            {/* AI Helpers Tools Bar */}
-            <div className={canvasStyles.aiToolsBar}>
-                <button 
-                    className={canvasStyles.aiBarButton}
-                    onClick={onAIImproveContent}
-                    title="Improve tone, grammar and flow of text"
-                >
-                    <Sparkles size={14} style={{ color: '#a78bfa' }} />
-                    <span>Improve Content</span>
-                </button>
-                <button 
-                    className={canvasStyles.aiBarButton}
-                    onClick={onAIContinueWriting}
-                    title="Let AI continue writing from current cursor position"
-                >
-                    <Wand2 size={14} style={{ color: '#8b5cf6' }} />
-                    <span>Continue Writing</span>
-                </button>
-                <button 
-                    className={`${canvasStyles.aiBarButton} ${selectedTextData ? canvasStyles.activeAI : ''}`}
-                    onClick={() => {
-                        if (selectedTextData) {
-                            onAIRewriteSelected(selectedTextData);
-                        } else {
-                            // Call with null to rewrite whole content or warn user
-                            onAIRewriteSelected(null);
-                        }
-                    }}
-                    title={selectedTextData ? `Rewrite: "${selectedTextData.text.substring(0, 20)}..."` : "Highlight text inside content block to rewrite it"}
-                >
-                    <RefreshCw size={14} style={{ animation: selectedTextData ? 'spin 6s linear infinite' : 'none' }} />
-                    <span>
-                        {selectedTextData ? 'Rewrite Selection ✨' : 'Rewrite Content'}
-                    </span>
-                </button>
-                <button 
-                    className={canvasStyles.aiBarButton}
-                    onClick={() => onAIExpandContent(selectedTextData)}
-                    title="Elaborate and add depth to selection or text"
-                >
-                    <Maximize2 size={14} />
-                    <span>Expand</span>
-                </button>
-                <button 
-                    className={canvasStyles.aiBarButton}
-                    onClick={() => onAIShortenContent(selectedTextData)}
-                    title="Condense and summarize selection or text"
-                >
-                    <Minimize2 size={14} />
-                    <span>Shorten</span>
-                </button>
-
-                {selectedTextData && (
-                    <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#a78bfa', background: 'rgba(139, 92, 246, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
-                        Selected {selectedTextData.text.split(/\s+/).filter(Boolean).length} words
-                    </span>
-                )}
-            </div>
-
-            {/* Formatting Toolbar */}
-            <div className={canvasStyles.formattingToolbar}>
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('**', '**')} title="Bold"><Bold size={16} /></button>
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('*', '*')} title="Italic"><Italic size={16} /></button>
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('<u>', '</u>')} title="Underline"><Underline size={16} /></button>
-                <div className={canvasStyles.formatDivider} />
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('# ')} style={{ fontWeight: '700', fontSize: '13px' }} title="Heading 1">H1</button>
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('## ')} style={{ fontWeight: '700', fontSize: '13px' }} title="Heading 2">H2</button>
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('> ')} title="Quote"><Quote size={16} /></button>
-                <div className={canvasStyles.formatDivider} />
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('![Image Alt](', ')')} title="Insert Image"><Image size={16} /></button>
-                <button className={canvasStyles.formatButton} onClick={() => insertFormat('```\n', '\n```')} title="Code Block"><Code size={16} /></button>
-            </div>
-
-            {/* Content Editor */}
-            <div className={canvasStyles.contentArea}>
-                <textarea
-                    ref={textareaRef}
-                    className={canvasStyles.contentInput}
-                    placeholder="Start writing manually, or use the AI tools above to generate content..."
-                    value={blogData.content || ''}
-                    onChange={(e) => {
-                        onChange({ ...blogData, content: e.target.value });
-                        handleSelection(e);
-                    }}
-                    onSelect={handleSelection}
-                    onKeyUp={handleSelection}
-                />
-            </div>
-
-            {/* Bottom Status Bar */}
-            <div className={canvasStyles.statusBar}>
-                <div className={canvasStyles.statusLeft}>
-                    <span style={{ marginRight: '8px' }}>Status:</span>
-                    <label className={canvasStyles.statusOption}>
-                        <input 
-                            type="radio" 
-                            name="post-status" 
-                            checked={blogData.status === 'Draft'} 
-                            onChange={() => onChange({ ...blogData, status: 'Draft' })}
-                            className={canvasStyles.radioInput} 
-                        />
-                        <span className={canvasStyles.radioCustom} />
-                        <span>Draft</span>
-                    </label>
-                    <label className={canvasStyles.statusOption}>
-                        <input 
-                            type="radio" 
-                            name="post-status" 
-                            checked={blogData.status === 'Published'} 
-                            onChange={() => onChange({ ...blogData, status: 'Published' })}
-                            className={canvasStyles.radioInput} 
-                        />
-                        <span className={canvasStyles.radioCustom} />
-                        <span>Published</span>
-                    </label>
-                </div>
-                <div className={canvasStyles.statusRight}>
-                    <span>{wordCount} Words</span>
-                    <span>{readTime} min read</span>
                 </div>
             </div>
         </div>

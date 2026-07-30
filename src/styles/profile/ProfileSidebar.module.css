@@ -6,8 +6,14 @@
     border-right: 1px solid #1e1e2e;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     flex-shrink: 0;
     padding: 20px 16px;
+}
+
+.topContent {
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebarHeader {
@@ -73,62 +79,60 @@
 }
 
 .editProfile {
-    padding: 8px 20px;
-    background: transparent;
-    border: 1px solid #2d2d44;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    border: none;
     border-radius: 8px;
-    color: #94a3b8;
+    color: #ffffff;
     font-size: 12px;
     font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .editProfile:hover {
-    background: #1a1a2e;
-    color: #e2e8f0;
-    border-color: #4c1d95;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+    color: #ffffff;
 }
 
-.nav {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.sidebarFooter {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.navItem {
+.logoutBtn {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 10px;
-    border: none;
-    background: transparent;
-    color: #94a3b8;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
+    color: #ef4444;
     font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
     width: 100%;
+    box-sizing: border-box;
 }
 
-.navItem:hover {
-    background: #1a1a2e;
-    color: #e2e8f0;
-}
-
-.navItem.active {
-    background: #4c1d95;
-    color: #f8fafc;
-}
-
-.navIcon {
-    flex-shrink: 0;
-}
-
-.navLabel {
-    font-weight: 500;
+.logoutBtn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
 }
 
 @media (max-width: 1024px) {
@@ -141,7 +145,7 @@
     .userName,
     .userRole,
     .editProfile,
-    .navLabel {
+    .logoutText {
         display: none;
     }
 
@@ -154,8 +158,8 @@
         height: 40px;
     }
 
-    .navItem {
+    .logoutBtn {
+        padding: 12px 0;
         justify-content: center;
-        padding: 12px;
     }
 }

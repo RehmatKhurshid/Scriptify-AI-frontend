@@ -3,9 +3,9 @@ import styles from '../../styles/profile/ProfileTabs.module.css';
 
 const ProfileTabs = ({ activeTab, onTabChange, counts }) => {
     const tabs = [
-        { id: 'blogs', label: 'My Blogs', count: counts.blogs },
-        { id: 'drafts', label: 'Drafts', count: counts.drafts },
-        { id: 'bookmarks', label: 'Bookmarks', count: counts.bookmarks },
+        { id: 'all', label: 'All Blogs', count: counts.all || 0 },
+        { id: 'published', label: 'Published', count: counts.published || 0 },
+        { id: 'drafts', label: 'Drafts', count: counts.drafts || 0 },
     ];
 
     return (

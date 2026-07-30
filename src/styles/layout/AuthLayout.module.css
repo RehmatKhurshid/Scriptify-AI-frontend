@@ -21,12 +21,13 @@
   object-fit: cover;
 }
 
-/* Content layer - floats above the wave */
+/* Content layer - floats below fixed navbar */
 .contentLayer {
   position: relative;
   z-index: 1;
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - 65px);
+  padding-top: 65px;
   width: 100%;
 }
 

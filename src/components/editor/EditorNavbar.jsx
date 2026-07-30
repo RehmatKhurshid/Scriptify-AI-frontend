@@ -1,27 +1,59 @@
 import React from 'react';
-import { Cloud } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { RefreshCw, Home } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import styles from '../../styles/editor/EditorNavbar.module.css';
 
-const EditorNavbar = ({ onPublish }) => {
+const EditorNavbar = ({ activeTab = 'editor', activeTabLabel = 'Create Blog', onPublish, onSaveDraft, loading }) => {
+    const { user } = useAuth();
+    const userAvatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.firstName || 'User')}`;
+
+    const isCreateBlogTab = activeTab === 'editor';
+
     return (
         <header className={styles.navbar}>
+            {/* Left Side: Home Feed > [Active Tab Label] */}
             <div className={styles.leftSection}>
-                <span className={styles.breadcrumbLink}>Drafts</span>
-                <span className={styles.breadcrumbSeparator}>/</span>
-                <span className={styles.breadcrumbActive}>New Blog Post</span>
+                <Link to="/Home-Feed" className={styles.homeLink}>
+                    <Home size={16} />
+                    <span>Home Feed</span>
+                </Link>
+                <span className={styles.breadcrumbSeparator}>&gt;</span>
+                <span className={styles.breadcrumbActive}>{activeTabLabel}</span>
             </div>
 
+            {/* Right Side */}
             <div className={styles.rightSection}>
-                <div className={styles.saveStatus}>
-                    <Cloud size={16} className={styles.saveIcon} />
-                    <span>Saved just now</span>
-                </div>
-                <button className={styles.previewButton}>
-                    Preview
-                </button>
-                <button className={styles.publishButton} onClick={onPublish}>
-                    Publish
-                </button>
+                {isCreateBlogTab && (
+                    <>
+                        <button
+                            type="button"
+                            className={styles.previewButton}
+                            onClick={() => onSaveDraft && onSaveDraft()}
+                            disabled={loading}
+                        >
+                            Save Draft
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.publishButton}
+                            onClick={() => onPublish && onPublish()}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <RefreshCw style={{ animation: 'spin 1s linear infinite' }} size={14} />
+                                    Publishing...
+                                </span>
+                            ) : (
+                                'Publish'
+                            )}
+                        </button>
+                    </>
+                )}
+                <Link to="/profile" className={styles.profileLink} title="Profile">
+                    <img src={userAvatar} alt="Profile" className={styles.avatarImg} />
+                </Link>
             </div>
         </header>
     );
