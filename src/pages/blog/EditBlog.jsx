@@ -88,14 +88,12 @@ const EditBlog = () => {
     const navigate = useNavigate();
 
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-    const [activeNavItem, setActiveNavItem] = useState('drafts');
+    const [activeNavItem, setActiveNavItem] = useState('create');
 
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
-        { id: 'drafts', label: 'Drafts', icon: 'FileText' },
-        { id: 'workshop', label: 'AI Workshop', icon: 'Sparkles' },
-        { id: 'assets', label: 'Assets', icon: 'FolderOpen' },
-        { id: 'settings', label: 'Settings', icon: 'Settings' },
+        { id: 'create', label: 'Create Blog', icon: 'FileText', path: '/create' },
+        { id: 'dashboard', label: 'Dashboard', icon: 'LayoutDashboard', path: '/Home-Feed' },
+        { id: 'drafts', label: 'My Drafts', icon: 'FileText', path: '/profile' },
     ];
 
     // Core States
