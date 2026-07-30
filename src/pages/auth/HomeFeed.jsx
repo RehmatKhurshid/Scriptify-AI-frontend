@@ -1,36 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FiPenTool, FiGlobe, FiUser, FiRefreshCw } from 'react-icons/fi';
+import { FiPenTool, FiRefreshCw } from 'react-icons/fi';
 import HomeFeedLayout from '../../components/layout/HomeFeedLayout';
 import HeroArticle from '../../components/home-feed/HeroArticle';
 import FeedSection from '../../components/home-feed/FeedSection';
-import { useAuth } from '../../context/AuthContext';
 import { blogService } from '../../services/blogService';
 import styles from '../../styles/home-feed/HomeFeed.module.css';
 
 const HomeFeed = () => {
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth();
-    const [feedTab, setFeedTab] = useState('all'); // 'all' | 'my'
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchBlogs();
-    }, [feedTab, isAuthenticated]);
+    }, []);
 
     const fetchBlogs = async () => {
         setLoading(true);
         setError(null);
         try {
-            let data;
-            if (feedTab === 'my' && isAuthenticated) {
-                data = await blogService.getMyBlogs({ status: 'published' });
-            } else {
-                data = await blogService.getAllBlogs({ limit: 30 });
-            }
-
+            const data = await blogService.getAllBlogs({ limit: 30 });
             const rawBlogs = data.blogs || [];
 
             // Format raw backend blogs for component rendering
@@ -82,84 +73,6 @@ const HomeFeed = () => {
     return (
         <HomeFeedLayout>
             <div className={styles.container}>
-                {/* Top Control Bar */}
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flexWrap: 'wrap',
-                    gap: '16px',
-                    paddingBottom: '16px',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                    marginBottom: '8px'
-                }}>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <button
-                            onClick={() => setFeedTab('all')}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '10px 18px',
-                                borderRadius: '10px',
-                                border: 'none',
-                                cursor: 'pointer',
-                                fontWeight: '600',
-                                fontSize: '0.9rem',
-                                backgroundColor: feedTab === 'all' ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-                                color: feedTab === 'all' ? '#ffffff' : '#94a3b8',
-                                transition: 'all 0.2s ease',
-                            }}
-                        >
-                            <FiGlobe size={16} />
-                            All Published Blogs
-                        </button>
-
-                        {isAuthenticated && (
-                            <button
-                                onClick={() => setFeedTab('my')}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    padding: '10px 18px',
-                                    borderRadius: '10px',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    fontWeight: '600',
-                                    fontSize: '0.9rem',
-                                    backgroundColor: feedTab === 'my' ? '#6366f1' : 'rgba(255, 255, 255, 0.05)',
-                                    color: feedTab === 'my' ? '#ffffff' : '#94a3b8',
-                                    transition: 'all 0.2s ease',
-                                }}
-                            >
-                                <FiUser size={16} />
-                                My Published Blogs
-                            </button>
-                        )}
-                    </div>
-
-                    <Link
-                        to="/create"
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            padding: '10px 20px',
-                            borderRadius: '10px',
-                            backgroundColor: 'rgba(139, 92, 246, 0.15)',
-                            color: '#a78bfa',
-                            border: '1px solid rgba(139, 92, 246, 0.3)',
-                            fontWeight: '600',
-                            fontSize: '0.9rem',
-                            textDecoration: 'none',
-                            transition: 'all 0.2s ease',
-                        }}
-                    >
-                        <FiPenTool size={16} />
-                        Write Article
-                    </Link>
-                </div>
 
                 {loading ? (
                     <div style={{
@@ -209,12 +122,10 @@ const HomeFeed = () => {
                         margin: '20px 0'
                     }}>
                         <h3 style={{ fontSize: '1.25rem', color: '#f3f4f6', marginBottom: '8px' }}>
-                            {feedTab === 'my' ? "You haven't published any blogs yet" : "No published blogs found"}
+                            No published blogs found
                         </h3>
                         <p style={{ color: '#9ca3af', marginBottom: '24px', maxWidth: '450px', margin: '0 auto 24px' }}>
-                            {feedTab === 'my'
-                                ? "Share your ideas and structural insights with the community by publishing your first article."
-                                : "Be the first author to publish a blog post on Scriptify AI!"}
+                            Be the first author to publish a blog post on Scriptify AI!
                         </p>
                         <Link
                             to="/create"
@@ -246,7 +157,7 @@ const HomeFeed = () => {
                         {remainingBlogs.length > 0 && (
                             <FeedSection
                                 blogs={remainingBlogs}
-                                title={feedTab === 'my' ? 'My Published Articles' : 'Recent Articles'}
+                                title="Recent Articles"
                                 onArticleClick={handleArticleClick}
                             />
                         )}
