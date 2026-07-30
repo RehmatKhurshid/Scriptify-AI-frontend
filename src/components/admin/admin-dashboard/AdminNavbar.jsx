@@ -43,8 +43,6 @@ const AdminNavbar = () => {
                     <span>ORKLES</span>
                 </div>
 
-                <button className={styles.upgradeButton}>Upgrade</button>
-
                 <Link to="/create" className={styles.writeButton}>
                     <PenLine size={16} />
                     <span>Write Post</span>

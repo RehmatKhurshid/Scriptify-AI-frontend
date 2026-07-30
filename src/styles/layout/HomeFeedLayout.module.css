@@ -2,6 +2,7 @@
     min-height: 100vh;
     background-color: var(--color-bg-primary);
     font-family: var(--font-family);
+    padding-top: 64px;
 }
 
 .main {

@@ -1,9 +1,23 @@
 import React from 'react';
 import { FiEye } from 'react-icons/fi';
+import { useAuth } from '../../../context/AuthContext';
 import Avatar from '../../common/Avatar';
 import styles from '../../../styles/profile/edit/LivePreview.module.css';
 
-const LivePreview = () => {
+const LivePreview = ({ formData, avatarPreview }) => {
+    const { user } = useAuth();
+
+    const firstName = formData?.firstName ?? user?.firstName ?? '';
+    const lastName = formData?.lastName ?? user?.lastName ?? '';
+    const fullName = `${firstName} ${lastName}`.trim() || 'Logged User';
+    
+    const previewAvatar = avatarPreview || user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fullName || 'User')}`;
+    const userRole = (user?.role ? user.role : 'blogger').toUpperCase();
+    
+    const joinedDate = user?.createdAt
+        ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        : 'March 2024';
+
     return (
         <div className={styles.sidebar}>
             <div className={styles.header}>
@@ -14,17 +28,17 @@ const LivePreview = () => {
             <div className={styles.card}>
                 <div className={styles.avatarSection}>
                     <Avatar
-                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"
-                        alt="Alex Chen"
+                        src={previewAvatar}
+                        alt={fullName}
                         size="xl"
                     />
                 </div>
 
                 <div className={styles.info}>
-                    <h2 className={styles.name}>Alex Chen</h2>
-                    <p className={styles.role}>Blogger & Technologist</p>
+                    <h2 className={styles.name}>{fullName || 'Scriptify User'}</h2>
+                    <p className={styles.role}>{userRole}</p>
                     <p className={styles.bio}>
-                        AI Enthusiast & Tech Blogger exploring the intersection of design, code, and generative intelligence.
+                        {formData?.bio || 'Exploring artificial intelligence, design, code, and generative editorial tools on Scriptify AI.'}
                     </p>
 
                     <div className={styles.tags}>
@@ -32,47 +46,35 @@ const LivePreview = () => {
                         <span className={styles.tag}>AI</span>
                         <span className={styles.tag}>Design</span>
                     </div>
-
-                    <button className={styles.viewProfileButton}>
-                        View Public Profile
-                    </button>
                 </div>
 
                 <div className={styles.stats}>
                     <div className={styles.stat}>
-                        <span className={styles.statValue}>2.4k</span>
+                        <span className={styles.statValue}>1.2k</span>
                         <span className={styles.statLabel}>Followers</span>
                     </div>
                     <div className={styles.stat}>
-                        <span className={styles.statValue}>800</span>
+                        <span className={styles.statValue}>180</span>
                         <span className={styles.statLabel}>Following</span>
-                    </div>
-                    <div className={styles.stat}>
-                        <span className={styles.statValue}>124</span>
-                        <span className={styles.statLabel}>Bookmarks</span>
                     </div>
                 </div>
 
                 <div className={styles.details}>
                     <div className={styles.detailRow}>
                         <span className={styles.detailLabel}>Role</span>
-                        <span className={styles.detailValue}>Blogger</span>
+                        <span className={styles.detailValue}>{userRole}</span>
                     </div>
                     <div className={styles.detailRow}>
                         <span className={styles.detailLabel}>Auth Provider</span>
-                        <span className={styles.detailValue}>Google</span>
+                        <span className={styles.detailValue}>{user?.googleId ? 'Google' : 'Email/Password'}</span>
                     </div>
                     <div className={styles.detailRow}>
                         <span className={styles.detailLabel}>Verification</span>
-                        <span className={`${styles.detailValue} ${styles.verified}`}>Verified</span>
+                        <span className={`${styles.detailValue} ${styles.verified}`}>Verified User</span>
                     </div>
                     <div className={styles.detailRow}>
-                        <span className={styles.detailLabel}>Joined</span>
-                        <span className={styles.detailValue}>Oct 12, 2023</span>
-                    </div>
-                    <div className={styles.detailRow}>
-                        <span className={styles.detailLabel}>Last Updated</span>
-                        <span className={styles.detailValue}>2 days ago</span>
+                        <span className={styles.detailLabel}>Joined Date</span>
+                        <span className={styles.detailValue}>{joinedDate}</span>
                     </div>
                 </div>
             </div>

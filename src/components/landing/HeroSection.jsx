@@ -24,10 +24,10 @@ const HeroSection = () => {
             <div className={styles.ctaGroup}>
                 <Link to="/signup">
                     <Button variant="primary" size="md" className={styles.ctaPrimary}>
-                        Get Started Free
+                        Get Started
                     </Button>
                 </Link>
-                <Link to="/" className={styles.ctaSecondary}>
+                <Link to="/Home-Feed" className={styles.ctaSecondary}>
                     <span>Explore Blogs</span>
                     <FiArrowUpRight className={styles.ctaIcon} />
                 </Link>

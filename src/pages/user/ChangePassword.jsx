@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { FiEye, FiEyeOff, FiRefreshCw } from 'react-icons/fi';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../../services/authService';
+import { useAuth } from '../../context/AuthContext';
 import styles from '../../styles/auth/ChangePasswordForm.module.css';
 
 const ChangePasswordForm = () => {
+    const navigate = useNavigate();
+    const { logout } = useAuth();
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -11,20 +15,79 @@ const ChangePasswordForm = () => {
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
+    useEffect(() => {
+        if (successMessage) {
+            const timer = setTimeout(() => {
+                setSuccessMessage('');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage]);
+
     const getSecurityLevel = (password) => {
         if (!password || password === '••••••••') return { level: 'Waiting for input...', color: 'muted' };
-        if (password.length < 8) return { level: 'Weak', color: 'weak' };
+        if (password.length < 8) return { level: 'Weak (min 8 chars)', color: 'weak' };
         if (password.length < 12 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-            return { level: 'Medium', color: 'medium' };
+            return { level: 'Medium (needs upper & number)', color: 'medium' };
         }
         return { level: 'Strong', color: 'strong' };
     };
 
     const security = getSecurityLevel(newPassword);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Changing password...');
+        setError('');
+        setSuccessMessage('');
+
+        if (!currentPassword) {
+            setError('Please enter your current password.');
+            return;
+        }
+
+        if (!newPassword) {
+            setError('Please enter your new password.');
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            setError('New password must be at least 8 characters.');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setError('New password and confirm password do not match.');
+            return;
+        }
+
+        if (currentPassword === newPassword) {
+            setError('New password must differ from your current password.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await authService.changePassword({
+                oldPassword: currentPassword,
+                newPassword,
+            });
+
+            setSuccessMessage(response.message || 'Password changed successfully! Redirecting to login...');
+
+            setTimeout(async () => {
+                await logout();
+                navigate('/signin');
+            }, 1800);
+        } catch (err) {
+            setError(err.message || 'Failed to change password. Please check your current password.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -123,6 +186,37 @@ const ChangePasswordForm = () => {
                         <p className={styles.subtitle}>Update your account security credentials.</p>
                     </div>
 
+                    {(error || successMessage) && (
+                        <div style={{ marginBottom: '16px' }}>
+                            {error && (
+                                <div style={{
+                                    padding: '10px 16px',
+                                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                    border: '1px solid rgba(239, 68, 68, 0.2)',
+                                    borderRadius: '8px',
+                                    color: '#ef4444',
+                                    fontSize: '13px',
+                                    textAlign: 'center',
+                                }}>
+                                    {error}
+                                </div>
+                            )}
+                            {successMessage && (
+                                <div style={{
+                                    padding: '10px 16px',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                                    borderRadius: '8px',
+                                    color: '#10b981',
+                                    fontSize: '13px',
+                                    textAlign: 'center',
+                                }}>
+                                    {successMessage}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.field}>
                             <label className={styles.label}>Current Password</label>
@@ -140,7 +234,7 @@ const ChangePasswordForm = () => {
                                     onClick={() => setShowCurrent(!showCurrent)}
                                     aria-label={showCurrent ? 'Hide password' : 'Show password'}
                                 >
-                                    {showCurrent ? <FiEyeOff /> : <FiEye />}
+                                    {showCurrent ? <FiEye /> : <FiEyeOff />}
                                 </button>
                             </div>
                         </div>
@@ -161,7 +255,7 @@ const ChangePasswordForm = () => {
                                     onClick={() => setShowNew(!showNew)}
                                     aria-label={showNew ? 'Hide password' : 'Show password'}
                                 >
-                                    {showNew ? <FiEyeOff /> : <FiEye />}
+                                    {showNew ? <FiEye /> : <FiEyeOff />}
                                 </button>
                             </div>
                             <p className={`${styles.securityText} ${styles[security.color]}`}>
@@ -185,13 +279,20 @@ const ChangePasswordForm = () => {
                                     onClick={() => setShowConfirm(!showConfirm)}
                                     aria-label={showConfirm ? 'Hide password' : 'Show password'}
                                 >
-                                    {showConfirm ? <FiEyeOff /> : <FiEye />}
+                                    {showConfirm ? <FiEye /> : <FiEyeOff />}
                                 </button>
                             </div>
                         </div>
 
-                        <button type="submit" className={styles.submitButton}>
-                            Update Password
+                        <button type="submit" className={styles.submitButton} disabled={loading}>
+                            {loading ? (
+                                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                    <FiRefreshCw style={{ animation: 'spin 1s linear infinite' }} />
+                                    Updating Password...
+                                </span>
+                            ) : (
+                                'Update Password'
+                            )}
                         </button>
                     </form>
 

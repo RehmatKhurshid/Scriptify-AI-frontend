@@ -1,24 +1,56 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FiArrowRight } from 'react-icons/fi';
+import { Link, useNavigate } from 'react-router-dom';
+import { FiArrowRight, FiRefreshCw, FiEye, FiEyeOff } from 'react-icons/fi';
 import InputField from '../common/InputField';
 import Button from '../common/Button';
-import GoogleButton from './GoogleButton';
+import { useAuth } from '../../context/AuthContext';
 import styles from '../../styles/auth/SignInForm.module.css';
 
 const SignInForm = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle sign in logic
-    console.log('Sign in:', { email, password });
-  };
+    setError('');
+    setSuccessMessage('');
 
-  const handleGoogleSignIn = () => {
-    // Handle Google SSO
-    console.log('Google sign in');
+    if (!email.trim() || !password) {
+      setError('Please fill in both email and password.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = await login({
+        email: email.trim(),
+        password,
+      });
+
+      setSuccessMessage(data.message || 'Login successful! Redirecting...');
+
+      setTimeout(() => {
+        navigate('/Home-Feed');
+      }, 1000);
+    } catch (err) {
+      const errMsg = err.message || 'Invalid email or password.';
+      setError(errMsg);
+
+      if (errMsg.toLowerCase().includes('verify your email')) {
+        setTimeout(() => {
+          navigate('/verify-email', { state: { email: email.trim() } });
+        }, 2000);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,13 +60,17 @@ const SignInForm = () => {
         <p className={styles.subtitle}>Enter your details to access your workspace.</p>
       </div>
 
-      <GoogleButton onClick={handleGoogleSignIn} />
+      {error && (
+        <div className={styles.errorAlert} role="alert">
+          {error}
+        </div>
+      )}
 
-      <div className={styles.divider}>
-        <span className={styles.dividerLine}></span>
-        <span className={styles.dividerText}>or</span>
-        <span className={styles.dividerLine}></span>
-      </div>
+      {successMessage && (
+        <div className={styles.successAlert} role="status">
+          {successMessage}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <InputField
@@ -44,21 +80,39 @@ const SignInForm = () => {
           placeholder="name@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={loading}
+          required
         />
 
-        <InputField
-          id="password"
-          label="Password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          rightElement={
+        <div className={styles.field}>
+          <div className={styles.labelRow}>
+            <label htmlFor="password" className={styles.label}>Password</label>
             <Link to="/forgot-password" className={styles.forgotLink}>
               Forgot?
             </Link>
-          }
-        />
+          </div>
+          <div className={styles.passwordWrapper}>
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              className={styles.input}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+              required
+            />
+            <button
+              type="button"
+              className={styles.eyeButton}
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              disabled={loading}
+            >
+              {showPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+          </div>
+        </div>
 
         <div className={styles.submitWrapper}>
           <Button
@@ -66,9 +120,10 @@ const SignInForm = () => {
             variant="primary"
             size="md"
             fullWidth
-            icon={<FiArrowRight />}
+            icon={loading ? <FiRefreshCw style={{ animation: 'spin 1s linear infinite' }} /> : <FiArrowRight />}
+            disabled={loading}
           >
-            Sign in
+            {loading ? 'Signing in...' : 'Sign in'}
           </Button>
         </div>
       </form>

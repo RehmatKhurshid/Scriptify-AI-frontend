@@ -30,51 +30,6 @@
     margin-bottom: 12px;
 }
 
-.themeGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.themeCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 20px;
-    background: #0b1120;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    color: #94a3b8;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-}
-
-.themeCard:hover {
-    border-color: #475569;
-    color: #e2e8f0;
-}
-
-.themeCard.active {
-    border-color: #a78bfa;
-    color: #f8fafc;
-    background: rgba(167, 139, 250, 0.05);
-}
-
-.checkDot {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 8px;
-    height: 8px;
-    background: #a78bfa;
-    border-radius: 50%;
-}
-
 .toggleRow {
     display: flex;
     align-items: center;
@@ -124,10 +79,4 @@
 
 .toggle.on .toggleThumb {
     left: 22px;
-}
-
-@media (max-width: 768px) {
-    .themeGrid {
-        grid-template-columns: 1fr;
-    }
 }

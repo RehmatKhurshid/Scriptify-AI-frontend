@@ -1,34 +1,58 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { PenLine } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { FiPlus } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthContext';
+import Logo from '../icons/Logo';
 import styles from '../../styles/navigation/TopNavbar.module.css';
 
 const TopNavbar = () => {
-    const navLinks = [
-        { label: 'Home', path: '/', active: false },
-        { label: 'Explore', path: '/explore', active: false },
-        { label: 'Workspace', path: '/workspace', active: false },
-        { label: 'Profile', path: '/profile', active: true },
-    ];
+    const { user, isAuthenticated } = useAuth();
+    const location = useLocation();
+
+    const userAvatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.firstName || 'User')}`;
+    const feedLabel = isAuthenticated ? 'Home Feed' : 'Explore Blogs';
 
     return (
         <nav className={styles.navbar}>
-            <div className={styles.navLinks}>
-                {navLinks.map((link) => (
-                    <Link
-                        key={link.label}
-                        to={link.path}
-                        className={`${styles.navLink} ${link.active ? styles.active : ''}`}
-                    >
-                        {link.label}
-                    </Link>
-                ))}
+            {/* Left Side: Logo & Home Feed / Explore Blogs */}
+            <div className={styles.left}>
+                <Link to={isAuthenticated ? "/Home-Feed" : "/"} className={styles.brand}>
+                    <Logo size={24} />
+                    <span className={styles.brandName}>Scriptify AI</span>
+                </Link>
+
+                <Link
+                    to="/Home-Feed"
+                    className={`${styles.navLink} ${location.pathname.toLowerCase() === '/home-feed' ? styles.active : ''}`}
+                >
+                    {feedLabel}
+                </Link>
             </div>
 
-            <Link to="/create" className={styles.writeButton}>
-                <PenLine size={16} />
-                <span>Write</span>
-            </Link>
+            {/* Right Side */}
+            <div className={styles.right}>
+                {isAuthenticated ? (
+                    <>
+                        <Link to="/create" className={styles.createBtn} title="Create Blog">
+                            <FiPlus size={18} />
+                            <span className={styles.btnText}>Create</span>
+                        </Link>
+
+                        <Link to="/profile" className={styles.profileLink} title="Profile">
+                            <img src={userAvatar} alt="Profile" className={styles.avatarImg} />
+                        </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/signin" className={styles.signInLink}>
+                            Sign In
+                        </Link>
+                        <Link to="/signup" className={styles.createBtn}>
+                            Sign Up
+                        </Link>
+                    </>
+                )}
+            </div>
         </nav>
     );
 };

@@ -9,7 +9,6 @@ import DangerZoneCard from '../../components/admin/settings/DangerZoneCard';
 import styles from '../../styles/admin/settings/AdminSettings.module.css';
 
 const AdminSettings = () => {
-    const [theme, setTheme] = useState('dark');
     const [notifications, setNotifications] = useState(true);
 
     const sidebarNavItems = [
@@ -61,8 +60,6 @@ const AdminSettings = () => {
                             <AccountOverviewCard data={accountData} />
                             <SecurityCard data={securityData} />
                             <PreferencesCard
-                                theme={theme}
-                                onThemeChange={setTheme}
                                 notifications={notifications}
                                 onNotificationsChange={setNotifications}
                             />

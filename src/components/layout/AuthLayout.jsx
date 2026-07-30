@@ -1,11 +1,13 @@
 import React from 'react';
 import { FaFeatherAlt } from 'react-icons/fa';
 import TestimonialCard from '../auth/TestimonialCard';
+import AuthNavbar from '../auth/AuthNavbar';
 import styles from '../../styles/layout/AuthLayout.module.css';
 
 const AuthLayout = ({ children }) => {
     return (
         <div className={styles.container}>
+            <AuthNavbar />
             {/* Full-screen wave background */}
             <div className={styles.waveBackground}>
                 <svg
@@ -102,13 +104,6 @@ const AuthLayout = ({ children }) => {
             <div className={styles.contentLayer}>
                 {/* Left branding */}
                 <div className={styles.leftPanel}>
-                    <div className={styles.brand}>
-                        <div className={styles.logo}>
-                            <FaFeatherAlt className={styles.logoIcon} />
-                        </div>
-                        <span className={styles.brandName}>Scriptify AI</span>
-                    </div>
-
                     <div className={styles.tagline}>
                         <p className={styles.taglineMain}>Magical Minimalism for Creators.</p>
                         <p className={styles.taglineSub}>

@@ -1,0 +1,91 @@
+.interactionBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    margin-top: 14px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s ease;
+}
+
+.interactionBar:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.leftGroup {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.actionBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.actionBtn:hover {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.icon {
+    transition: transform 0.2s ease, stroke 0.2s ease, fill 0.2s ease;
+}
+
+.actionBtn:hover .icon {
+    transform: scale(1.1);
+}
+
+.actionBtn:active .icon {
+    transform: scale(0.9);
+}
+
+.liked {
+    color: #f472b6;
+}
+
+.liked .heartIconActive {
+    stroke: #ec4899;
+    animation: heartPop 0.3s ease;
+}
+
+@keyframes heartPop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.activeComment {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+}
+
+.bookmarked {
+    color: #a78bfa;
+}
+
+.count {
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+}

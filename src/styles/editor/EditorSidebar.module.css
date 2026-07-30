@@ -106,28 +106,6 @@
     gap: 12px;
 }
 
-.upgradeButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
-}
-
-.upgradeButton:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
-}
-
 .footerLinks {
     display: flex;
     flex-direction: column;
@@ -183,10 +161,6 @@
 }
 
 /* Collapsed state adjustments */
-.collapsed .upgradeButton {
-    padding: 10px;
-}
-
 .collapsed .footerLink {
     justify-content: center;
     padding: 10px 0;

@@ -2,23 +2,15 @@ import React from 'react';
 import {
     LayoutDashboard,
     FileText,
-    Sparkles,
-    FolderOpen,
-    Settings,
     ChevronLeft,
     ChevronRight,
-    Zap,
-    HelpCircle,
-    LogOut
+    Zap
 } from 'lucide-react';
 import styles from '../../styles/editor/EditorSidebar.module.css';
 
 const iconMap = {
     LayoutDashboard,
     FileText,
-    Sparkles,
-    FolderOpen,
-    Settings,
 };
 
 const EditorSidebar = ({
@@ -57,24 +49,6 @@ const EditorSidebar = ({
                     );
                 })}
             </nav>
-
-            <div className={styles.sidebarFooter}>
-                <button className={styles.upgradeButton}>
-                    <Zap size={16} />
-                    {!collapsed && <span>Upgrade to Pro</span>}
-                </button>
-
-                <div className={styles.footerLinks}>
-                    <button className={styles.footerLink} title={collapsed ? 'Help' : ''}>
-                        <HelpCircle className={styles.footerIcon} size={20} />
-                        {!collapsed && <span>Help</span>}
-                    </button>
-                    <button className={styles.footerLink} title={collapsed ? 'Sign Out' : ''}>
-                        <LogOut className={styles.footerIcon} size={20} />
-                        {!collapsed && <span>Sign Out</span>}
-                    </button>
-                </div>
-            </div>
 
             <button className={styles.collapseButton} onClick={onToggleCollapse}>
                 {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
