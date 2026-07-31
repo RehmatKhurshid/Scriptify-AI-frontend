@@ -27,6 +27,8 @@ const CreateBlogDashboard = ({ onWriteClick, initialTab = 'all' }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [actionLoadingId, setActionLoadingId] = useState(null);
 
+    const [blogCounts, setBlogCounts] = useState({ all: 0, published: 0, drafts: 0 });
+
     useEffect(() => {
         setActiveTab(initialTab);
     }, [initialTab]);
@@ -39,9 +41,16 @@ const CreateBlogDashboard = ({ onWriteClick, initialTab = 'all' }) => {
         setLoading(true);
         setError(null);
         try {
-            const data = await blogService.getMyBlogs();
+            const data = await blogService.getMyBlogs({ limit: 200 });
             const rawBlogs = data.blogs || [];
             setBlogs(rawBlogs);
+            if (data.counts) {
+                setBlogCounts(data.counts);
+            } else {
+                const pub = rawBlogs.filter(b => b.status === 'published').length;
+                const drf = rawBlogs.filter(b => b.status === 'draft').length;
+                setBlogCounts({ all: rawBlogs.length, published: pub, drafts: drf });
+            }
         } catch (err) {
             console.error('Failed to fetch user blogs:', err);
             setError(err.message || 'Failed to load user blogs and statistics.');
@@ -54,9 +63,9 @@ const CreateBlogDashboard = ({ onWriteClick, initialTab = 'all' }) => {
     const draftBlogs = blogs.filter(b => b.status === 'draft');
 
     const stats = {
-        total: blogs.length,
-        published: publishedBlogs.length,
-        drafts: draftBlogs.length,
+        total: blogCounts.all !== undefined ? blogCounts.all : blogs.length,
+        published: blogCounts.published !== undefined ? blogCounts.published : publishedBlogs.length,
+        drafts: blogCounts.drafts !== undefined ? blogCounts.drafts : draftBlogs.length,
     };
 
     const handlePublishDraft = async (blogId, e) => {

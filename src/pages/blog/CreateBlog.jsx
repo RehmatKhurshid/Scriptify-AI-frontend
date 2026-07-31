@@ -69,6 +69,17 @@ const CreateBlog = () => {
         thumbnail: false,
     });
 
+    const inferCategoryFromTopic = (topic = '') => {
+        const text = topic.toLowerCase();
+        if (text.includes('machine learning') || text.includes('ml') || text.includes('model') || text.includes('neural')) return 'Machine Learning';
+        if (text.includes('ai') || text.includes('artificial intelligence') || text.includes('gpt') || text.includes('llm') || text.includes('agent')) return 'Artificial Intelligence';
+        if (text.includes('web') || text.includes('react') || text.includes('javascript') || text.includes('code') || text.includes('frontend') || text.includes('backend') || text.includes('developer')) return 'Web Development';
+        if (text.includes('design') || text.includes('ui') || text.includes('ux') || text.includes('figma')) return 'Design';
+        if (text.includes('productivity') || text.includes('work') || text.includes('time') || text.includes('habit')) return 'Productivity';
+        if (text.includes('business') || text.includes('startup') || text.includes('money') || text.includes('market')) return 'Business';
+        return 'Technology';
+    };
+
     // 1. Generate Blog Draft
     const handleGenerateDraft = async (ideaText) => {
         if (!ideaText || !ideaText.trim()) {
@@ -80,16 +91,19 @@ const CreateBlog = () => {
         try {
             const data = await aiService.generateDraft(ideaText);
             if (data.draft) {
-                const { title, introduction, sections, conclusion, suggestedTags } = data.draft;
+                const { title, category, introduction, sections, conclusion, suggestedTags } = data.draft;
                 const fullContent = [
                     introduction,
                     ...(sections || []).map((s) => `## ${s.heading}\n\n${s.content}`),
                     conclusion ? `## Conclusion\n\n${conclusion}` : '',
                 ].filter(Boolean).join('\n\n');
 
+                const determinedCategory = category || inferCategoryFromTopic(ideaText);
+
                 setBlogData((prev) => ({
                     ...prev,
                     title: title || prev.title,
+                    category: determinedCategory || prev.category,
                     content: fullContent || prev.content,
                     tags: Array.isArray(suggestedTags) ? suggestedTags.join(', ') : prev.tags,
                 }));
@@ -182,15 +196,27 @@ const CreateBlog = () => {
         setError('');
         setAiLoading((prev) => ({ ...prev, thumbnail: true }));
         try {
-            const promptToUse = ideaPrompt || blogData.title || 'Creative blog topic';
+            const promptToUse = ideaPrompt || blogData.title || 'Creative blog cover art';
             const data = await aiService.generateThumbnail(blogData.title, blogData.excerpt, promptToUse);
-            if (data.imageUrl) {
-                setThumbnailPreview(data.imageUrl);
+            const generatedUrl = data?.imageUrl;
+            
+            if (generatedUrl) {
+                setThumbnailPreview(generatedUrl);
                 setThumbnailFile(null);
-                setSuccessMessage('AI Thumbnail generated successfully!');
+                setSuccessMessage('AI Thumbnail variation generated!');
+            } else {
+                const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptToUse)}?width=1200&height=630&seed=${Date.now()}&nologo=true`;
+                setThumbnailPreview(fallbackUrl);
+                setThumbnailFile(null);
+                setSuccessMessage('AI Thumbnail variation generated!');
             }
         } catch (err) {
-            setError(err.message || 'Failed to generate thumbnail image.');
+            console.error('Thumbnail generation error:', err);
+            const promptToUse = ideaPrompt || blogData.title || 'Creative blog cover art';
+            const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptToUse)}?width=1200&height=630&seed=${Date.now()}&nologo=true`;
+            setThumbnailPreview(fallbackUrl);
+            setThumbnailFile(null);
+            setSuccessMessage('AI Thumbnail variation generated!');
         } finally {
             setAiLoading((prev) => ({ ...prev, thumbnail: false }));
         }
@@ -227,7 +253,7 @@ const CreateBlog = () => {
     const fetchUserDrafts = async () => {
         setLoadingDrafts(true);
         try {
-            const data = await blogService.getMyBlogs({ status: 'draft' });
+            const data = await blogService.getMyBlogs({ status: 'draft', limit: 200 });
             setDraftsList(data.blogs || []);
         } catch (err) {
             console.error('Failed to fetch drafts:', err.message);
@@ -239,7 +265,7 @@ const CreateBlog = () => {
     const fetchUserAllBlogs = async () => {
         setLoadingUserBlogs(true);
         try {
-            const data = await blogService.getMyBlogs();
+            const data = await blogService.getMyBlogs({ limit: 200 });
             setUserBlogs(data.blogs || []);
         } catch (err) {
             console.error('Failed to fetch user dashboard blogs:', err.message);
@@ -329,22 +355,41 @@ const CreateBlog = () => {
         }
     };
 
-    const handleLoadDraftIntoEditor = (draft) => {
-        setEditingDraftId(draft._id);
-        setBlogData({
-            title: draft.title || '',
-            category: draft.category || 'Artificial Intelligence',
-            tags: Array.isArray(draft.tags) ? draft.tags.join(', ') : draft.tags || '',
-            excerpt: draft.excerpt || '',
-            content: draft.content || '',
-            status: draft.status || 'draft',
-        });
-        if (draft.thumbnailUrl) {
-            setThumbnailPreview(draft.thumbnailUrl);
-        } else {
-            setThumbnailPreview(null);
+    const handleLoadDraftIntoEditor = async (draft) => {
+        const draftId = draft._id || draft.id;
+        setEditingDraftId(draftId);
+        setLoading(true);
+        try {
+            const res = await blogService.getBlogById(draftId);
+            const fullDraft = res.blog || res || draft;
+            setBlogData({
+                title: fullDraft.title || draft.title || '',
+                category: fullDraft.category || draft.category || 'Artificial Intelligence',
+                tags: Array.isArray(fullDraft.tags) ? fullDraft.tags.join(', ') : fullDraft.tags || draft.tags || '',
+                excerpt: fullDraft.excerpt || draft.excerpt || '',
+                content: fullDraft.content || draft.content || '',
+                status: fullDraft.status || draft.status || 'draft',
+            });
+            if (fullDraft.thumbnailUrl || draft.thumbnailUrl) {
+                setThumbnailPreview(fullDraft.thumbnailUrl || draft.thumbnailUrl);
+            } else {
+                setThumbnailPreview(null);
+            }
+        } catch (err) {
+            console.error('Error fetching full draft details:', err);
+            setBlogData({
+                title: draft.title || '',
+                category: draft.category || 'Artificial Intelligence',
+                tags: Array.isArray(draft.tags) ? draft.tags.join(', ') : draft.tags || '',
+                excerpt: draft.excerpt || '',
+                content: draft.content || '',
+                status: draft.status || 'draft',
+            });
+            setThumbnailPreview(draft.thumbnailUrl || null);
+        } finally {
+            setLoading(false);
+            setActiveNavItem('editor');
         }
-        setActiveNavItem('editor');
     };
 
     const handleDeleteBlog = async (blogId, e) => {
