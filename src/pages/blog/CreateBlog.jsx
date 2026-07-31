@@ -168,23 +168,45 @@ const CreateBlog = () => {
     };
 
     // 4. Improve Content
-    const handleImproveContent = async (actionKey, instruction) => {
-        if (!blogData.content || !blogData.content.trim()) {
-            setError('Please write some content first to use content operations.');
+    const handleImproveContent = async (actionKey = 'improve', instruction = 'Improve grammar, clarity, readability, and professional tone.') => {
+        const textToImprove = (blogData.content || blogData.excerpt || blogData.title || ideaText || '').trim();
+        if (!textToImprove) {
+            setError('Please write a title, excerpt, or content first before using AI content tools.');
             return;
         }
         setError('');
         setAiLoading((prev) => ({ ...prev, improve: actionKey }));
         try {
-            const data = await aiService.improveContent(blogData.content, instruction);
-            if (data.improved) {
-                setBlogData((prev) => ({
-                    ...prev,
-                    content: data.improved,
-                }));
-                setSuccessMessage('Content updated successfully!');
+            const data = await aiService.improveContent(textToImprove, instruction);
+            if (data && data.improved) {
+                const cleaned = data.improved
+                    .replace(/^```(?:markdown)?\s*/i, '')
+                    .replace(/\s*```$/, '')
+                    .trim();
+
+                setBlogData((prev) => {
+                    const nextContent = actionKey === 'continue'
+                        ? (prev.content ? `${prev.content}\n\n${cleaned}` : cleaned)
+                        : cleaned;
+                    return {
+                        ...prev,
+                        content: nextContent,
+                    };
+                });
+                setSuccessMessage(
+                    actionKey === 'continue'
+                        ? 'Continued writing content successfully!'
+                        : actionKey === 'rewrite'
+                            ? 'Content rewritten successfully!'
+                            : actionKey === 'expand'
+                                ? 'Content expanded successfully!'
+                                : actionKey === 'shorten'
+                                    ? 'Content shortened successfully!'
+                                    : 'Content improved successfully!'
+                );
             }
         } catch (err) {
+            console.error('Failed to improve content:', err);
             setError(err.message || 'Failed to process content operation.');
         } finally {
             setAiLoading((prev) => ({ ...prev, improve: null }));
@@ -275,8 +297,14 @@ const CreateBlog = () => {
     };
 
     const handleThumbnailSelect = (file) => {
+        if (!file) return;
         setThumbnailFile(file);
         setThumbnailPreview(URL.createObjectURL(file));
+        setSuccessMessage('Image uploaded and set as cover preview!');
+    };
+
+    const handleManualImageSelect = (file) => {
+        handleThumbnailSelect(file);
     };
 
     const handleRemoveThumbnail = () => {
@@ -900,6 +928,7 @@ const CreateBlog = () => {
                             thumbnailPreview={thumbnailPreview}
                             onThumbnailSelect={handleThumbnailSelect}
                             onRemoveThumbnail={handleRemoveThumbnail}
+                            onManualImageSelect={handleManualImageSelect}
                             onGenerateDraft={handleGenerateDraft}
                             onGenerateThumbnail={handleGenerateThumbnail}
                             aiLoading={aiLoading}
