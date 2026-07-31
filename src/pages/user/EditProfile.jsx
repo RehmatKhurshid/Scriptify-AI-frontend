@@ -5,7 +5,6 @@ import EditProfileHeader from '../../components/profile/edit/EditProfileHeader';
 import ProfilePicture from '../../components/profile/edit/ProfilePicture';
 import PersonalInfo from '../../components/profile/edit/PersonalInfo';
 import AboutMe from '../../components/profile/edit/AboutMe';
-import ReadingPreferences from '../../components/profile/edit/ReadingPreferences';
 import SecuritySettings from '../../components/profile/edit/SecuritySettings';
 import DangerZone from '../../components/profile/edit/DangerZone';
 import LivePreview from '../../components/profile/edit/LivePreview';
@@ -188,7 +187,6 @@ const EditProfile = () => {
                                 bio={formData.bio}
                                 onChange={handleFieldChange}
                             />
-                            <ReadingPreferences />
                             <SecuritySettings />
                             <DangerZone />
                         </div>

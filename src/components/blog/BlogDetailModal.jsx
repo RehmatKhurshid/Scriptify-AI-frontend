@@ -96,11 +96,25 @@ const BlogDetailModal = ({
         ? formatISTTime(blog.createdAt || fullBlog?.createdAt)
         : (blog.readTime && blog.readTime.includes('IST') ? blog.readTime : formatISTTime(new Date()));
 
+    const getCategoryFallbackImage = (catName = '') => {
+        const cat = catName.toLowerCase();
+        if (cat.includes('ai') || cat.includes('artificial') || cat.includes('machine') || cat.includes('model')) {
+            return 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=1200&q=80';
+        }
+        if (cat.includes('code') || cat.includes('web') || cat.includes('dev') || cat.includes('tech') || cat.includes('programming')) {
+            return 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80';
+        }
+        if (cat.includes('design') || cat.includes('art') || cat.includes('creative') || cat.includes('ui')) {
+            return 'https://images.unsplash.com/photo-1542744094-3a317272018a?auto=format&fit=crop&w=1200&q=80';
+        }
+        return 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80';
+    };
+
     const displayTitle = fullBlog?.title || blog.title;
     const displayExcerpt = fullBlog?.excerpt || blog.excerpt;
     const displayContent = fullBlog?.content || blog.content;
     const displayCategory = fullBlog?.category || blog.category || 'Article';
-    const displayImage = fullBlog?.thumbnailUrl || blog.image;
+    const displayImage = fullBlog?.thumbnailUrl || fullBlog?.thumbnail || blog.thumbnailUrl || blog.image || blog.thumbnail || blog.coverImage || blog.raw?.thumbnailUrl || blog.raw?.thumbnail || getCategoryFallbackImage(displayCategory);
 
     return (
         <div className={styles.overlay} onClick={onClose}>
@@ -109,6 +123,21 @@ const BlogDetailModal = ({
                 <button type="button" className={styles.closeBtn} onClick={onClose} title="Close Article">
                     <X size={16} />
                 </button>
+
+                {/* Hero Featured Cover Banner */}
+                {displayImage && (
+                    <div className={styles.coverWrapper} style={{ marginTop: '10px', marginBottom: '20px' }}>
+                        <img
+                            src={displayImage}
+                            alt={displayTitle}
+                            className={styles.coverImage}
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = getCategoryFallbackImage(displayCategory);
+                            }}
+                        />
+                    </div>
+                )}
 
                 {/* Article Header */}
                 <div className={styles.articleHeader}>
@@ -133,13 +162,6 @@ const BlogDetailModal = ({
                         </div>
                     </div>
                 </div>
-
-                {/* Cover Image */}
-                {displayImage && (
-                    <div className={styles.coverWrapper}>
-                        <img src={displayImage} alt={displayTitle} className={styles.coverImage} />
-                    </div>
-                )}
 
                 {/* Body Content */}
                 <div className={styles.bodyContent}>

@@ -37,27 +37,14 @@ const LivePreview = ({ formData, avatarPreview }) => {
                 <div className={styles.info}>
                     <h2 className={styles.name}>{fullName || 'Scriptify User'}</h2>
                     <p className={styles.role}>{userRole}</p>
-                    <p className={styles.bio}>
-                        {formData?.bio || 'Exploring artificial intelligence, design, code, and generative editorial tools on Scriptify AI.'}
-                    </p>
+                    {formData?.bio ? (
+                        <p className={styles.bio}>{formData.bio}</p>
+                    ) : null}
 
-                    <div className={styles.tags}>
-                        <span className={styles.tag}>Technology</span>
-                        <span className={styles.tag}>AI</span>
-                        <span className={styles.tag}>Design</span>
-                    </div>
+
                 </div>
 
-                <div className={styles.stats}>
-                    <div className={styles.stat}>
-                        <span className={styles.statValue}>1.2k</span>
-                        <span className={styles.statLabel}>Followers</span>
-                    </div>
-                    <div className={styles.stat}>
-                        <span className={styles.statValue}>180</span>
-                        <span className={styles.statLabel}>Following</span>
-                    </div>
-                </div>
+
 
                 <div className={styles.details}>
                     <div className={styles.detailRow}>
