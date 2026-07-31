@@ -88,6 +88,7 @@ const ArticleCard = ({
         createdAt,
         readTime: postTimeIST,
         image,
+        thumbnailUrl: image,
         likesCount,
         commentsCount,
         isLiked,

@@ -57,8 +57,9 @@ const CreateBlog = () => {
         status: 'published',
     });
 
-    const [thumbnailFile, setThumbnailFile] = useState(null);
-    const [thumbnailPreview, setThumbnailPreview] = useState(null);
+    const [manualImageFile, setManualImageFile] = useState(null);
+    const [manualImagePreview, setManualImagePreview] = useState(null);
+    const [aiThumbnailPreview, setAiThumbnailPreview] = useState(null);
 
     // AI Features loading state
     const [aiLoading, setAiLoading] = useState({
@@ -215,30 +216,31 @@ const CreateBlog = () => {
 
     // 5. Generate AI Thumbnail
     const handleGenerateThumbnail = async (ideaPrompt) => {
+        const topicOrTitle = (ideaPrompt || blogData.title || blogData.excerpt || '').trim();
+        if (!topicOrTitle) {
+            setError('Please enter a blog title or describe your blog idea first to generate an AI cover graphic.');
+            return;
+        }
+
         setError('');
         setAiLoading((prev) => ({ ...prev, thumbnail: true }));
         try {
-            const promptToUse = ideaPrompt || blogData.title || 'Creative blog cover art';
-            const data = await aiService.generateThumbnail(blogData.title, blogData.excerpt, promptToUse);
+            const data = await aiService.generateThumbnail(blogData.title, blogData.excerpt, topicOrTitle);
             const generatedUrl = data?.imageUrl;
-            
+
             if (generatedUrl) {
-                setThumbnailPreview(generatedUrl);
-                setThumbnailFile(null);
-                setSuccessMessage('AI Thumbnail variation generated!');
+                setAiThumbnailPreview(generatedUrl);
+                setSuccessMessage('AI Cover graphic generated successfully!');
             } else {
-                const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptToUse)}?width=1200&height=630&seed=${Date.now()}&nologo=true`;
-                setThumbnailPreview(fallbackUrl);
-                setThumbnailFile(null);
-                setSuccessMessage('AI Thumbnail variation generated!');
+                const cleanTopic = topicOrTitle.replace(/[^a-zA-Z0-9 ]/g, " ").trim().substring(0, 150);
+                const encoded = encodeURIComponent(`${cleanTopic} professional editorial cover graphic 4k no text`);
+                const fallbackUrl = `https://image.pollinations.ai/prompt/${encoded}?width=1200&height=630&seed=${Date.now()}&nologo=true`;
+                setAiThumbnailPreview(fallbackUrl);
+                setSuccessMessage('AI Cover graphic generated successfully!');
             }
         } catch (err) {
             console.error('Thumbnail generation error:', err);
-            const promptToUse = ideaPrompt || blogData.title || 'Creative blog cover art';
-            const fallbackUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptToUse)}?width=1200&height=630&seed=${Date.now()}&nologo=true`;
-            setThumbnailPreview(fallbackUrl);
-            setThumbnailFile(null);
-            setSuccessMessage('AI Thumbnail variation generated!');
+            setError(err.message || 'Failed to generate AI cover graphic.');
         } finally {
             setAiLoading((prev) => ({ ...prev, thumbnail: false }));
         }
@@ -296,20 +298,20 @@ const CreateBlog = () => {
         }
     };
 
-    const handleThumbnailSelect = (file) => {
-        if (!file) return;
-        setThumbnailFile(file);
-        setThumbnailPreview(URL.createObjectURL(file));
-        setSuccessMessage('Image uploaded and set as cover preview!');
-    };
-
     const handleManualImageSelect = (file) => {
-        handleThumbnailSelect(file);
+        if (!file) return;
+        setManualImageFile(file);
+        setManualImagePreview(URL.createObjectURL(file));
+        setSuccessMessage('Manual image file attached successfully!');
     };
 
-    const handleRemoveThumbnail = () => {
-        setThumbnailFile(null);
-        setThumbnailPreview(null);
+    const handleRemoveManualImage = () => {
+        setManualImageFile(null);
+        setManualImagePreview(null);
+    };
+
+    const handleRemoveAiThumbnail = () => {
+        setAiThumbnailPreview(null);
     };
 
     const handleSavePost = async (targetStatus = 'published') => {
@@ -343,10 +345,12 @@ const CreateBlog = () => {
             formData.append('tags', blogData.tags);
             formData.append('status', targetStatus);
 
-            if (thumbnailFile) {
-                formData.append('thumbnail', thumbnailFile);
-            } else if (thumbnailPreview) {
-                formData.append('thumbnailUrl', thumbnailPreview);
+            if (manualImageFile) {
+                formData.append('thumbnail', manualImageFile);
+            } else if (manualImagePreview) {
+                formData.append('thumbnailUrl', manualImagePreview);
+            } else if (aiThumbnailPreview) {
+                formData.append('thumbnailUrl', aiThumbnailPreview);
             }
 
             let response;
@@ -398,10 +402,26 @@ const CreateBlog = () => {
                 content: fullDraft.content || draft.content || '',
                 status: fullDraft.status || draft.status || 'draft',
             });
-            if (fullDraft.thumbnailUrl || draft.thumbnailUrl) {
-                setThumbnailPreview(fullDraft.thumbnailUrl || draft.thumbnailUrl);
+            const isAiUrl = (url = '') => {
+                if (!url) return false;
+                return url.includes('pollinations.ai') || url.includes('generativelanguage') || url.includes('unsplash.com');
+            };
+
+            const savedThumbnail = fullDraft.thumbnailUrl || draft.thumbnailUrl || fullDraft.coverImage || draft.coverImage || fullDraft.image || draft.image || null;
+            if (savedThumbnail) {
+                if (isAiUrl(savedThumbnail)) {
+                    setAiThumbnailPreview(savedThumbnail);
+                    setManualImagePreview(null);
+                    setManualImageFile(null);
+                } else {
+                    setManualImagePreview(savedThumbnail);
+                    setAiThumbnailPreview(null);
+                    setManualImageFile(null);
+                }
             } else {
-                setThumbnailPreview(null);
+                setManualImagePreview(null);
+                setManualImageFile(null);
+                setAiThumbnailPreview(null);
             }
         } catch (err) {
             console.error('Error fetching full draft details:', err);
@@ -413,7 +433,19 @@ const CreateBlog = () => {
                 content: draft.content || '',
                 status: draft.status || 'draft',
             });
-            setThumbnailPreview(draft.thumbnailUrl || null);
+            const fallbackThumbnail = draft.thumbnailUrl || draft.coverImage || draft.image || null;
+            if (fallbackThumbnail) {
+                if (fallbackThumbnail.includes('pollinations.ai') || fallbackThumbnail.includes('unsplash.com')) {
+                    setAiThumbnailPreview(fallbackThumbnail);
+                    setManualImagePreview(null);
+                } else {
+                    setManualImagePreview(fallbackThumbnail);
+                    setAiThumbnailPreview(null);
+                }
+            } else {
+                setManualImagePreview(null);
+                setAiThumbnailPreview(null);
+            }
         } finally {
             setLoading(false);
             setActiveNavItem('editor');
@@ -924,13 +956,14 @@ const CreateBlog = () => {
                             aiLoading={aiLoading}
                         />
                         <PostSettingsPanel
-                            thumbnailFile={thumbnailFile}
-                            thumbnailPreview={thumbnailPreview}
-                            onThumbnailSelect={handleThumbnailSelect}
-                            onRemoveThumbnail={handleRemoveThumbnail}
+                            manualImageFile={manualImageFile}
+                            manualImagePreview={manualImagePreview}
                             onManualImageSelect={handleManualImageSelect}
-                            onGenerateDraft={handleGenerateDraft}
+                            onRemoveManualImage={handleRemoveManualImage}
+                            aiThumbnailPreview={aiThumbnailPreview}
                             onGenerateThumbnail={handleGenerateThumbnail}
+                            onRemoveAiThumbnail={handleRemoveAiThumbnail}
+                            onGenerateDraft={handleGenerateDraft}
                             aiLoading={aiLoading}
                         />
                     </div>

@@ -106,28 +106,22 @@ const ProfileBlogCard = ({ blog, onDelete, onPublish }) => {
                 onClick={() => setIsModalOpen(true)}
                 style={{ cursor: 'pointer' }}
             >
-                {blog.coverImage ? (
-                    <div className={styles.coverWrapper}>
-                        <img src={blog.coverImage} alt={blog.title} className={styles.cover} />
-                        <div className={styles.statusBadge} style={statusStyle}>
-                            <span className={styles.statusDot} style={{ backgroundColor: dotColor }} />
-                            {isPublished ? 'Published' : 'Draft'}
-                        </div>
-                        <div className={styles.readTime}>
-                            <Clock size={12} />
-                            {postTimeIST}
-                        </div>
+                {/* Top Meta Row (Status Badge & Timestamp for ALL posts) */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                    <div className={styles.statusBadge} style={{ ...statusStyle, position: 'static' }}>
+                        <span className={styles.statusDot} style={{ backgroundColor: dotColor }} />
+                        {isPublished ? 'Published' : 'Draft'}
                     </div>
-                ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                        <div className={styles.statusBadge} style={{ ...statusStyle, position: 'static' }}>
-                            <span className={styles.statusDot} style={{ backgroundColor: dotColor }} />
-                            {isPublished ? 'Published' : 'Draft'}
-                        </div>
-                        <div className={styles.readTime} style={{ position: 'static', backgroundColor: 'transparent', color: '#94a3b8' }}>
-                            <Clock size={12} style={{ marginRight: '4px' }} />
-                            {postTimeIST}
-                        </div>
+                    <div className={styles.readTime} style={{ position: 'static', backgroundColor: 'transparent', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem' }}>
+                        <Clock size={13} />
+                        <span>{postTimeIST}</span>
+                    </div>
+                </div>
+
+                {/* Cover Image (if present) */}
+                {blog.coverImage && (
+                    <div className={styles.coverWrapper} style={{ marginBottom: '14px' }}>
+                        <img src={blog.coverImage} alt={blog.title} className={styles.cover} />
                     </div>
                 )}
 
@@ -137,31 +131,10 @@ const ProfileBlogCard = ({ blog, onDelete, onPublish }) => {
                     </h3>
                     <p className={styles.description}>{blog.description || 'No summary available...'}</p>
 
-                    <div className={styles.footer}>
-                        <div className={styles.stats}>
-                            <div title="Views" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <Eye size={14} />
-                                <span>{blog.views || 0}</span>
-                            </div>
-                            <div title="Likes" style={{ display: 'flex', alignItems: 'center', gap: '4px', color: isLiked ? '#ec4899' : 'inherit' }}>
-                                <Heart size={14} fill={isLiked ? '#ec4899' : 'none'} />
-                                <span>{likesCount}</span>
-                            </div>
-                            <div
-                                title="Comments"
-                                style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsCommentsOpen(!isCommentsOpen);
-                                }}
-                            >
-                                <MessageSquare size={14} />
-                                <span>{commentsCount}</span>
-                            </div>
-                        </div>
-
-                        <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
-                            {!isPublished && onPublish && (
+                    {/* Draft Actions */}
+                    {!isPublished && onPublish && (
+                        <div className={styles.footer}>
+                            <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
                                 <button
                                     type="button"
                                     className={styles.publishBtn}
@@ -173,29 +146,13 @@ const ProfileBlogCard = ({ blog, onDelete, onPublish }) => {
                                 >
                                     Publish
                                 </button>
-                            )}
-                            <Link to={`/create`} className={styles.actionBtn} title="Edit in Editor" onClick={(e) => e.stopPropagation()}>
-                                <Edit size={14} />
-                            </Link>
-                            {onDelete && (
-                                <button
-                                    type="button"
-                                    className={styles.actionBtn}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onDelete(blog._id || blog.id);
-                                    }}
-                                    title="Delete Blog"
-                                >
-                                    <Trash2 size={14} />
-                                </button>
-                            )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
-                    {/* Interactive bar and comments for published user posts (Only for Logged-In Users) */}
+                    {/* Single working Interactive bar and comments for published posts */}
                     {isPublished && isAuthenticated && (
-                        <div onClick={(e) => e.stopPropagation()}>
+                        <div onClick={(e) => e.stopPropagation()} style={{ marginTop: '12px' }}>
                             <BlogInteractionBar
                                 likesCount={likesCount}
                                 commentsCount={commentsCount}

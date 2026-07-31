@@ -131,6 +131,7 @@ const HeroArticle = ({ blog: propBlog }) => {
         readTime: postTimeIST,
         createdAt: heroBlog?.createdAt,
         image,
+        thumbnailUrl: heroBlog?.thumbnailUrl || image,
         likesCount,
         commentsCount,
         isLiked,

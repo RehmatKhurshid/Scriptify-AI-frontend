@@ -119,13 +119,40 @@ const EditBlog = () => {
 
     // Pre-fill Blog details on Mount / ID change
     useEffect(() => {
-        const loadedBlog = MOCK_BLOGS[id] || DEFAULT_BLOG;
-        setBlogData({ ...loadedBlog });
-        setInitialBlogData({ ...loadedBlog });
-        setSaveStatus('saved');
-        setIsDirty(false);
-        setHasSessionEdits(false);
-        addToast('info', 'Blog Loaded', `Loaded existing blog post "${loadedBlog.title}" successfully.`);
+        if (id) {
+            blogService.getBlogById(id)
+                .then((res) => {
+                    const fetched = res.blog || res;
+                    if (fetched) {
+                        const thumbnail = fetched.thumbnailUrl || fetched.image || fetched.coverImage || '';
+                        const formatted = {
+                            id: fetched._id || fetched.id || id,
+                            title: fetched.title || '',
+                            excerpt: fetched.excerpt || '',
+                            category: fetched.category || 'Artificial Intelligence',
+                            tags: Array.isArray(fetched.tags) ? fetched.tags.join(', ') : fetched.tags || '',
+                            content: fetched.content || '',
+                            status: fetched.status || 'Draft',
+                            image: thumbnail,
+                            thumbnailUrl: thumbnail,
+                            author: fetched.author ? `${fetched.author.firstName || ''} ${fetched.author.lastName || ''}`.trim() : 'Author',
+                            authorAvatar: fetched.author?.avatar || '',
+                        };
+                        setBlogData(formatted);
+                        setInitialBlogData(formatted);
+                        setSaveStatus('saved');
+                        setIsDirty(false);
+                        setHasSessionEdits(false);
+                        addToast('info', 'Blog Loaded', `Loaded existing blog post "${formatted.title}" successfully.`);
+                    }
+                })
+                .catch((err) => {
+                    console.error('Error fetching blog for editing:', err);
+                    const loadedBlog = MOCK_BLOGS[id] || DEFAULT_BLOG;
+                    setBlogData({ ...loadedBlog });
+                    setInitialBlogData({ ...loadedBlog });
+                });
+        }
     }, [id]);
 
     // Handle Manual Changes & Save State dirty calculations
