@@ -17,6 +17,7 @@ const Profile = () => {
     const [sortBy, setSortBy] = useState('newest');
 
     const [userBlogs, setUserBlogs] = useState([]);
+    const [blogCounts, setBlogCounts] = useState({ all: 0, published: 0, drafts: 0 });
     const [loadingBlogs, setLoadingBlogs] = useState(true);
 
     useEffect(() => {
@@ -28,9 +29,17 @@ const Profile = () => {
     const fetchUserBlogs = async () => {
         setLoadingBlogs(true);
         try {
-            const data = await blogService.getMyBlogs();
+            const data = await blogService.getMyBlogs({ limit: 200 });
             const blogs = data.blogs || [];
             setUserBlogs(blogs);
+
+            if (data.counts) {
+                setBlogCounts(data.counts);
+            } else {
+                const pub = blogs.filter((b) => b.status === 'published').length;
+                const drf = blogs.filter((b) => b.status === 'draft').length;
+                setBlogCounts({ all: blogs.length, published: pub, drafts: drf });
+            }
 
             // Auto-upgrade local state role if user has created a blog
             if (blogs.length > 0 && authUser?.role === 'reader' && updateUser) {
@@ -61,9 +70,9 @@ const Profile = () => {
         stats: {
             followers: authUser?.followers?.length || 0,
             following: authUser?.following?.length || 0,
-            all: userBlogs.length,
-            published: publishedBlogs.length,
-            drafts: draftBlogs.length,
+            all: blogCounts.all,
+            published: blogCounts.published,
+            drafts: blogCounts.drafts,
         },
     };
 

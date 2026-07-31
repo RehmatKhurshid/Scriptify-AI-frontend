@@ -36,7 +36,9 @@ const CommentsSection = ({
                 const authorObj = c.author || {};
                 const name = `${authorObj.firstName || ''} ${authorObj.lastName || ''}`.trim() || 'User';
                 const avatar = authorObj.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
-                const isOwner = user && (authorObj._id === user._id || authorObj._id === user.id);
+                const userId = user ? String(user._id || user.id || user.userId || '') : '';
+                const authorId = authorObj ? String(authorObj._id || authorObj.id || '') : '';
+                const isOwner = Boolean(userId && authorId && userId === authorId);
 
                 return {
                     id: c._id,

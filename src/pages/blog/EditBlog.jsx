@@ -5,6 +5,7 @@ import EditorSidebar from '../../components/editor/EditorSidebar';
 import EditBlogNavbar from '../../components/editor/EditBlogNavbar';
 import EditBlogCanvas from '../../components/editor/EditBlogCanvas';
 import EditPostSettingsPanel from '../../components/editor/EditPostSettingsPanel';
+import { blogService } from '../../services/blogService';
 import styles from '../../styles/editor/EditBlog.module.css';
 
 // Pre-existing mock databases
@@ -47,12 +48,6 @@ The goal of the modern designer is not to make interfaces beautiful, but to make
         content: `Latent space is a mathematical abstraction. It is a high-dimensional universe where concepts are represented as coordinates, and relationships between concepts are represented as distances.
 
 When a language model learns, it builds this space. It plots "apple" near "pear" but far from "submarines". What is fascinating is that abstract concepts also find their relative positions: "justice" and "fairness" cluster together, while "chaos" sits on a distant ridge.
-
-### Navigating the Geometry of Meaning
-
-To navigate latent space is to explore the landscape of human thought. When we prompt a model to write a poem about artificial intelligence in the style of Emily Dickinson, we are drawing a vector between disparate coordinate systems. 
-
-The resulting text is the intersection of these vectors. It is a bridge between the mathematical distribution of text tokens and the emotional resonances we associate with poetic form.
 
 ### Intuition vs. Logic
 
