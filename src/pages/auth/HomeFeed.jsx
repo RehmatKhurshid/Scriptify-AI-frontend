@@ -85,7 +85,7 @@ const HomeFeed = () => {
                         gap: '12px'
                     }}>
                         <FiRefreshCw size={24} style={{ animation: 'spin 1s linear infinite', color: '#8b5cf6' }} />
-                        <span>Loading published articles...</span>
+                        <span>Loading...</span>
                     </div>
                 ) : error ? (
                     <div style={{
