@@ -112,7 +112,7 @@ const FeedSection = ({ blogs: propBlogs, title = "Your Feed" }) => {
             <div className={styles.articlesList}>
                 {loading ? (
                     <div style={{ textAlign: 'center', padding: '40px 0', color: '#94a3b8' }}>
-                        Loading latest published posts...
+                        Loading...
                     </div>
                 ) : (
                     articles.map((article) => (
