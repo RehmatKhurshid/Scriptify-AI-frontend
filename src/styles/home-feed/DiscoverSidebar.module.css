@@ -1,0 +1,188 @@
+.sidebarContainer {
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: sticky;
+    top: 84px;
+    width: 100%;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.titleGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.titleIcon {
+    color: var(--color-purple-400);
+    font-size: 1.1rem;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.userList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.userCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all var(--transition-base);
+}
+
+.userCard:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(139, 92, 246, 0.2);
+    transform: translateY(-1px);
+}
+
+.userInfoGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+}
+
+.avatarWrapper {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--color-purple-500), #ec4899);
+}
+
+.avatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: var(--color-bg-secondary);
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.userName {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--transition-fast);
+}
+
+.userInfoGroup:hover .userName {
+    color: var(--color-purple-400);
+}
+
+.userHandle {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.userMeta {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    margin-top: 1px;
+}
+
+.followBtn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.followBtnNotFollowing {
+    background: linear-gradient(135deg, var(--color-purple-600), #8b5cf6);
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(139, 92, 246, 0.3);
+}
+
+.followBtnNotFollowing:hover {
+    opacity: 0.92;
+    transform: scale(1.03);
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.45);
+}
+
+.followBtnFollowing {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-text-secondary);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.followBtnFollowing:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.loadingState, .emptyState {
+    text-align: center;
+    padding: 1.5rem 0;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+    color: var(--color-purple-400);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

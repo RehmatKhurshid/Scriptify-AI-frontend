@@ -5,3 +5,36 @@
     width: 100%;
     min-width: 0;
 }
+
+.feedWrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    width: 100%;
+}
+
+.feedWrapperWithSidebar {
+    grid-template-columns: minmax(0, 1fr) 340px;
+}
+
+.mainFeed {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    min-width: 0;
+}
+
+.sidebarWrapper {
+    width: 100%;
+}
+
+/* Responsive breakpoint for sidebar */
+@media (max-width: 1024px) {
+    .feedWrapperWithSidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebarWrapper {
+        margin-top: 1rem;
+    }
+}

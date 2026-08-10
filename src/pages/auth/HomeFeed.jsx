@@ -4,11 +4,14 @@ import { FiPenTool, FiRefreshCw } from 'react-icons/fi';
 import HomeFeedLayout from '../../components/layout/HomeFeedLayout';
 import HeroArticle from '../../components/home-feed/HeroArticle';
 import FeedSection from '../../components/home-feed/FeedSection';
+import DiscoverSidebar from '../../components/home-feed/DiscoverSidebar';
+import { useAuth } from '../../context/AuthContext';
 import { blogService } from '../../services/blogService';
 import styles from '../../styles/home-feed/HomeFeed.module.css';
 
 const HomeFeed = () => {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -49,6 +52,8 @@ const HomeFeed = () => {
                     date: b.createdAt ? new Date(b.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently',
                     readTime: calculatedReadTime,
                     image: b.thumbnailUrl || null,
+                    commentsCount: typeof b.commentsCount === 'number' ? b.commentsCount : 0,
+                    likesCount: Array.isArray(b.likes) ? b.likes.length : 0,
                     raw: b,
                 };
             });
@@ -73,96 +78,105 @@ const HomeFeed = () => {
     return (
         <HomeFeedLayout>
             <div className={styles.container}>
-
-                {loading ? (
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '80px 20px',
-                        color: '#94a3b8',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '12px'
-                    }}>
-                        <FiRefreshCw size={24} style={{ animation: 'spin 1s linear infinite', color: '#8b5cf6' }} />
-                        <span>Loading...</span>
-                    </div>
-                ) : error ? (
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '60px 20px',
-                        color: '#ef4444',
-                        backgroundColor: 'rgba(239, 68, 68, 0.08)',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(239, 68, 68, 0.2)'
-                    }}>
-                        <p>{error}</p>
-                        <button
-                            onClick={fetchBlogs}
-                            style={{
-                                marginTop: '12px',
-                                padding: '8px 16px',
-                                backgroundColor: '#6366f1',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '6px',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Retry
-                        </button>
-                    </div>
-                ) : blogs.length === 0 ? (
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '80px 20px',
-                        backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                        border: '1px dashed rgba(255, 255, 255, 0.1)',
-                        borderRadius: '16px',
-                        margin: '20px 0'
-                    }}>
-                        <h3 style={{ fontSize: '1.25rem', color: '#f3f4f6', marginBottom: '8px' }}>
-                            No published blogs found
-                        </h3>
-                        <p style={{ color: '#9ca3af', marginBottom: '24px', maxWidth: '450px', margin: '0 auto 24px' }}>
-                            Be the first author to publish a blog post on Scriptify AI!
-                        </p>
-                        <Link
-                            to="/create"
-                            style={{
-                                display: 'inline-flex',
+                <div className={`${styles.feedWrapper} ${isAuthenticated ? styles.feedWrapperWithSidebar : ''}`}>
+                    <main className={styles.mainFeed}>
+                        {loading ? (
+                            <div style={{
+                                textAlign: 'center',
+                                padding: '80px 20px',
+                                color: '#94a3b8',
+                                display: 'flex',
+                                flexDirection: 'column',
                                 alignItems: 'center',
-                                gap: '8px',
-                                padding: '12px 24px',
-                                borderRadius: '10px',
-                                backgroundColor: '#6366f1',
-                                color: '#ffffff',
-                                fontWeight: '600',
-                                textDecoration: 'none'
-                            }}
-                        >
-                            <FiPenTool size={18} />
-                            Create Blog Post
-                        </Link>
-                    </div>
-                ) : (
-                    <>
-                        {featuredBlog && (
-                            <HeroArticle
-                                blog={featuredBlog}
-                                onClick={() => handleArticleClick(featuredBlog)}
-                            />
-                        )}
+                                gap: '12px'
+                            }}>
+                                <FiRefreshCw size={24} style={{ animation: 'spin 1s linear infinite', color: '#8b5cf6' }} />
+                                <span>Loading...</span>
+                            </div>
+                        ) : error ? (
+                            <div style={{
+                                textAlign: 'center',
+                                padding: '60px 20px',
+                                color: '#ef4444',
+                                backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                                borderRadius: '12px',
+                                border: '1px solid rgba(239, 68, 68, 0.2)'
+                            }}>
+                                <p>{error}</p>
+                                <button
+                                    onClick={fetchBlogs}
+                                    style={{
+                                        marginTop: '12px',
+                                        padding: '8px 16px',
+                                        backgroundColor: '#6366f1',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Retry
+                                </button>
+                            </div>
+                        ) : blogs.length === 0 ? (
+                            <div style={{
+                                textAlign: 'center',
+                                padding: '80px 20px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                                border: '1px dashed rgba(255, 255, 255, 0.1)',
+                                borderRadius: '16px',
+                                margin: '20px 0'
+                            }}>
+                                <h3 style={{ fontSize: '1.25rem', color: '#f3f4f6', marginBottom: '8px' }}>
+                                    No published blogs found
+                                </h3>
+                                <p style={{ color: '#9ca3af', marginBottom: '24px', maxWidth: '450px', margin: '0 auto 24px' }}>
+                                    Be the first author to publish a blog post on Scriptify AI!
+                                </p>
+                                <Link
+                                    to="/create"
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '12px 24px',
+                                        borderRadius: '10px',
+                                        backgroundColor: '#6366f1',
+                                        color: '#ffffff',
+                                        fontWeight: '600',
+                                        textDecoration: 'none'
+                                    }}
+                                >
+                                    <FiPenTool size={18} />
+                                    Create Blog Post
+                                </Link>
+                            </div>
+                        ) : (
+                            <>
+                                {featuredBlog && (
+                                    <HeroArticle
+                                        blog={featuredBlog}
+                                        onClick={() => handleArticleClick(featuredBlog)}
+                                    />
+                                )}
 
-                        {remainingBlogs.length > 0 && (
-                            <FeedSection
-                                blogs={remainingBlogs}
-                                title="Recent Articles"
-                                onArticleClick={handleArticleClick}
-                            />
+                                {remainingBlogs.length > 0 && (
+                                    <FeedSection
+                                        blogs={remainingBlogs}
+                                        title="Recent Articles"
+                                        onArticleClick={handleArticleClick}
+                                    />
+                                )}
+                            </>
                         )}
-                    </>
-                )}
+                    </main>
+
+                    {isAuthenticated && (
+                        <div className={styles.sidebarWrapper}>
+                            <DiscoverSidebar />
+                        </div>
+                    )}
+                </div>
             </div>
         </HomeFeedLayout>
     );

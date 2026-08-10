@@ -3,28 +3,66 @@ import TopNavbar from '../../components/navigation/TopNavbar';
 import ProfileSidebar from '../../components/profile/ProfileSidebar';
 import ProfileHeader from '../../components/profile/ProfileHeader';
 import ProfileStats from '../../components/profile/ProfileStats';
-import ProfileTabs from '../../components/profile/ProfileTabs';
-import ProfileSearchBar from '../../components/profile/ProfileSearchBar';
 import ProfileBlogCard from '../../components/profile/ProfileBlogCard';
+import FollowingList from '../../components/profile/FollowingList';
 import { useAuth } from '../../context/AuthContext';
 import { blogService } from '../../services/blogService';
+import { userService } from '../../services/userService';
 import styles from '../../styles/profile/Profile.module.css';
 
 const Profile = () => {
     const { user: authUser, updateUser } = useAuth();
     const [activeTab, setActiveTab] = useState('all');
-    const [searchQuery, setSearchQuery] = useState('');
-    const [sortBy, setSortBy] = useState('newest');
 
     const [userBlogs, setUserBlogs] = useState([]);
     const [blogCounts, setBlogCounts] = useState({ all: 0, published: 0, drafts: 0 });
     const [loadingBlogs, setLoadingBlogs] = useState(true);
 
+    const [followingUsers, setFollowingUsers] = useState([]);
+    const [followerUsers, setFollowerUsers] = useState([]);
+    const [followingMap, setFollowingMap] = useState({});
+    const [actionLoading, setActionLoading] = useState({});
+
+    const currentUserId = authUser?._id || authUser?.id;
+
     useEffect(() => {
-        if (authUser) {
+        if (currentUserId) {
             fetchUserBlogs();
+            fetchUserProfileDetails();
         }
-    }, [authUser]);
+    }, [currentUserId]);
+
+    const fetchUserProfileDetails = async () => {
+        if (!currentUserId) return;
+        try {
+            const userData = await userService.getUserById(currentUserId);
+            const following = Array.isArray(userData.following) ? userData.following : [];
+            const followers = Array.isArray(userData.followers) ? userData.followers : [];
+
+            setFollowingUsers(following);
+            setFollowerUsers(followers);
+
+            // Build following map
+            const map = {};
+            following.forEach((u) => {
+                const uId = typeof u === 'object' ? u._id || u.id : u;
+                if (uId) map[String(uId)] = true;
+            });
+            setFollowingMap(map);
+
+            // Keep authUser context up to date
+            if (updateUser && authUser) {
+                updateUser({
+                    _id: currentUserId,
+                    id: currentUserId,
+                    following: following.map((u) => (typeof u === 'object' ? u._id || u.id : u)),
+                    followers: followers.map((u) => (typeof u === 'object' ? u._id || u.id : u)),
+                });
+            }
+        } catch (err) {
+            console.error('Failed to fetch user profile details:', err.message);
+        }
+    };
 
     const fetchUserBlogs = async () => {
         setLoadingBlogs(true);
@@ -52,6 +90,35 @@ const Profile = () => {
         }
     };
 
+    const handleFollowToggleInProfile = async (targetUserId, isCurrentlyFollowing) => {
+        if (actionLoading[targetUserId]) return;
+
+        // Optimistic UI updates
+        setActionLoading((prev) => ({ ...prev, [targetUserId]: true }));
+        setFollowingMap((prev) => ({ ...prev, [String(targetUserId)]: !isCurrentlyFollowing }));
+
+        if (isCurrentlyFollowing) {
+            setFollowingUsers((prev) => prev.filter((u) => String(typeof u === 'object' ? u._id || u.id : u) !== String(targetUserId)));
+        }
+
+        try {
+            const res = await userService.toggleFollow(targetUserId);
+            const serverFollowing = typeof res.isFollowing === 'boolean' ? res.isFollowing : !isCurrentlyFollowing;
+
+            setFollowingMap((prev) => ({ ...prev, [String(targetUserId)]: serverFollowing }));
+
+            // Re-fetch populated details to ensure exact list sync
+            fetchUserProfileDetails();
+        } catch (err) {
+            console.error('Failed to toggle follow status:', err.message);
+            // Revert on error
+            setFollowingMap((prev) => ({ ...prev, [String(targetUserId)]: isCurrentlyFollowing }));
+            fetchUserProfileDetails();
+        } finally {
+            setActionLoading((prev) => ({ ...prev, [targetUserId]: false }));
+        }
+    };
+
     const publishedBlogs = userBlogs.filter((b) => b.status === 'published');
     const draftBlogs = userBlogs.filter((b) => b.status === 'draft');
 
@@ -68,22 +135,13 @@ const Profile = () => {
         joined: authUser?.createdAt ? new Date(authUser.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'March 2024',
         authProvider: authUser?.googleId ? 'Google' : 'Email/Password',
         stats: {
-            followers: authUser?.followers?.length || 0,
-            following: authUser?.following?.length || 0,
+            followers: followerUsers.length,
+            following: followingUsers.length,
             all: blogCounts.all,
             published: blogCounts.published,
             drafts: blogCounts.drafts,
         },
     };
-
-    const sidebarNavItems = [
-        { id: 'feed', label: 'My Feed', icon: 'Rss' },
-        { id: 'trending', label: 'Trending', icon: 'TrendingUp' },
-        { id: 'library', label: 'Library', icon: 'BookOpen' },
-        { id: 'workspace', label: 'AI Workspace', icon: 'Sparkles' },
-        { id: 'profile', label: 'Profile', icon: 'User', active: true },
-        { id: 'settings', label: 'Settings', icon: 'Settings' },
-    ];
 
     let currentTabBlogs = userBlogs;
     if (activeTab === 'published' || activeTab === 'blogs') {
@@ -104,11 +162,6 @@ const Profile = () => {
         views: `${b.views || 0} views`,
         date: new Date(b.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     }));
-
-    const filteredBlogs = formattedBlogs.filter(blog =>
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     const handleDeleteBlog = async (blogId) => {
         if (!window.confirm('Are you sure you want to delete this blog?')) return;
@@ -141,35 +194,33 @@ const Profile = () => {
                     <ProfileStats stats={user.stats} activeTab={activeTab} onTabChange={setActiveTab} />
 
                     <div className={styles.contentSection}>
-                        <div className={styles.tabsRow}>
-                            <ProfileTabs
-                                activeTab={activeTab}
-                                onTabChange={setActiveTab}
-                                counts={{
-                                    all: user.stats.all,
-                                    published: user.stats.published,
-                                    drafts: user.stats.drafts,
-                                }}
+                        {activeTab === 'following' ? (
+                            <FollowingList
+                                users={followingUsers}
+                                followingMap={followingMap}
+                                onFollowToggle={handleFollowToggleInProfile}
+                                actionLoading={actionLoading}
+                                type="following"
                             />
-                            <ProfileSearchBar
-                                searchQuery={searchQuery}
-                                onSearchChange={setSearchQuery}
-                                sortBy={sortBy}
-                                onSortChange={setSortBy}
+                        ) : activeTab === 'followers' ? (
+                            <FollowingList
+                                users={followerUsers}
+                                followingMap={followingMap}
+                                onFollowToggle={handleFollowToggleInProfile}
+                                actionLoading={actionLoading}
+                                type="followers"
                             />
-                        </div>
-
-                        {loadingBlogs ? (
+                        ) : loadingBlogs ? (
                             <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8' }}>
                                 Loading your articles...
                             </div>
-                        ) : filteredBlogs.length === 0 ? (
+                        ) : formattedBlogs.length === 0 ? (
                             <div style={{ textAlign: 'center', padding: '60px 0', color: '#94a3b8' }}>
                                 No articles found in this category.
                             </div>
                         ) : (
                             <div className={styles.blogGrid}>
-                                {filteredBlogs.map(blog => (
+                                {formattedBlogs.map(blog => (
                                     <ProfileBlogCard
                                         key={blog.id}
                                         blog={blog}

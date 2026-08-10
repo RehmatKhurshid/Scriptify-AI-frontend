@@ -40,15 +40,7 @@ const ArticleCard = ({
         setIsLiked(initialIsLiked);
     }, [initialLikes, initialComments, initialIsLiked]);
 
-    useEffect(() => {
-        if (id && !String(id).startsWith('fallback-')) {
-            blogService.getComments(id).then((data) => {
-                if (data && typeof data.total === 'number') {
-                    setCommentsCount(data.total);
-                }
-            }).catch(() => {});
-        }
-    }, [id]);
+
 
     const postTimeIST = createdAt
         ? formatISTTime(createdAt)

@@ -31,16 +31,7 @@ const ProfileBlogCard = ({ blog, onDelete, onPublish }) => {
     const [isCommentsOpen, setIsCommentsOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        const bId = blog._id || blog.id;
-        if (bId && !String(bId).startsWith('fallback-')) {
-            blogService.getComments(bId).then((data) => {
-                if (data && typeof data.total === 'number') {
-                    setCommentsCount(data.total);
-                }
-            }).catch(() => {});
-        }
-    }, [blog._id, blog.id]);
+
 
     const handleLikeToggle = async () => {
         if (!user) {
