@@ -33,7 +33,7 @@ const ProfileStats = ({ stats, activeTab, onTabChange }) => {
             value: stats.followers || 0,
             labelColor: '#a855f7',
             valueColor: '#a855f7',
-            clickable: false,
+            clickable: true,
         },
         {
             id: 'following',
@@ -41,7 +41,7 @@ const ProfileStats = ({ stats, activeTab, onTabChange }) => {
             value: stats.following || 0,
             labelColor: '#3b82f6',
             valueColor: '#3b82f6',
-            clickable: false,
+            clickable: true,
         },
     ];
 

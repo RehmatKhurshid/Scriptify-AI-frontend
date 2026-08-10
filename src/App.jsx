@@ -8,6 +8,7 @@ import ResetPassword from './pages/auth/ResetPassword';
 import ChangePassword from './pages/user/ChangePassword';
 import HomeFeed from './pages/auth/HomeFeed';
 import Profile from './pages/user/Profile';
+import UserProfile from './pages/user/UserProfile';
 import EditProfile from './pages/user/EditProfile';
 import CreateBlog from './pages/blog/CreateBlog';
 import EditBlog from './pages/blog/EditBlog';
@@ -103,6 +104,7 @@ function App() {
           <Route path="/Home-Feed" element={<HomeFeed />} />
           <Route path="/home-feed" element={<HomeFeed />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/profile/:id" element={<UserProfile />} />
           <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
           <Route path="/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
           <Route path="/change-password" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />

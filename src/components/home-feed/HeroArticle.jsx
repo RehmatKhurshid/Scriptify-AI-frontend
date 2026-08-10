@@ -45,14 +45,6 @@ const HeroArticle = ({ blog: propBlog }) => {
             setIsLiked(likedByMe);
         }
 
-        const blogId = b._id || b.id;
-        if (blogId && !String(blogId).startsWith('fallback-')) {
-            blogService.getComments(blogId).then((commentRes) => {
-                if (commentRes && typeof commentRes.total === 'number') {
-                    setCommentsCount(commentRes.total);
-                }
-            }).catch(() => {});
-        }
     };
 
     const fetchHeroBlog = async () => {

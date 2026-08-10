@@ -1,18 +1,19 @@
 .container {
     width: 100%;
-    max-width: 400px;
-    padding: var(--space-md) var(--space-xl);
+    max-width: 390px;
+    padding: 12px 22px;
     background-color: rgba(17, 24, 39, 0.6);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
+    box-sizing: border-box;
 }
 
 .header {
     text-align: center;
-    margin-bottom: var(--space-md);
+    margin-bottom: 6px;
 }
 
 .logoWrapper {
@@ -20,7 +21,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
-    margin-bottom: var(--space-xs);
+    margin-bottom: 2px;
 }
 
 @media (min-width: 901px) {
@@ -43,23 +44,23 @@
 }
 
 .title {
-    font-size: var(--font-size-xl);
+    font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-text-primary);
-    margin: 0 0 var(--space-xs) 0;
+    margin: 0 0 2px 0;
     letter-spacing: -0.025em;
 }
 
 .subtitle {
-    font-size: var(--font-size-sm);
+    font-size: 12px;
     color: var(--color-text-secondary);
     margin: 0;
 }
 
 .errorAlert {
-    padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-sm);
-    font-size: var(--font-size-xs);
+    padding: 4px 10px;
+    margin-bottom: 6px;
+    font-size: 11px;
     color: #ef4444;
     background-color: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.2);
@@ -68,9 +69,9 @@
 }
 
 .successAlert {
-    padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-sm);
-    font-size: var(--font-size-xs);
+    padding: 4px 10px;
+    margin-bottom: 6px;
+    font-size: 11px;
     color: #10b981;
     background-color: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.2);
@@ -78,82 +79,28 @@
     text-align: center;
 }
 
-/* Google Button */
-.googleButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    font-family: var(--font-family);
-    font-size: var(--font-size-sm);
-    font-weight: 500;
-    color: var(--color-text-primary);
-    background-color: var(--color-bg-input);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    outline: none;
-}
-
-.googleButton:hover {
-    background-color: #374151;
-    border-color: var(--color-border-focus);
-}
-
-.googleIcon {
-    font-size: 1.25rem;
-    flex-shrink: 0;
-}
-
-.googleText {
-    line-height: 1.5;
-}
-
-/* Divider */
-.divider {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    margin: 8px 0;
-}
-
-.dividerLine {
-    flex: 1;
-    height: 1px;
-    background-color: var(--color-border);
-}
-
-.dividerText {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    text-transform: lowercase;
-}
-
 /* Form */
 .form {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .nameRow {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
+    gap: 8px;
 }
 
 .nameField,
 .field {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: 1px;
 }
 
 .label {
-    font-size: var(--font-size-xs);
+    font-size: 11px;
     font-weight: 500;
     color: var(--color-text-secondary);
     letter-spacing: 0.025em;
@@ -161,9 +108,9 @@
 
 .input {
     width: 100%;
-    padding: 6px 12px;
+    padding: 5px 10px;
     font-family: var(--font-family);
-    font-size: var(--font-size-sm);
+    font-size: 13px;
     color: var(--color-text-primary);
     background-color: var(--color-bg-input);
     border: 1px solid var(--color-border);
@@ -194,23 +141,23 @@
 }
 
 .passwordWrapper .input {
-    padding-right: 2.5rem;
+    padding-right: 2.2rem;
 }
 
 .eyeButton {
     position: absolute;
-    right: var(--space-sm);
+    right: 8px;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
     background: none;
     border: none;
     color: var(--color-text-muted);
-    font-size: 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
     border-radius: var(--radius-sm);
     transition: color var(--transition-fast);
@@ -221,15 +168,108 @@
     color: var(--color-text-secondary);
 }
 
+/* Password Strength Indicator */
+.strengthWrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.strengthTrack {
+    flex: 1;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.strengthFill {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strengthLabel {
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Requirements Checklist */
+.requirements {
+    margin-top: 1px;
+}
+
+.requirementsLabel {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+    margin: 0 0 2px 0;
+}
+
+.requirementsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 8px;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
+}
+
+.requirement.met {
+    color: #10B981;
+}
+
+.reqIcon {
+    font-size: 0.7rem;
+    flex-shrink: 0;
+}
+
+.reqLabel {
+    line-height: 1.1;
+}
+
+/* Confirm Password Label Row & Match Badge */
+.labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.matchBadge {
+    font-size: 10.5px;
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.matchBadge.matched {
+    color: #10B981;
+}
+
+.matchBadge.unmatched {
+    color: #ef4444;
+}
+
 .submitWrapper {
-    margin-top: var(--space-sm);
+    margin-top: 4px;
 }
 
 .footer {
     text-align: center;
-    font-size: var(--font-size-sm);
+    font-size: 12px;
     color: var(--color-text-secondary);
-    margin: 10px 0 0 0;
+    margin: 6px 0 0 0;
 }
 
 .signInLink {
@@ -247,12 +287,12 @@
 /* Responsive */
 @media (max-width: 480px) {
     .container {
-        padding: var(--space-xl) var(--space-md);
+        padding: 12px 14px;
         max-width: 100%;
     }
 
     .nameRow {
-        grid-template-columns: 1fr;
-        gap: var(--space-md);
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
     }
 }
