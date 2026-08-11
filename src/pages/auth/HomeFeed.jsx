@@ -7,24 +7,42 @@ import FeedSection from '../../components/home-feed/FeedSection';
 import DiscoverSidebar from '../../components/home-feed/DiscoverSidebar';
 import { useAuth } from '../../context/AuthContext';
 import { blogService } from '../../services/blogService';
+import { aiService } from '../../services/aiService';
 import styles from '../../styles/home-feed/HomeFeed.module.css';
+
+import { getAvatarUrl } from '../../utils/avatar';
 
 const HomeFeed = () => {
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     const [blogs, setBlogs] = useState([]);
+    const [isPersonalized, setIsPersonalized] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchBlogs();
-    }, []);
+    }, [isAuthenticated]);
 
     const fetchBlogs = async () => {
         setLoading(true);
         setError(null);
         try {
-            const data = await blogService.getAllBlogs({ limit: 30 });
+            let data;
+            if (isAuthenticated) {
+                try {
+                    data = await aiService.getPersonalizedFeed(1, 30);
+                    if (data?.isPersonalized) {
+                        setIsPersonalized(true);
+                    }
+                } catch (recErr) {
+                    console.warn('Personalized feed fallback to getAllBlogs:', recErr.message);
+                    data = await blogService.getAllBlogs({ limit: 30 });
+                }
+            } else {
+                data = await blogService.getAllBlogs({ limit: 30 });
+            }
+
             const rawBlogs = data.blogs || [];
 
             // Format raw backend blogs for component rendering
@@ -33,8 +51,7 @@ const HomeFeed = () => {
                     ? `${b.author.firstName || ''} ${b.author.lastName || ''}`.trim()
                     : 'Anonymous Author';
 
-                const avatar = b.author?.avatar ||
-                    `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(authorName || 'User')}`;
+                const avatar = getAvatarUrl(b.author, authorName);
 
                 const cleanExcerpt = b.excerpt ||
                     (b.content ? b.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...' : 'No description provided');
@@ -163,7 +180,7 @@ const HomeFeed = () => {
                                 {remainingBlogs.length > 0 && (
                                     <FeedSection
                                         blogs={remainingBlogs}
-                                        title="Recent Articles"
+                                        title={isAuthenticated ? (isPersonalized ? "✨ Recommended For You" : "Articles For You") : "Recent Articles"}
                                         onArticleClick={handleArticleClick}
                                     />
                                 )}

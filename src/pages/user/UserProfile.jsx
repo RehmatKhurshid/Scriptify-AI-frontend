@@ -10,6 +10,8 @@ import { userService } from '../../services/userService';
 import { blogService } from '../../services/blogService';
 import styles from '../../styles/profile/UserProfile.module.css';
 
+import { getAvatarUrl } from '../../utils/avatar';
+
 const UserProfile = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -305,7 +307,7 @@ const UserProfile = () => {
     }
 
     const fullName = `${profileUser.firstName || ''} ${profileUser.lastName || ''}`.trim() || 'Author';
-    const avatar = profileUser.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fullName)}`;
+    const avatar = getAvatarUrl(profileUser, fullName);
     const joinedDate = profileUser.createdAt ? new Date(profileUser.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Recently';
 
     const followingUsers = Array.isArray(profileUser.following) ? profileUser.following : [];

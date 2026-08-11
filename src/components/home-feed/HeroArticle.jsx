@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { blogService } from '../../services/blogService';
 import { formatISTTime } from '../../utils/dateUtils';
 import styles from '../../styles/home-feed/HeroArticle.module.css';
+import { getAvatarUrl } from '../../utils/avatar';
 
 const HeroArticle = ({ blog: propBlog }) => {
     const { user, isAuthenticated } = useAuth();
@@ -31,8 +32,16 @@ const HeroArticle = ({ blog: propBlog }) => {
 
     const applyBlogData = (b) => {
         setHeroBlog(b);
-        if (typeof b.likesCount === 'number') setLikesCount(b.likesCount);
-        if (typeof b.commentsCount === 'number') setCommentsCount(b.commentsCount);
+        const resolvedLikesCount = typeof b.likesCount === 'number'
+            ? b.likesCount
+            : (Array.isArray(b.likes) ? b.likes.length : 0);
+        setLikesCount(resolvedLikesCount);
+
+        const resolvedCommentsCount = typeof b.commentsCount === 'number'
+            ? b.commentsCount
+            : (Array.isArray(b.comments) ? b.comments.length : 0);
+        setCommentsCount(resolvedCommentsCount);
+
         if (user && Array.isArray(b.likes)) {
             const userId = String(user._id || user.id || user.userId || '');
             const likedByMe = Boolean(
@@ -44,7 +53,6 @@ const HeroArticle = ({ blog: propBlog }) => {
             );
             setIsLiked(likedByMe);
         }
-
     };
 
     const fetchHeroBlog = async () => {
@@ -69,14 +77,18 @@ const HeroArticle = ({ blog: propBlog }) => {
         if (heroBlog?._id) {
             try {
                 const res = await blogService.toggleLike(heroBlog._id);
-                setIsLiked(res.liked);
-                setLikesCount(res.likeCount);
+                const newLiked = typeof res.liked === 'boolean' ? res.liked : !isLiked;
+                const newCount = typeof res.likeCount === 'number'
+                    ? res.likeCount
+                    : (typeof res.likesCount === 'number' ? res.likesCount : (newLiked ? likesCount + 1 : Math.max(0, likesCount - 1)));
+                setIsLiked(newLiked);
+                setLikesCount(newCount);
             } catch (err) {
                 console.error('Failed to toggle like on hero article:', err.message);
             }
         } else {
             setIsLiked(!isLiked);
-            setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
+            setLikesCount((prev) => (isLiked ? Math.max(0, prev - 1) : prev + 1));
         }
     };
 
@@ -84,7 +96,7 @@ const HeroArticle = ({ blog: propBlog }) => {
         title: "The Architecture of Tomorrow: AI's Role in Generative Design",
         excerpt: "Exploring how neural networks are moving beyond image generation to create functional, structurally sound, and impossibly beautiful buildings that defy conventions...",
         author: "Dr. Elena Rostova",
-        authorAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face",
+        authorAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena%20Rostova",
         date: "Oct 12",
         readTime: "8 min read",
         image: "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&h=600&fit=crop",
@@ -96,11 +108,13 @@ const HeroArticle = ({ blog: propBlog }) => {
         ? (heroBlog.excerpt || (heroBlog.content ? heroBlog.content.substring(0, 180) + '...' : ''))
         : fallbackArticle.excerpt;
 
-    const authorName = heroBlog?.author
-        ? `${heroBlog.author.firstName || ''} ${heroBlog.author.lastName || ''}`.trim()
+    const authorName = heroBlog
+        ? (typeof heroBlog.author === 'string'
+            ? heroBlog.author
+            : `${heroBlog.author?.firstName || ''} ${heroBlog.author?.lastName || ''}`.trim() || heroBlog.author?.username || 'Author')
         : fallbackArticle.author;
 
-    const authorAvatar = heroBlog?.author?.avatar || fallbackArticle.authorAvatar;
+    const authorAvatar = heroBlog?.authorAvatar || getAvatarUrl(heroBlog?.author, authorName);
     const image = heroBlog?.thumbnailUrl || fallbackArticle.image;
 
     const postTimeIST = heroBlog?.createdAt
@@ -129,6 +143,11 @@ const HeroArticle = ({ blog: propBlog }) => {
         isLiked,
     };
 
+    const isRecentlyPublished = heroBlog?.createdAt && (Date.now() - new Date(heroBlog.createdAt).getTime()) < 48 * 60 * 60 * 1000;
+    const badgeLabel = heroBlog
+        ? (isRecentlyPublished ? 'Latest Release' : 'Top Recommendation')
+        : 'Trending on Scriptify AI';
+
     return (
         <>
             <article
@@ -141,7 +160,7 @@ const HeroArticle = ({ blog: propBlog }) => {
                     <div className={styles.imageOverlay}></div>
                     <div className={styles.trendingBadge}>
                         <span className={styles.trendingDot}></span>
-                        {heroBlog ? 'Latest Release' : 'Trending on Scriptify AI'}
+                        {badgeLabel}
                     </div>
                 </div>
 

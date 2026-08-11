@@ -6,6 +6,8 @@ import EditBlogNavbar from '../../components/editor/EditBlogNavbar';
 import EditBlogCanvas from '../../components/editor/EditBlogCanvas';
 import EditPostSettingsPanel from '../../components/editor/EditPostSettingsPanel';
 import { blogService } from '../../services/blogService';
+import { aiService } from '../../services/aiService';
+import { getAvatarUrl } from '../../utils/avatar';
 import styles from '../../styles/editor/EditBlog.module.css';
 
 // Pre-existing mock databases
@@ -256,21 +258,24 @@ const EditBlog = () => {
     };
 
     // AI Helper Operations
-    const handleAIGenerateTitle = () => {
+    const handleAIGenerateTitle = async () => {
         setLoadingFields(prev => ({ ...prev, title: true }));
         addToast('info', 'AI Assistant', 'Analyzing content to generate matching titles...');
-        
-        setTimeout(() => {
-            const generated = [
-                `Designing the Invisible: UX in the Era of Predictive AI`,
-                `Beyond Clicking: Why the Best Interface is No Interface`,
-                `The Cognitive Load Trap: Minimizing Friction in Product Design`,
-                `Implicit Intent: The Evolution of Intelligent UX Systems`
-            ];
-            setAiTitles(generated);
+
+        try {
+            const data = await aiService.generateTitles(blogData.title || blogData.category, blogData.content);
+            if (data.titles && Array.isArray(data.titles) && data.titles.length > 0) {
+                setAiTitles(data.titles);
+                setActiveModal('title-select');
+            } else {
+                addToast('warning', 'AI Assistant', 'No titles generated. Please try again.');
+            }
+        } catch (err) {
+            console.error('Failed to generate titles:', err);
+            addToast('error', 'AI Assistant', err.message || 'Failed to generate title suggestions.');
+        } finally {
             setLoadingFields(prev => ({ ...prev, title: false }));
-            setActiveModal('title-select');
-        }, 2000);
+        }
     };
 
     const selectTitle = (newTitle) => {
@@ -549,6 +554,35 @@ const EditBlog = () => {
         }
     };
 
+    const handleAIGenerateContent = async () => {
+        const topicOrTitle = blogData.title || blogData.category;
+        setLoadingFields(prev => ({ ...prev, content: true }));
+        addToast('info', 'AI Assistant', 'Writing content draft based on title...');
+
+        try {
+            const data = await aiService.generateDraft(topicOrTitle);
+            if (data.draft) {
+                const { introduction, sections, conclusion } = data.draft;
+                const fullContent = [
+                    introduction,
+                    ...(sections || []).map((s) => `## ${s.heading}\n\n${s.content}`),
+                    conclusion ? `## Conclusion\n\n${conclusion}` : '',
+                ].filter(Boolean).join('\n\n');
+
+                setBlogData(prev => ({ ...prev, content: fullContent }));
+                setSaveStatus('idle');
+                setIsDirty(true);
+                setHasSessionEdits(true);
+                addToast('success', 'Content Generated', 'AI draft generated successfully.');
+            }
+        } catch (err) {
+            console.error('Failed to generate content:', err);
+            addToast('error', 'AI Assistant', err.message || 'Failed to generate content.');
+        } finally {
+            setLoadingFields(prev => ({ ...prev, content: false }));
+        }
+    };
+
     return (
         <div className={styles.editBlogPage}>
             {/* Sidebar Navigation */}
@@ -579,6 +613,7 @@ const EditBlog = () => {
                         onChange={handleBlogDataChange}
                         loadingFields={loadingFields}
                         onAIGenerateTitle={handleAIGenerateTitle}
+                        onAIGenerateContent={handleAIGenerateContent}
                         onAISummarizeExcerpt={handleAISummarizeExcerpt}
                         onAIGenerateTags={handleAIGenerateTags}
                         onAIImproveContent={handleAIImproveContent}
@@ -793,7 +828,7 @@ const EditBlog = () => {
 
                                     <div className={styles.previewAuthorSection}>
                                         <img 
-                                            src={blogData.authorAvatar || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face'} 
+                                            src={getAvatarUrl(user || blogData.authorAvatar || blogData.author, blogData.author || 'Author')} 
                                             alt="Author Avatar" 
                                             className={styles.previewAuthorAvatar} 
                                         />

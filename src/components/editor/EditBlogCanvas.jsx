@@ -14,6 +14,7 @@ const EditBlogCanvas = ({
     onChange,
     loadingFields = {},
     onAIGenerateTitle,
+    onAIGenerateContent,
     onAISummarizeExcerpt,
     onAIGenerateTags,
     onAIImproveContent,
@@ -126,10 +127,8 @@ const EditBlogCanvas = ({
                                 transition: 'all 0.3s'
                             }}
                         />
-                        {loadingFields.title ? (
+                        {loadingFields.title && (
                             <Loader2 size={16} style={{ position: 'absolute', right: '14px', color: '#8b5cf6', animation: 'spin 1s linear infinite' }} />
-                        ) : (
-                            <Sparkles size={16} className={canvasStyles.inputSparkle} />
                         )}
                     </div>
                 </div>
@@ -178,10 +177,8 @@ const EditBlogCanvas = ({
                                     transition: 'all 0.3s'
                                 }}
                             />
-                            {loadingFields.tags ? (
+                            {loadingFields.tags && (
                                 <Loader2 size={16} style={{ position: 'absolute', right: '14px', color: '#8b5cf6', animation: 'spin 1s linear infinite' }} />
-                            ) : (
-                                <Sparkles size={16} className={canvasStyles.inputSparkle} />
                             )}
                         </div>
                     </div>
@@ -190,7 +187,22 @@ const EditBlogCanvas = ({
                 {/* Content Section */}
                 <div className={canvasStyles.inputGroup}>
                     <div className={canvasStyles.contentHeaderRow}>
-                        <label className={canvasStyles.label}>Content</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <label className={canvasStyles.label}>Content</label>
+                            <button
+                                className={canvasStyles.aiLabelButton}
+                                onClick={onAIGenerateContent || onAIImproveContent}
+                                disabled={loadingFields.content}
+                                type="button"
+                            >
+                                {loadingFields.content ? (
+                                    <Loader2 size={12} style={{ animation: 'spin 1s linear infinite' }} />
+                                ) : (
+                                    <Sparkles size={12} className={canvasStyles.sparkleColor} />
+                                )}
+                                <span>{loadingFields.content ? 'Generating...' : 'Generate Content'}</span>
+                            </button>
+                        </div>
 
                         {/* Top AI Action Buttons for Content */}
                         <div className={canvasStyles.contentAiBar}>
@@ -298,10 +310,8 @@ const EditBlogCanvas = ({
                                 transition: 'all 0.3s'
                             }}
                         />
-                        {loadingFields.excerpt ? (
+                        {loadingFields.excerpt && (
                             <Loader2 size={16} style={{ position: 'absolute', right: '14px', top: '14px', color: '#8b5cf6', animation: 'spin 1s linear infinite' }} />
-                        ) : (
-                            <Sparkles size={16} className={canvasStyles.textareaSparkle} />
                         )}
                     </div>
                 </div>

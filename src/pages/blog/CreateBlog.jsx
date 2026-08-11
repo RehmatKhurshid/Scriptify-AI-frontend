@@ -11,7 +11,9 @@ import {
     LayoutDashboard,
     Eye,
     CheckCircle,
-    FileSpreadsheet
+    FileSpreadsheet,
+    Sparkles,
+    X
 } from 'lucide-react';
 import EditorNavbar from '../../components/editor/EditorNavbar';
 import EditorSidebar from '../../components/editor/EditorSidebar';
@@ -68,7 +70,11 @@ const CreateBlog = () => {
         summary: false,
         improve: null,
         thumbnail: false,
+        titles: false,
+        content: false,
     });
+    const [aiTitles, setAiTitles] = useState([]);
+    const [showTitleModal, setShowTitleModal] = useState(false);
 
     const inferCategoryFromTopic = (topic = '') => {
         const text = topic.toLowerCase();
@@ -79,6 +85,65 @@ const CreateBlog = () => {
         if (text.includes('productivity') || text.includes('work') || text.includes('time') || text.includes('habit')) return 'Productivity';
         if (text.includes('business') || text.includes('startup') || text.includes('money') || text.includes('market')) return 'Business';
         return 'Technology';
+    };
+
+    // 0. Generate AI Title suggestions
+    const handleGenerateTitles = async () => {
+        if (!blogData.title && !blogData.content && !blogData.category) {
+            setError('Please enter a title, category, or content first to generate title suggestions.');
+            return;
+        }
+        setError('');
+        setAiLoading((prev) => ({ ...prev, titles: true }));
+        try {
+            const data = await aiService.generateTitles(blogData.title || blogData.category, blogData.content);
+            if (data.titles && Array.isArray(data.titles) && data.titles.length > 0) {
+                setAiTitles(data.titles);
+                setShowTitleModal(true);
+                setSuccessMessage('AI Title suggestions generated!');
+            } else {
+                setError('No titles generated. Please try again.');
+            }
+        } catch (err) {
+            setError(err.message || 'Failed to generate title suggestions.');
+        } finally {
+            setAiLoading((prev) => ({ ...prev, titles: false }));
+        }
+    };
+
+    // 0b. Generate AI Blog Content
+    const handleGenerateContent = async () => {
+        const topicOrTitle = blogData.title || blogData.category;
+        if (!topicOrTitle || !topicOrTitle.trim()) {
+            setError('Please enter a Title or Category first so AI knows what content to generate.');
+            return;
+        }
+        setError('');
+        setAiLoading((prev) => ({ ...prev, content: true }));
+        try {
+            const data = await aiService.generateDraft(topicOrTitle);
+            if (data.draft) {
+                const { title, category, introduction, sections, conclusion, suggestedTags } = data.draft;
+                const fullContent = [
+                    introduction,
+                    ...(sections || []).map((s) => `## ${s.heading}\n\n${s.content}`),
+                    conclusion ? `## Conclusion\n\n${conclusion}` : '',
+                ].filter(Boolean).join('\n\n');
+
+                setBlogData((prev) => ({
+                    ...prev,
+                    title: prev.title || title || '',
+                    category: prev.category || category || 'Technology',
+                    content: fullContent,
+                    tags: prev.tags || (Array.isArray(suggestedTags) ? suggestedTags.join(', ') : ''),
+                }));
+                setSuccessMessage('AI Content generated successfully!');
+            }
+        } catch (err) {
+            setError(err.message || 'Failed to generate blog content.');
+        } finally {
+            setAiLoading((prev) => ({ ...prev, content: false }));
+        }
     };
 
     // 1. Generate Blog Draft
@@ -950,6 +1015,8 @@ const CreateBlog = () => {
                         <EditorCanvas
                             blogData={blogData}
                             onChange={setBlogData}
+                            onGenerateTitles={handleGenerateTitles}
+                            onGenerateContent={handleGenerateContent}
                             onGenerateTags={handleGenerateTags}
                             onGenerateSummary={handleGenerateSummary}
                             onImproveContent={handleImproveContent}
@@ -969,6 +1036,84 @@ const CreateBlog = () => {
                     </div>
                 )}
             </div>
+
+            {/* Modal: Title Select Suggestions */}
+            {showTitleModal && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000,
+                    backdropFilter: 'blur(4px)'
+                }}>
+                    <div style={{
+                        backgroundColor: '#18181b',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        borderRadius: '12px',
+                        padding: '24px',
+                        maxWidth: '550px',
+                        width: '90%',
+                        color: '#ffffff'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Sparkles size={20} style={{ color: '#a855f7' }} />
+                                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>AI Title Suggestions</h3>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowTitleModal(false)}
+                                style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer' }}
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <p style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '16px' }}>
+                            Choose one of the generated options to apply it to your blog post title:
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {aiTitles.map((option, idx) => (
+                                <button
+                                    key={idx}
+                                    type="button"
+                                    onClick={() => {
+                                        setBlogData((prev) => ({ ...prev, title: option }));
+                                        setShowTitleModal(false);
+                                        setSuccessMessage('AI Title applied successfully!');
+                                    }}
+                                    style={{
+                                        textAlign: 'left',
+                                        padding: '12px 16px',
+                                        backgroundColor: '#27272a',
+                                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                                        borderRadius: '8px',
+                                        color: '#f4f4f5',
+                                        fontSize: '14px',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = '#a855f7';
+                                        e.currentTarget.style.backgroundColor = '#3f3f46';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                                        e.currentTarget.style.backgroundColor = '#27272a';
+                                    }}
+                                >
+                                    {option}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
