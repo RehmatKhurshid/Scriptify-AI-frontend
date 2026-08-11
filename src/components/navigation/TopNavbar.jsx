@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiPlus } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { getAvatarUrl } from '../../utils/avatar';
 import Logo from '../icons/Logo';
 import styles from '../../styles/navigation/TopNavbar.module.css';
 
@@ -9,7 +10,7 @@ const TopNavbar = () => {
     const { user, isAuthenticated } = useAuth();
     const location = useLocation();
 
-    const userAvatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.firstName || 'User')}`;
+    const userAvatar = getAvatarUrl(user, user?.firstName || 'User');
     const feedLabel = isAuthenticated ? 'Home Feed' : 'Explore Blogs';
 
     return (

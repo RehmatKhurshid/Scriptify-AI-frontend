@@ -74,7 +74,6 @@ const PostSettingsPanel = ({
                     <Sparkles size={16} className={styles.aiIcon} />
                     <span>AI Blog Assistant</span>
                 </div>
-                <span className={styles.betaTag}>READY</span>
             </div>
 
             {/* 1. Generate Draft Section */}
@@ -105,7 +104,7 @@ const PostSettingsPanel = ({
 
             {/* 2. Manual Image Upload Section */}
             <div className={styles.sectionThumbnail} style={{ marginTop: '24px' }}>
-                <label className={styles.sectionLabel}>Image Upload (Manual)</label>
+                <label className={styles.sectionLabel}>Image Upload</label>
 
                 <input
                     type="file"

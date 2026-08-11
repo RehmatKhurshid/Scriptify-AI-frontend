@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { RefreshCw, Home } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { getAvatarUrl } from '../../utils/avatar';
 import styles from '../../styles/editor/EditorNavbar.module.css';
 
 const EditorNavbar = ({ activeTab = 'editor', activeTabLabel = 'Create Blog', onPublish, onSaveDraft, loading }) => {
     const { user } = useAuth();
-    const userAvatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.firstName || 'User')}`;
+    const userAvatar = getAvatarUrl(user, user?.firstName || 'User');
 
     const isCreateBlogTab = activeTab === 'editor';
 

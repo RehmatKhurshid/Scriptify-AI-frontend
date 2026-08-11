@@ -12,6 +12,8 @@ import styles from '../../styles/editor/EditorCanvas.module.css';
 const EditorCanvas = ({
     blogData,
     onChange,
+    onGenerateTitles,
+    onGenerateContent,
     onGenerateTags,
     onGenerateSummary,
     onImproveContent,
@@ -33,6 +35,21 @@ const EditorCanvas = ({
                 <div className={styles.inputGroup}>
                     <div className={styles.labelRow}>
                         <label className={styles.label}>Title</label>
+                        {onGenerateTitles && (
+                            <button
+                                type="button"
+                                className={styles.aiLabelButton}
+                                onClick={onGenerateTitles}
+                                disabled={aiLoading.titles}
+                            >
+                                {aiLoading.titles ? (
+                                    <Loader2 size={12} className={styles.spinIcon} />
+                                ) : (
+                                    <Sparkles size={12} className={styles.sparkleColor} />
+                                )}
+                                <span>{aiLoading.titles ? 'Generating...' : 'Suggest Titles'}</span>
+                            </button>
+                        )}
                     </div>
                     <div className={styles.inputWithIcon}>
                         <input
@@ -42,7 +59,6 @@ const EditorCanvas = ({
                             value={blogData.title}
                             onChange={(e) => onChange({ ...blogData, title: e.target.value })}
                         />
-                        <Sparkles size={16} className={styles.inputSparkle} />
                     </div>
                 </div>
 
@@ -86,7 +102,6 @@ const EditorCanvas = ({
                                 value={blogData.tags || ''}
                                 onChange={(e) => onChange({ ...blogData, tags: e.target.value })}
                             />
-                            <Sparkles size={16} className={styles.inputSparkle} />
                         </div>
                     </div>
                 </div>
@@ -94,7 +109,24 @@ const EditorCanvas = ({
                 {/* Content Writing Section */}
                 <div className={styles.inputGroup}>
                     <div className={styles.contentHeaderRow}>
-                        <label className={styles.label}>Content</label>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <label className={styles.label}>Content</label>
+                            {onGenerateContent && (
+                                <button
+                                    type="button"
+                                    className={styles.aiLabelButton}
+                                    onClick={onGenerateContent}
+                                    disabled={aiLoading.content}
+                                >
+                                    {aiLoading.content ? (
+                                        <Loader2 size={12} className={styles.spinIcon} />
+                                    ) : (
+                                        <Sparkles size={12} className={styles.sparkleColor} />
+                                    )}
+                                    <span>{aiLoading.content ? 'Generating...' : 'Generate Content'}</span>
+                                </button>
+                            )}
+                        </div>
 
                         {/* Top AI Action Buttons for Content */}
                         <div className={styles.contentAiBar}>
@@ -188,7 +220,6 @@ const EditorCanvas = ({
                             value={blogData.excerpt}
                             onChange={(e) => onChange({ ...blogData, excerpt: e.target.value })}
                         />
-                        <Sparkles size={16} className={styles.textareaSparkle} />
                     </div>
                 </div>
             </div>

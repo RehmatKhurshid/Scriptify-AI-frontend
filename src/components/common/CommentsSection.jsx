@@ -5,6 +5,7 @@ import Avatar from './Avatar';
 import { useAuth } from '../../context/AuthContext';
 import { blogService } from '../../services/blogService';
 import { formatISTTime } from '../../utils/dateUtils';
+import { getAvatarUrl } from '../../utils/avatar';
 import styles from '../../styles/common/CommentsSection.module.css';
 
 const CommentsSection = ({
@@ -35,7 +36,7 @@ const CommentsSection = ({
             const formatted = rawComments.map((c) => {
                 const authorObj = c.author || {};
                 const name = `${authorObj.firstName || ''} ${authorObj.lastName || ''}`.trim() || 'User';
-                const avatar = authorObj.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+                const avatar = getAvatarUrl(authorObj, name);
                 const userId = user ? String(user._id || user.id || user.userId || '') : '';
                 const authorId = authorObj ? String(authorObj._id || authorObj.id || '') : '';
                 const isOwner = Boolean(userId && authorId && userId === authorId);
@@ -67,7 +68,7 @@ const CommentsSection = ({
         ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.username || 'User'
         : 'Guest';
 
-    const currentUserAvatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(currentUserName)}`;
+    const currentUserAvatar = getAvatarUrl(user, currentUserName);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

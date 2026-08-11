@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ArticleCard from './ArticleCard';
 import { blogService } from '../../services/blogService';
 import { useAuth } from '../../context/AuthContext';
+import { getAvatarUrl } from '../../utils/avatar';
 import styles from '../../styles/home-feed/FeedSection.module.css';
 
 const defaultFallbackArticles = [
@@ -68,7 +69,7 @@ const FeedSection = ({ blogs: propBlogs, title = "Your Feed" }) => {
             return {
                 id: blogObj._id || blogObj.id || `blog-${Math.random()}`,
                 author: authorName || 'Anonymous',
-                authorAvatar: blogObj.author?.avatar || blogObj.authorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(authorName)}`,
+                authorAvatar: getAvatarUrl(blogObj.author || blogObj.authorAvatar, authorName),
                 category: blogObj.category || 'Technology',
                 title: blogObj.title || 'Untitled Post',
                 excerpt: blogObj.excerpt || (blogObj.content ? blogObj.content.replace(/<[^>]*>?/gm, '').substring(0, 140) + '...' : ''),

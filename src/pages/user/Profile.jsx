@@ -10,6 +10,8 @@ import { blogService } from '../../services/blogService';
 import { userService } from '../../services/userService';
 import styles from '../../styles/profile/Profile.module.css';
 
+import { getAvatarUrl } from '../../utils/avatar';
+
 const Profile = () => {
     const { user: authUser, updateUser } = useAuth();
     const [activeTab, setActiveTab] = useState('all');
@@ -129,7 +131,7 @@ const Profile = () => {
         name: fullName || 'Scriptify Author',
         handle: `@${(authUser?.firstName || 'user').toLowerCase()}`,
         role: computedRole,
-        avatar: authUser?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fullName || 'User')}`,
+        avatar: getAvatarUrl(authUser, fullName || 'User'),
         banner: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&h=400&fit=crop',
         bio: authUser?.bio || '',
         joined: authUser?.createdAt ? new Date(authUser.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'March 2024',
@@ -154,13 +156,21 @@ const Profile = () => {
 
     const formattedBlogs = currentTabBlogs.map((b) => ({
         id: b._id,
+        _id: b._id,
         title: b.title || 'Untitled Post',
         description: b.excerpt || (b.content ? b.content.substring(0, 140) + '...' : 'No description provided'),
+        content: b.content,
         coverImage: b.thumbnailUrl || null,
         status: (b.status || 'published').toLowerCase(),
         readTime: `${Math.max(1, Math.ceil((b.content ? b.content.trim().split(/\s+/).length : 0) / 200))} min read`,
-        views: `${b.views || 0} views`,
+        views: b.views || 0,
         date: new Date(b.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        createdAt: b.createdAt,
+        likes: b.likes || [],
+        likesCount: Array.isArray(b.likes) ? b.likes.length : (b.likesCount || 0),
+        commentsCount: typeof b.commentsCount === 'number' ? b.commentsCount : (Array.isArray(b.comments) ? b.comments.length : 0),
+        authorName: fullName,
+        category: b.category || 'Blog',
     }));
 
     const handleDeleteBlog = async (blogId) => {
