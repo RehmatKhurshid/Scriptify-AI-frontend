@@ -113,11 +113,11 @@ function App() {
           <Route path="/edit-blog" element={<ProtectedRoute><EditBlog /></ProtectedRoute>} />
 
           {/* Admin Protected Routes */}
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admin/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
-          <Route path="/admin/blogs" element={<ProtectedRoute><BlogManagement /></ProtectedRoute>} />
-          <Route path="/admin/flagged-comments" element={<ProtectedRoute><FlaggedComments /></ProtectedRoute>} />
-          <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute adminOnly><UserManagement /></ProtectedRoute>} />
+          <Route path="/admin/blogs" element={<ProtectedRoute adminOnly><BlogManagement /></ProtectedRoute>} />
+          <Route path="/admin/flagged-comments" element={<ProtectedRoute adminOnly><FlaggedComments /></ProtectedRoute>} />
+          <Route path="/admin/settings" element={<ProtectedRoute adminOnly><AdminSettings /></ProtectedRoute>} />
 
           {/* Catch-all 404 Not Found */}
           <Route path="*" element={<NotFoundPage />} />

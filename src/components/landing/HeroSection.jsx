@@ -1,7 +1,6 @@
 import React from 'react';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import Button from '../common/Button';
 import styles from '../../styles/landing/HeroSection.module.css';
 
 const HeroSection = () => {
@@ -22,10 +21,8 @@ const HeroSection = () => {
             </p>
 
             <div className={styles.ctaGroup}>
-                <Link to="/signup">
-                    <Button variant="primary" size="md" className={styles.ctaPrimary}>
-                        Get Started
-                    </Button>
+                <Link to="/signup" className={styles.ctaPrimary}>
+                    Get Started Free
                 </Link>
                 <Link to="/Home-Feed" className={styles.ctaSecondary}>
                     <span>Explore Blogs</span>

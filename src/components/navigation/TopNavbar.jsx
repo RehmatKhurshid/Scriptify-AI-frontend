@@ -28,6 +28,16 @@ const TopNavbar = () => {
                 >
                     {feedLabel}
                 </Link>
+
+                {isAuthenticated && user?.role === 'admin' && (
+                    <Link
+                        to="/admin"
+                        className={`${styles.navLink} ${location.pathname.startsWith('/admin') ? styles.active : ''}`}
+                        style={{ color: '#8b5cf6', fontWeight: 600 }}
+                    >
+                        Admin Dashboard
+                    </Link>
+                )}
             </div>
 
             {/* Right Side */}

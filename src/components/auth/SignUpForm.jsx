@@ -72,7 +72,7 @@ const SignUpForm = () => {
             });
 
             setSuccessMessage(data.message || 'Registration successful! Redirecting to email verification...');
-            
+
             setTimeout(() => {
                 navigate('/verify-email', { state: { email: email.trim() } });
             }, 1500);
