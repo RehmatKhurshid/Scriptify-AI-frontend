@@ -2,7 +2,7 @@ import React from 'react';
 import { KeyRound } from 'lucide-react';
 import styles from '../../../styles/admin/settings/SecurityCard.module.css';
 
-const SecurityCard = ({ data }) => {
+const SecurityCard = ({ data, onChangePassword }) => {
     return (
         <div className={styles.card}>
             <h3 className={styles.cardTitle}>Security</h3>
@@ -13,7 +13,7 @@ const SecurityCard = ({ data }) => {
                         <span className={styles.securityLabel}>Password</span>
                         <span className={styles.securitySub}>Last changed {data.passwordLastChanged}</span>
                     </div>
-                    <button className={styles.actionBtn}>
+                    <button className={styles.actionBtn} onClick={onChangePassword}>
                         <KeyRound size={14} />
                         Change Password
                     </button>

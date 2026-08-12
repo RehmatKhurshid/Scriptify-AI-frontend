@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Plus } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
 import styles from '../../../styles/admin/blog-management/BlogSidebar.module.css';
 
 const iconMap = {
@@ -53,6 +54,11 @@ const routeMap = {
 };
 
 const BlogSidebar = ({ navItems }) => {
+    const { user } = useAuth();
+    const displayName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Admin User' : 'Admin User';
+    const email = user?.email || 'admin@scriptify.ai';
+    const avatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'Admin'}`;
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.sidebarHeader}>
@@ -90,13 +96,13 @@ const BlogSidebar = ({ navItems }) => {
                 <div className={styles.userProfile}>
                     <div className={styles.userAvatar}>
                         <img
-                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
-                            alt="Admin User"
+                            src={avatar}
+                            alt={displayName}
                         />
                     </div>
                     <div className={styles.userInfo}>
-                        <span className={styles.userName}>Admin User</span>
-                        <span className={styles.userEmail}>admin@scriptify.ai</span>
+                        <span className={styles.userName}>{displayName}</span>
+                        <span className={styles.userEmail}>{email}</span>
                     </div>
                 </div>
             </div>

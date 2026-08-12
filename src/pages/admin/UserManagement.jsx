@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import AdminSidebar from '../../components/admin/admin-dashboard/AdminSidebar';
 import TopSearchNavbar from '../../components/admin/user-management/TopSearchNavbar';
 import UserManagementHeader from '../../components/admin/user-management/UserManagementHeader';
@@ -6,115 +6,152 @@ import UserFilterBar from '../../components/admin/user-management/UserFilterBar'
 import UsersTable from '../../components/admin/user-management/UsersTable';
 import UserPagination from '../../components/admin/user-management/UserPagination';
 import UserDetailsPanel from '../../components/admin/user-management/UserDetailsPanel';
+import adminService from '../../services/adminService';
 import styles from '../../styles/admin/user-management/UserManagement.module.css';
 
 const UserManagement = () => {
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [panelOpen, setPanelOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [role, setRole] = useState('');
+  const [status, setStatus] = useState('');
+  const [verified, setVerified] = useState('');
+  const [page, setPage] = useState(1);
+  const [meta, setMeta] = useState({ total: 0, totalPages: 1, limit: 10 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    const sidebarNavItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
-        { id: 'users', label: 'Users', icon: 'Users', active: true },
-        { id: 'blogs', label: 'Blogs', icon: 'FileText' },
-        { id: 'flagged', label: 'Flagged Comments', icon: 'Flag' },
-        { id: 'settings', label: 'Settings', icon: 'Settings' },
-    ];
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const d = await adminService.getUsers({
+        page,
+        limit: 10,
+        search: search.trim(),
+        role,
+        status,
+        verified,
+      });
+      const mapped = (d.users || []).map((u) => ({
+        ...u,
+        id: u._id,
+        name: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email,
+        initials: `${u.firstName?.[0] || ''}${u.lastName?.[0] || ''}`.toUpperCase() || 'U',
+        avatar: u.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.email}`,
+        auth: u.authProvider === 'google' ? 'Google' : 'Local',
+        role: u.role === 'admin' ? 'Admin' : u.role === 'blogger' ? 'Blogger' : 'Reader',
+        status: u.isSuspended || !u.isActive ? 'Suspended' : 'Active',
+        joined: u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-',
+        verified: !!u.isVerified,
+        followers: u.followers?.length || 0,
+        following: u.following?.length || 0,
+      }));
+      setUsers(mapped);
+      setMeta({ total: d.total || 0, totalPages: d.totalPages || 1, limit: d.limit || 10 });
+      if (selected) {
+        const f = mapped.find((u) => u.id === selected.id);
+        if (f) setSelected(f);
+      }
+    } catch (e) {
+      setError(e.message || 'Unable to load users.');
+    } finally {
+      setLoading(false);
+    }
+  }, [page, role, status, verified, search, selected]);
 
-    const users = [
-        {
-            id: 1,
-            name: 'Elena Rostova',
-            email: 'elena.r@editorial.co',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena',
-            initials: 'ER',
-            auth: 'Google',
-            role: 'Admin',
-            status: 'Active',
-            joined: 'Oct 12, 2023',
-            verified: true,
-            followers: '12.4k',
-            following: '842',
-            bio: 'Senior Editorial Director at Scriptly AI. Passionate about tech storytelling and digital ethics.',
-            mobile: '+1 (555) 012-3456',
-        },
-        {
-            id: 2,
-            name: 'Marcus Vance',
-            email: 'm.vance@writes.ai',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus',
-            initials: 'MV',
-            auth: 'Local',
-            role: 'Blogger',
-            status: 'Active',
-            joined: 'Nov 05, 2023',
-            verified: false,
-            followers: '8.2k',
-            following: '1.2k',
-            bio: 'Tech writer and software engineer. I write about AI, web development, and the future of work.',
-            mobile: '+1 (555) 987-6543',
-        },
-        {
-            id: 3,
-            name: 'Julian Dax',
-            email: 'julian.dax88@gmail.com',
-            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Julian',
-            initials: 'JD',
-            auth: 'Google',
-            role: 'Reader',
-            status: 'Suspended',
-            joined: 'Jan 18, 2024',
-            verified: true,
-            followers: '0',
-            following: '45',
-            bio: 'AI enthusiast and avid reader. Always learning.',
-            mobile: '+1 (555) 456-7890',
-        },
-    ];
+  useEffect(() => {
+    load();
+  }, [load]);
 
-    const handleUserClick = (user) => {
-        setSelectedUser(user);
-        setPanelOpen(true);
-    };
+  const toggle = async (u) => {
+    try {
+      await adminService.toggleUserSuspension(u.id);
+      await load();
+    } catch (e) {
+      setError(e.message || 'Unable to update user.');
+    }
+  };
 
-    const handleClosePanel = () => {
-        setPanelOpen(false);
-        setTimeout(() => setSelectedUser(null), 300);
-    };
+  const nav = [
+    { id: 'dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
+    { id: 'users', label: 'Users', icon: 'Users', active: true },
+    { id: 'blogs', label: 'Blogs', icon: 'FileText' },
+    { id: 'flagged', label: 'Flagged Comments', icon: 'Flag' },
+    { id: 'settings', label: 'Settings', icon: 'Settings' },
+  ];
 
-    return (
-        <div className={styles.managementPage}>
-            <AdminSidebar
-                navItems={sidebarNavItems}
-                isEditorial={true}
+  return (
+    <div className={styles.managementPage}>
+      <AdminSidebar navItems={nav} isEditorial />
+      <div className={styles.mainArea}>
+        <TopSearchNavbar
+          search={search}
+          onSearchChange={(v) => {
+            setSearch(v);
+            setPage(1);
+          }}
+        />
+        <div className={styles.contentArea}>
+          <UserManagementHeader totalUsers={meta.total.toLocaleString()} />
+          <UserFilterBar
+            search={search}
+            role={role}
+            status={status}
+            verified={verified}
+            onSearchChange={(v) => {
+              setSearch(v);
+              setPage(1);
+            }}
+            onRoleChange={(v) => {
+              setRole(v);
+              setPage(1);
+            }}
+            onStatusChange={(v) => {
+              setStatus(v);
+              setPage(1);
+            }}
+            onVerifiedChange={(v) => {
+              setVerified(v);
+              setPage(1);
+            }}
+            onResetFilters={() => {
+              setSearch('');
+              setRole('');
+              setStatus('');
+              setVerified('');
+              setPage(1);
+            }}
+          />
+          {error && <div style={{ color: '#f87171', padding: 12 }}>{error}</div>}
+          {loading ? (
+            <div style={{ padding: 40, textAlign: 'center' }}>Loading users...</div>
+          ) : (
+            <UsersTable
+              users={users}
+              onUserClick={(u) => {
+                setSelected(u);
+                setOpen(true);
+              }}
+              selectedUserId={selected?.id}
+              onToggleSuspension={toggle}
             />
-
-            <div className={styles.mainArea}>
-                <TopSearchNavbar />
-
-                <div className={styles.contentArea}>
-                    <UserManagementHeader totalUsers="42.8k" />
-                    <UserFilterBar />
-                    <UsersTable
-                        users={users}
-                        onUserClick={handleUserClick}
-                        selectedUserId={selectedUser?.id}
-                    />
-                    <UserPagination
-                        currentPage={1}
-                        totalPages={4280}
-                        totalItems={42800}
-                        itemsPerPage={10}
-                    />
-                </div>
-            </div>
-
-            <UserDetailsPanel
-                user={selectedUser}
-                isOpen={panelOpen}
-                onClose={handleClosePanel}
-            />
+          )}
+          <UserPagination {...meta} currentPage={page} totalItems={meta.total} onPageChange={setPage} />
         </div>
-    );
+      </div>
+      <UserDetailsPanel
+        user={selected}
+        isOpen={open}
+        onClose={() => {
+          setOpen(false);
+          setSelected(null);
+        }}
+        onToggleSuspension={toggle}
+      />
+    </div>
+  );
 };
 
 export default UserManagement;

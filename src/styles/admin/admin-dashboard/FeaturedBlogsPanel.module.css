@@ -3,6 +3,10 @@
     border: 1px solid #1e293b;
     border-radius: 16px;
     padding: 24px;
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
 }
 
 .panelHeader {
@@ -10,6 +14,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .panelTitle {
@@ -41,6 +46,7 @@
     flex-direction: column;
     gap: 12px;
     margin-bottom: 16px;
+    width: 100%;
 }
 
 .blogItem {
@@ -53,6 +59,10 @@
     border-radius: 12px;
     transition: all 0.2s;
     cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .blogItem:hover {
@@ -64,10 +74,29 @@
     width: 44px;
     height: 44px;
     border-radius: 10px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    position: relative;
+    background: #1e293b;
+}
+
+.thumbImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.thumbFallback {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .thumbInner {
@@ -78,7 +107,9 @@
 }
 
 .blogInfo {
+    flex: 1;
     min-width: 0;
+    overflow: hidden;
 }
 
 .blogTitle {
@@ -89,12 +120,17 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
+    width: 100%;
 }
 
 .blogMeta {
     font-size: 11px;
     color: #475569;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .promoteBtn {

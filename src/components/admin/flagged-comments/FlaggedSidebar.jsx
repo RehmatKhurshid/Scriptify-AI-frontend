@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
 import styles from '../../../styles/admin/flagged-comments/FlaggedSidebar.module.css';
 
 const iconMap = {
@@ -53,6 +54,14 @@ const routeMap = {
 };
 
 const FlaggedSidebar = ({ navItems }) => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/signin');
+    };
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.sidebarHeader}>
@@ -98,7 +107,7 @@ const FlaggedSidebar = ({ navItems }) => {
             </nav>
 
             <div className={styles.sidebarFooter}>
-                <button className={styles.logoutBtn}>
+                <button className={styles.logoutBtn} onClick={handleLogout}>
                     <LogOut size={18} />
                     <span>Logout</span>
                 </button>

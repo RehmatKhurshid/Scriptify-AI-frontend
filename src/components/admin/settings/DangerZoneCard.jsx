@@ -2,7 +2,7 @@ import React from 'react';
 import { LogOut, AlertTriangle } from 'lucide-react';
 import styles from '../../../styles/admin/settings/DangerZoneCard.module.css';
 
-const DangerZoneCard = () => {
+const DangerZoneCard = ({ onLogout }) => {
     return (
         <div className={styles.card}>
             <div className={styles.cardHeader}>
@@ -17,12 +17,12 @@ const DangerZoneCard = () => {
             </p>
 
             <div className={styles.actions}>
-                <button className={styles.logoutBtn}>
+                <button className={styles.logoutBtn} onClick={onLogout}>
                     <LogOut size={16} />
                     Logout
                 </button>
 
-                <button className={styles.deleteBtn}>
+                <button className={styles.deleteBtn} onClick={onLogout}>
                     Delete Account
                 </button>
             </div>

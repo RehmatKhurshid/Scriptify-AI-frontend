@@ -11,14 +11,16 @@ import {
 } from 'recharts';
 import styles from '../../../styles/admin/admin-dashboard/PlatformGrowthChart.module.css';
 
-const data = [
-    { week: 'Week 1', users: 3200, blogs: 1800 },
-    { week: 'Week 2', users: 4100, blogs: 2400 },
-    { week: 'Week 3', users: 3800, blogs: 3200 },
-    { week: 'Week 4', users: 5200, blogs: 4100 },
+const defaultData = [
+    { week: 'Week 1', users: 0, blogs: 0 },
+    { week: 'Week 2', users: 0, blogs: 0 },
+    { week: 'Week 3', users: 0, blogs: 0 },
+    { week: 'Week 4', users: 0, blogs: 0 },
 ];
 
-const PlatformGrowthChart = () => {
+const PlatformGrowthChart = ({ data: propData }) => {
+    const chartData = (propData && propData.length > 0) ? propData : defaultData;
+
     return (
         <div className={styles.chartCard}>
             <div className={styles.chartHeader}>
@@ -40,7 +42,7 @@ const PlatformGrowthChart = () => {
 
             <div className={styles.chartBody}>
                 <ResponsiveContainer width="100%" height={280}>
-                    <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="usersGradient" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#a78bfa" stopOpacity={0.3} />

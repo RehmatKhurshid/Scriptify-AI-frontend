@@ -49,11 +49,20 @@
     flex-wrap: wrap;
 }
 
-.filterButton {
+.selectWrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.filterSelect {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 16px;
+    padding: 10px 32px 10px 16px;
     background: #111827;
     border: 1px solid #1e293b;
     border-radius: 10px;
@@ -62,11 +71,26 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    outline: none;
 }
 
-.filterButton:hover {
+.filterSelect:hover,
+.filterSelect:focus {
     border-color: #334155;
     color: #e2e8f0;
+}
+
+.filterSelect option {
+    background: #111827;
+    color: #e2e8f0;
+    padding: 8px;
+}
+
+.selectIcon {
+    position: absolute;
+    right: 12px;
+    pointer-events: none;
+    color: #94a3b8;
 }
 
 .moreFilters {
