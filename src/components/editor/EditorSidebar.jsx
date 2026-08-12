@@ -5,8 +5,8 @@ import {
     FileText,
     ChevronLeft,
     ChevronRight,
-    Zap
 } from 'lucide-react';
+import Logo from '../icons/Logo';
 import styles from '../../styles/editor/EditorSidebar.module.css';
 
 const iconMap = {
@@ -35,7 +35,7 @@ const EditorSidebar = ({
             <div className={styles.sidebarHeader}>
                 <Link to="/Home-Feed" style={{ textDecoration: 'none' }}>
                     <div className={styles.logo}>
-                        <Zap className={styles.logoIcon} />
+                        <Logo size={24} />
                         {!collapsed && <span className={styles.logoText}>Scriptify AI</span>}
                     </div>
                     {!collapsed && <span className={styles.logoTag}>Intelligence Suite</span>}

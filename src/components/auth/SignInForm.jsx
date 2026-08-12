@@ -37,7 +37,11 @@ const SignInForm = () => {
       setSuccessMessage(data.message || 'Login successful! Redirecting...');
 
       setTimeout(() => {
-        navigate('/Home-Feed');
+        if (data.user?.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/Home-Feed');
+        }
       }, 1000);
     } catch (err) {
       const errMsg = err.message || 'Invalid email or password.';
