@@ -1,16 +1,23 @@
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 16px;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .statCard {
     background: #111827;
     border: 1px solid #1e293b;
     border-radius: 14px;
-    padding: 20px;
+    padding: 16px;
     transition: all 0.2s;
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .statCard:hover {
@@ -21,25 +28,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    width: 100%;
 }
 
 .iconWrapper {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: #0d1117;
     border-radius: 10px;
     color: #64748b;
+    flex-shrink: 0;
 }
 
 .changeBadge {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 20px;
+    white-space: nowrap;
 }
 
 .changeBadge.up {
@@ -59,12 +69,14 @@
     border-radius: 50%;
     animation: pulse 2s infinite;
     box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+    flex-shrink: 0;
 }
 
 .statBody {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
+    min-width: 0;
 }
 
 .statLabel {
@@ -73,10 +85,13 @@
     color: #475569;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
 }
 
 .statValue {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     color: #f8fafc;
 }
@@ -102,46 +117,56 @@
 
 .urgentHeader {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 12px;
+    width: 100%;
 }
 
 .urgentBadge {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    align-items: flex-start;
+    gap: 6px;
     color: #fbbf24;
+    flex: 1;
 }
 
 .urgentBadge svg {
     color: #fbbf24;
+    flex-shrink: 0;
+    margin-top: 1px;
 }
 
 .urgentLabel {
-    display: block;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    color: #fbbf24;
+    white-space: normal;
+    line-height: 1.3;
+    word-break: break-word;
 }
 
 .urgentSubLabel {
-    display: block;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     color: #f472b6;
+    white-space: normal;
 }
 
 .reviewButton {
-    padding: 8px 16px;
+    padding: 4px 10px;
     background: rgba(244, 114, 182, 0.2);
     border: 1px solid rgba(244, 114, 182, 0.3);
-    border-radius: 8px;
+    border-radius: 6px;
     color: #f472b6;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .reviewButton:hover {
@@ -151,19 +176,24 @@
 .urgentValue {
     display: flex;
     align-items: baseline;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .urgentNumber {
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 700;
     color: #f8fafc;
+    flex-shrink: 0;
 }
 
 .urgentText {
-    font-size: 13px;
+    font-size: 11px;
     color: #c4b5fd;
+    white-space: normal;
+    line-height: 1.3;
+    word-break: break-word;
 }
 
 .urgentProgress {

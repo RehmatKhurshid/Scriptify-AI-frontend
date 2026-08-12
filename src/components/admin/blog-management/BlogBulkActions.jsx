@@ -2,27 +2,17 @@ import React from 'react';
 import { Star, EyeOff, Download, Trash2 } from 'lucide-react';
 import styles from '../../../styles/admin/blog-management/BlogBulkActions.module.css';
 
-const BlogBulkActions = ({ selectedCount }) => {
+const BlogBulkActions = ({ selectedCount = 0, onMarkFeatured, onDeleteSelected }) => {
     return (
         <div className={styles.bulkActions}>
-            <span className={styles.label}>Bulk Actions:</span>
+            <span className={styles.label}>Bulk Actions ({selectedCount}):</span>
 
-            <button className={styles.actionBtn}>
+            <button className={styles.actionBtn} disabled={!selectedCount} onClick={onMarkFeatured}>
                 <Star size={14} />
                 Mark Featured
             </button>
 
-            <button className={styles.actionBtn}>
-                <EyeOff size={14} />
-                Hide
-            </button>
-
-            <button className={styles.actionBtn}>
-                <Download size={14} />
-                Export
-            </button>
-
-            <button className={`${styles.actionBtn} ${styles.deleteBtn}`}>
+            <button className={`${styles.actionBtn} ${styles.deleteBtn}`} disabled={!selectedCount} onClick={onDeleteSelected}>
                 <Trash2 size={14} />
                 Delete
             </button>

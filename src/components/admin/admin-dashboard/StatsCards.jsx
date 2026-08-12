@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Users, FileText, MessageSquare, AlertTriangle, Activity } from 'lucide-react';
 import styles from '../../../styles/admin/admin-dashboard/StatsCards.module.css';
 
@@ -11,6 +12,8 @@ const iconMap = {
 };
 
 const StatsCards = ({ stats }) => {
+    const navigate = useNavigate();
+
     return (
         <div className={styles.statsGrid}>
             {stats.map((stat, index) => {
@@ -21,13 +24,15 @@ const StatsCards = ({ stats }) => {
                         <div key={index} className={`${styles.statCard} ${styles.urgentCard}`}>
                             <div className={styles.urgentHeader}>
                                 <div className={styles.urgentBadge}>
-                                    <AlertTriangle size={18} />
-                                    <div>
-                                        <span className={styles.urgentLabel}>URGENT</span>
-                                        <span className={styles.urgentSubLabel}>ATTENTION</span>
-                                    </div>
+                                    <AlertTriangle size={16} />
+                                    <span className={styles.urgentLabel}>URGENT ATTENTION</span>
                                 </div>
-                                <button className={styles.reviewButton}>Review Now</button>
+                                <button
+                                    className={styles.reviewButton}
+                                    onClick={() => navigate('/admin/flagged-comments')}
+                                >
+                                    Review
+                                </button>
                             </div>
                             <div className={styles.urgentValue}>
                                 <span className={styles.urgentNumber}>{stat.value}</span>
@@ -44,7 +49,7 @@ const StatsCards = ({ stats }) => {
                     <div key={index} className={styles.statCard}>
                         <div className={styles.statHeader}>
                             <div className={styles.iconWrapper}>
-                                <IconComponent size={20} />
+                                <IconComponent size={18} />
                             </div>
                             {stat.change && (
                                 <span className={`${styles.changeBadge} ${stat.trend === 'up' ? styles.up : styles.down}`}>
@@ -54,7 +59,7 @@ const StatsCards = ({ stats }) => {
                             {stat.hasDot && <span className={styles.liveDot} />}
                         </div>
                         <div className={styles.statBody}>
-                            <span className={styles.statLabel}>{stat.label}</span>
+                            <span className={styles.statLabel} title={stat.label}>{stat.label}</span>
                             <span className={styles.statValue}>{stat.value}</span>
                         </div>
                     </div>

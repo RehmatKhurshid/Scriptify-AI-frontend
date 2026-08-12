@@ -2,9 +2,21 @@ import React, { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import styles from '../../../styles/admin/settings/ProfileCard.module.css';
 
-const ProfileCard = ({ data }) => {
-    const [fullName, setFullName] = useState(data.fullName);
-    const [email, setEmail] = useState(data.email);
+const ProfileCard = ({ data, onSave }) => {
+    const [fullName, setFullName] = useState(data.fullName || '');
+    const [email, setEmail] = useState(data.email || '');
+
+    React.useEffect(() => {
+        setFullName(data.fullName || '');
+        setEmail(data.email || '');
+    }, [data.fullName, data.email]);
+
+    const handleSave = () => {
+        const parts = fullName.trim().split(' ');
+        const firstName = parts[0] || '';
+        const lastName = parts.slice(1).join(' ') || '';
+        onSave?.({ firstName, lastName, email });
+    };
 
     return (
         <div className={styles.card}>
@@ -59,7 +71,7 @@ const ProfileCard = ({ data }) => {
             </div>
 
             <div className={styles.cardFooter}>
-                <button className={styles.saveBtn}>Save Changes</button>
+                <button className={styles.saveBtn} onClick={handleSave}>Save Changes</button>
             </div>
         </div>
     );

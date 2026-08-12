@@ -18,6 +18,12 @@ export const userService = {
     const response = await api.post(`/users/${id}/follow`);
     return response.data;
   },
+
+  // 4. Update Profile
+  updateProfile: async (data) => {
+    const response = await api.put('/users/profile', data);
+    return response.data;
+  },
 };
 
 export default userService;

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plus, HelpCircle, LogOut } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
 import styles from '../../../styles/admin/settings/SettingsSidebar.module.css';
 
 const iconMap = {
@@ -53,6 +54,14 @@ const routeMap = {
 };
 
 const SettingsSidebar = ({ navItems }) => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/signin');
+    };
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.sidebarHeader}>
@@ -91,7 +100,7 @@ const SettingsSidebar = ({ navItems }) => {
                     <span>Help</span>
                 </button>
 
-                <button className={`${styles.footerLink} ${styles.signOut}`}>
+                <button className={`${styles.footerLink} ${styles.signOut}`} onClick={handleLogout}>
                     <LogOut size={18} />
                     <span>Sign Out</span>
                 </button>

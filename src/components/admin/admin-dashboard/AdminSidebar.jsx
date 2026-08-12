@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard,
     Users,
@@ -11,6 +11,7 @@ import {
     LogOut,
     Zap
 } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
 import styles from '../../../styles/admin/admin-dashboard/AdminSidebar.module.css';
 
 const iconMap = {
@@ -30,6 +31,14 @@ const routeMap = {
 };
 
 const AdminSidebar = ({ navItems, isEditorial = false }) => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/signin');
+    };
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.sidebarHeader}>
@@ -88,7 +97,7 @@ const AdminSidebar = ({ navItems, isEditorial = false }) => {
                     <span>Help</span>
                 </button>
 
-                <button className={styles.footerLink}>
+                <button className={styles.footerLink} onClick={handleLogout}>
                     <LogOut size={16} />
                     <span>Logout</span>
                 </button>

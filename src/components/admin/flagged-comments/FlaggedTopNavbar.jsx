@@ -1,8 +1,12 @@
 import React from 'react';
 import { Search, Bell, HelpCircle, ChevronDown } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
 import styles from '../../../styles/admin/flagged-comments/FlaggedTopNavbar.module.css';
 
 const FlaggedTopNavbar = () => {
+    const { user } = useAuth();
+    const avatar = user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.email || 'Admin'}`;
+
     return (
         <nav className={styles.navbar}>
             <div className={styles.leftSection}>
@@ -31,7 +35,7 @@ const FlaggedTopNavbar = () => {
                 <div className={styles.userMenu}>
                     <div className={styles.userAvatar}>
                         <img
-                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+                            src={avatar}
                             alt="Admin"
                         />
                     </div>
